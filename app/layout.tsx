@@ -3,8 +3,16 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
 import Providers from "@/components/Providers"
+import { Poppins } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+	subsets: ["latin"],
+	display: "swap",
+	variable: "--font-poppins",
+	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+	adjustFontFallback: false,
+});
 
 export const metadata: Metadata = {
   title: "E-Canteen",
@@ -18,12 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Header />
             {children}
-            <footer className="footer footer-center p-4 bg-base-300 text-base-content">
+            <footer className="footer footer-center p-4  text-base-content">
               <p>Copyright ☠︎ 2023 - All right reserved by Next</p>
             </footer>
           </div>

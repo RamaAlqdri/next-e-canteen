@@ -24,7 +24,10 @@
   background-color: #EFBA46;
   color: rgb(var(--foreground-rgb));
 }
-
+.badge-ePrimary {
+  background-color: #EEA147;
+  color: rgb(var(--foreground-rgb));
+}
 
 body {
   color: rgb(var(--foreground-rgb));

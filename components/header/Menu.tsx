@@ -24,7 +24,7 @@ const Menu = () => {
           <Link className="btn btn-ghost rounded-btn" href="/cart">
             Cart
             {mounted && items.length !== 0 && (
-              <div className="badge badge-secondary">
+              <div className="badge badge-ePrimary">
                 {items.reduce((a, c) => a + c.qty, 0)}{" "}
               </div>
             )}

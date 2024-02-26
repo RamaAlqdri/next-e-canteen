@@ -28,7 +28,7 @@ export default function ProductItem({ product }: { product: Product }) {
           <p className="mb-2">{product.brand}</p>
           <div className="flex justify-between">
             <div className="card-actions flex sm:items-center items-end justify-between">
-              <span className="sm:text-2xl text-lg font-semibold">
+              <span className="sm:text-2xl text-lg sm:font-semibold font-medium">
                 Rp {formatRupiah(product.price)},00
               </span>
               {"  "}

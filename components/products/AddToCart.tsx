@@ -27,7 +27,7 @@ export default function AddToCart({ item }: { item: OrderItem }) {
 
   ):(
     <button
-        className="btn h-2 px-2 min-h-8 sm:min-h-12 sm:p-3 btn-ePrimary border-0 drop-shadow-[0_10px_10px_rgba(237,161,71,0.4)] text-xs sm:text-base"
+        className="btn h-2 px-2 min-h-8 w-full sm:min-h-12 sm:p-3 btn-ePrimary border-0 drop-shadow-[0_10px_10px_rgba(237,161,71,0.4)] text-xs sm:text-base"
         type="button"
         onClick={addToCartHandler}
     >

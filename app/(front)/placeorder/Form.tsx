@@ -8,57 +8,80 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import useSWRMutation from "swr/mutation";
 import { formatRupiah } from "@/lib/utils";
+import orderService from "@/lib/services/orderService";
+import { Order } from "@/lib/models/OrderModel";
+import useSnap from "@/lib/hooks/useSnap";
 
 const Form = () => {
   const router = useRouter();
-  const {
-    paymentMethod,
-    shippingAddress,
-    items,
-    itemsPrice,
-    taxPrice,
-    shippingPrice,
-    totalPrice,
-    clear,
-  } = useCartService();
+  const { paymentMethod, orderBy, items, itemsPrice, totalPrice, clear } =
+    useCartService();
 
-  const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
-    `/api/orders/mine`,
-    async (url) => {
-      const res = await fetch("/api/orders", {
+  const placeOrder = async () => {
+    try {
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          paymentMethod,
-          shippingAddress,
-          items,
-          itemsPrice,
-          taxPrice,
-          shippingPrice,
-          totalPrice,
+          items: items,
+          orderBy: orderBy,
+          paymentMethod: paymentMethod,
+          itemsPrice: itemsPrice,
+          isPaid: false,
+          createdAt: new Date().toISOString(),
         }),
       });
-      const data = await res.json();
-      if (res.ok) {
-        clear();
-        toast.success("Order placed successfully");
-        return router.push(`/order/${data.order._id}`);
-      } else {
-        console.log(res);
-        toast.error(data.message);
+      // console.log(data)
+      console.log(response);
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error(
+          "Failed to place order. Server responded with status: " +
+            response.status
+        );
       }
+
+      const data = await response.json();
+      console.log(data);
+      console.log("tes");
+      clear();
+      snapEmbed(data.data.snap_token,'snap-container',{
+        onSuccess: function (result:any) {
+          console.log("success", result);
+          // setSnapShow(false)
+        },
+        onPending: function (result:any) {
+          console.log("pending", result);
+          // setSnapShow(false)
+        },
+        onClose: function () {
+          // setSnapShow(false)
+        },
+
+      })
+      toast.success("Order placed successfully");
+      // router.push("/");
+      // Redirect or handle response data as needed
+    } catch (error: any) {
+      console.error("Error placing order:", error.message);
+      toast.error("Failed to place order. Please try again later.");
+      // Additional error handling if needed
     }
-  );
+  };
+
+  const {snapEmbed} = useSnap();
+
   useEffect(() => {
     if (!paymentMethod) {
       return router.push("/payment");
     }
     if (items.length === 0) {
-      return router.push('/');
+      // return router.push("/");
     }
-  }, [paymentMethod, router]);
+  }, [items.length, paymentMethod, router]);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -68,17 +91,14 @@ const Form = () => {
 
   return (
     <div>
-      <CheckoutSteps current={4} />
+      <CheckoutSteps current={3} />
       <div className="grid md:grid-cols-4 md:gap-5 my-4">
         <div className="overflow-x-auto md:col-span-3">
           <div className="card bg-base-300">
             <div className="card-body">
-              <h2 className="card-title">Shipping Address</h2>
-              <p>{shippingAddress.fullName}</p>
-              <p>
-                {shippingAddress.address}, {shippingAddress.city},{" "}
-                {shippingAddress.postalCode}, {shippingAddress.country}{" "}
-              </p>
+              <h2 className="card-title">Identitas</h2>
+              <p>{orderBy.fullName}</p>
+              <p>{orderBy.email}</p>
               <div>
                 <Link className="btn" href="/shipping">
                   Edit
@@ -88,7 +108,7 @@ const Form = () => {
           </div>
           <div className="card bg-base-300 mt-4">
             <div className="card-body">
-              <h2 className="card-title">Payment Method</h2>
+              <h2 className="card-title">Metode Pembayaran</h2>
               <p>{paymentMethod}</p>
               <div>
                 <Link className="btn" href="/payment">
@@ -99,7 +119,7 @@ const Form = () => {
           </div>
           <div className="card bg-base-300 mt-4">
             <div className="card-body">
-              <h2 className="card-title">Items</h2>
+              <h2 className="card-title">Pesanan</h2>
               <table className="table">
                 <thead>
                   <tr>
@@ -119,10 +139,7 @@ const Form = () => {
                             width={50}
                             height={50}
                           ></Image>
-                          <span className="px-2">
-                            {item.name}({item.color}
-                            {item.size})
-                          </span>
+                          <span className="px-2">{item.name}</span>
                         </Link>
                       </td>
                       <td>
@@ -152,18 +169,7 @@ const Form = () => {
                     <div>Rp {formatRupiah(itemsPrice)},00</div>
                   </div>
                 </li>
-                <li>
-                  <div className=" flex justify-between">
-                    <div>Tax</div>
-                    <div>Rp {formatRupiah(taxPrice)},00</div>
-                  </div>
-                </li>
-                <li>
-                  <div className="flex justify-between">
-                    <div>Shipping</div>
-                    <div>Rp {formatRupiah(shippingPrice)},00</div>
-                  </div>
-                </li>
+
                 <li>
                   <div className="flex justify-between">
                     <div>Total</div>
@@ -173,12 +179,12 @@ const Form = () => {
                 <li>
                   <button
                     onClick={() => placeOrder()}
-                    disabled={isPlacing}
+                    // disabled={isPlacing}
                     className="btn btn-primary w-full"
                   >
-                    {isPlacing && (
+                    {/* {isPlacing && (
                       <span className="loading loading-spinner"></span>
-                    )}
+                    )} */}
                     Place Order
                   </button>
                 </li>
@@ -187,6 +193,8 @@ const Form = () => {
           </div>
         </div>
       </div>
+      
+      <div id="snap-container"></div>
     </div>
   );
 };

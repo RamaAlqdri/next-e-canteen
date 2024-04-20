@@ -2,38 +2,32 @@
 
 import CheckoutSteps from "@/components/CheckoutSteps";
 import useCartService from "@/lib/hooks/useCartStore";
-import { ShippingAddress } from "@/lib/models/OrderModel";
+import { OrderBy } from "@/lib/models/OrderModel";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, ValidationRule, useForm } from "react-hook-form";
 
 const Form = () => {
   const router = useRouter();
-  const { saveShippingAddress, shippingAddress } = useCartService();
+  const { saveOrderBy, orderBy } = useCartService();
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<ShippingAddress>({
+  } = useForm<OrderBy>({
     defaultValues: {
       fullName: "",
-      address: "",
-      city: "",
-      postalCode: "",
-      country: "",
+      email: "",
     },
   });
   useEffect(() => {
-    setValue("fullName", shippingAddress.fullName);
-    setValue("address", shippingAddress.address);
-    setValue("city", shippingAddress.city);
-    setValue("postalCode", shippingAddress.postalCode);
-    setValue("country", shippingAddress.country);
-  }, [setValue, shippingAddress]);
+    setValue("fullName", orderBy.fullName);
+    setValue("email", orderBy.email);
+  }, [setValue, orderBy]);
 
-  const formSubmit: SubmitHandler<ShippingAddress> = async (form) => {
-    saveShippingAddress(form);
+  const formSubmit: SubmitHandler<OrderBy> = async (form) => {
+    saveOrderBy(form);
     router.push("/payment");
   };
 
@@ -43,7 +37,7 @@ const Form = () => {
     required,
     pattern,
   }: {
-    id: keyof ShippingAddress;
+    id: keyof OrderBy;
     name: string;
     required?: boolean;
     pattern?: ValidationRule<RegExp>;
@@ -69,16 +63,14 @@ const Form = () => {
 
   return (
     <div>
-      <CheckoutSteps current={1} />
+      <CheckoutSteps current={0} />
       <div className="max-w-sm mx-auto card bg-base-300 my-4">
         <div className="card-body">
-          <h1 className="card-title">Shipping Address</h1>
+          <h1 className="card-title">Identitas Anda</h1>
           <form onSubmit={handleSubmit(formSubmit)}>
             <FormInput name="Full Name" id="fullName" required />
-            <FormInput name="Address" id="address" required />
-            <FormInput name="City" id="city" required />
-            <FormInput name="Postal Code" id="postalCode" required />
-            <FormInput name="Country" id="country" required />
+            <FormInput name="Email" id="email" required/>
+            
             <div className="my-2">
               <button
                 type="submit"

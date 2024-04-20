@@ -6,7 +6,7 @@ import CheckoutSteps from "@/components/CheckoutSteps";
 
 const Form = () => {
   const router = useRouter();
-  const { savePaymentMethod, paymentMethod, shippingAddress } =
+  const { savePaymentMethod, paymentMethod, orderBy } =
     useCartService();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,18 +15,18 @@ const Form = () => {
     router.push("/placeorder");
   };
   useEffect(() => {
-    if (!shippingAddress.address) {
+    if (!orderBy.fullName) {
       return router.push("/shipping");
     }
     setSelectedPaymentMethod(paymentMethod || "PayPal");
-  }, [paymentMethod, router, shippingAddress.address]);
+  }, [paymentMethod, router, orderBy.fullName]);
 
   return (
     <div>
-      <CheckoutSteps current={2} />
+      <CheckoutSteps current={1} />
       <div className="max-w-sm mx-auto card bg-base-300 my-4">
         <div className="card-body">
-          <h1 className="card-title">Payment Method</h1>
+          <h1 className="card-title">Metode Pembayaran</h1>
           <form onSubmit={handleSubmit}>
             {["PayPal", "Stripe", "CashOnDelivery"].map((payment) => (
               <div key={payment}>

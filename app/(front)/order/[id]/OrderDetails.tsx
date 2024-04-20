@@ -51,14 +51,9 @@ export default function OrderDetails({
 
   const {
     paymentMethod,
-    shippingAddress,
     items,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
     totalPrice,
-    isDelivered,
-    deliveredAt,
     isPaid,
     paidAt,
   } = data;
@@ -68,19 +63,6 @@ export default function OrderDetails({
       <div className="grid md:grid-cols-4 md:gap-5 my-4">
         <div className="md:col-span-3">
           <div className="card bg-base-300">
-            <div className="card-body">
-              <h2 className="card-title">Shipping Address</h2>
-              <p>{shippingAddress.fullName}</p>
-              <p>
-                {shippingAddress.address}, {shippingAddress.city},{" "}
-                {shippingAddress.postalCode}, {shippingAddress.country}{" "}
-              </p>
-              {isDelivered ? (
-                <div className="text-success">Delivered at {deliveredAt}</div>
-              ) : (
-                <div className="text-error">Not Delivered</div>
-              )}
-            </div>
           </div>
           <div className="card bg-base-300 mt-4">
             <div className="card-body">
@@ -120,7 +102,7 @@ export default function OrderDetails({
                             height={50}
                           ></Image>
                           <span className="px-2">
-                            {item.name} ({item.color} {item.size})
+                            {item.name}
                           </span>
                         </Link>
                       </td>
@@ -142,12 +124,6 @@ export default function OrderDetails({
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
                     <div>Rp {formatRupiah(itemsPrice)},00</div>
-                  </div>
-                </li>
-                <li>
-                  <div className="mb-2 flex justify-between">
-                    <div>Shipping</div>
-                    <div>Rp {formatRupiah(shippingPrice)},00</div>
                   </div>
                 </li>
                 <li>

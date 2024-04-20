@@ -6,11 +6,11 @@ const authConfig = {
   callbacks: {
     authorized({ request, auth }: any) {
       const protectedPaths = [
-        /\/shipping/,
-        /\/payment/,
-        /\/place-order/,
+        // /\/shipping/,
+        // /\/payment/,
+        // /\/place-order/,
         /\/profile/,
-        /\/order\/(.*)/,
+        // /\/order\/(.*)/,
         /\/admin/,
       ];
       const { pathname } = request.nextUrl;

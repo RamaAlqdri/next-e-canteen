@@ -5,6 +5,9 @@ import productsService from "@/lib/services/productService";
 import { Metadata } from "next";
 import Link from "next/link";
 import { convertDocToObj } from "@/lib/utils";
+import { useEffect } from "react";
+import canteenService from "@/lib/services/canteenService";
+import CanteenItem from "@/components/canteen/CanteenItem";
 
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_APP_NAME || "e-Canteen",
@@ -12,11 +15,12 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const featuredProducts = await productsService.getFeatured();
-  const latestProducts = await productsService.getLatest();
+  // const featuredProducts = await productsService.getFeatured();
+  const canteen = await canteenService.getAllCanteenData();
+  const products = await productsService.getAllProducts();
   return (
     <>
-      <div className="w-full carousel rounded-box mt-4">
+      {/* <div className="w-full carousel rounded-box mt-4">
         {featuredProducts.map((product, index) => (
           <div
             key={product._id}
@@ -46,13 +50,20 @@ export default async function Home() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
-      <h2 className="text-2xl py-2">Latest Product</h2>
-      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-        {latestProducts.map((product) => (
-          <ProductItem key={product.slug} product={convertDocToObj(product)} />
+      {/* <h2 className="text-2xl py-2">Welcome </h2> */}
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-10">
+        {canteen.map((canteen) => (
+          <CanteenItem key={canteen.slug} canteen={canteen}/>
+        
         ))}
+        
+        {/* {products.map((product) => (
+          
+          // <div key={product._id}>{product.name}</div>
+          <ProductItem key={product.slug} product={product} />
+        ))} */}
       </div>
     </>
   );

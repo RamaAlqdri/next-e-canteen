@@ -1,71 +1,91 @@
-import dbConnect from "@/lib/dbConnect";
-import ProductModel from "@/lib/models/ProductModels";
-import OrderModel, { OrderItem } from "@/lib/models/OrderModel";
-import { round2 } from "@/lib/utils";
-import { auth } from "@/lib/auth";
+// 'use client'
+import productsService from "@/lib/services/productService";
+import { Order } from "@/lib/models/OrderModel";
+import ordersService from "@/lib/services/orderService";
+import { nanoid } from "nanoid";
+import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-const calcPrices = (orderItems: OrderItem[]) => {
-  const itemsPrice = round2(
-    orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-  );
-  const shippingPrice = round2(itemsPrice > 100 ? 0 : 0);
-  const taxPrice = round2(Number((0.15 * itemsPrice).toFixed(2)));
-  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
-  return { itemsPrice, shippingPrice, taxPrice, totalPrice };
-};
+export async function GET() {
+  return NextResponse.json({
+    hello: "world",
+  });
+}
 
-export const POST = auth(async (req: any) => {
-  if (!req.auth) {
-    return Response.json(
-      { message: "unauthorized" },
-      {
-        status: 401,
-      }
-    );
-  }
-  const { user } = req.auth;
+export const POST = async (req: Request) => {
   try {
-    const payload = await req.json();
-    await dbConnect();
-    const dbProductPrices = await ProductModel.find(
-      {
-        _id: { $in: payload.items.map((x: { _id: string }) => x._id) },
+    const order = await req.json();
+
+    const transaction_id = `TRX-${nanoid(4)}-${nanoid(8)}`;
+
+    const gross_amount = order.itemsPrice;
+    const authString = btoa(`${process.env.NEXT_PUBLIC_MITRANS_SERVER_KEY}:`);
+
+    const payload = {
+      transaction_details: {
+        order_id: transaction_id,
+        gross_amount: gross_amount,
       },
-      "price"
+      item_details: order.items.map((item: any) => ({
+        // id: item._id,
+        price: item.price,
+        quantity: item.qty,
+        name: item.name,
+      })),
+      customer_details: {
+        first_name: order.orderBy.fullName,
+        email: order.orderBy.email,
+      },
+    };
+    console.log(payload);
+    console.log(process.env.NEXT_PUBLIC_MITRANS_BASE_URL);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_MITRANS_BASE_URL}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Basic ${authString}`,
+        },
+        body: JSON.stringify(payload),
+      }
     );
-    const dbOrderItems = payload.items.map((x: { _id: string }) => ({
-      ...x,
-      product: x._id,
-      price: dbProductPrices.find((x) => x._id === x._id).price,
-      _id: undefined,
-    }));
-    const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
-      calcPrices(dbOrderItems);
-    const newOrder = new OrderModel({
-      items: dbOrderItems,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-      shippingAddress: payload.shippingAddress,
-      paymentMethod: payload.paymentMethod,
-      user: user._id,
+    console.log(response);
+
+    const data = await response.json();
+
+    if (response.status != 201) {
+      return NextResponse.json({
+        status: "error",
+        message: "Failed to create transactions",
+      });
+    }
+    console.log(data);
+
+    await Promise.all([
+      ordersService.createOrder(
+        order.paymentMethod,
+        order.items,
+        order.orderBy,
+        gross_amount,
+        transaction_id
+      ),
+    ]);
+
+    return NextResponse.json({
+      status: "success",
+      data: {
+        id: transaction_id,
+        status: "PENDING",
+        customer_name: order.orderBy.fullName,
+        customer_email: order.orderBy.email,
+        products: order.items,
+        snap_token: data.token,
+        snap_redirect_url: data.redirect_url,
+      },
     });
-    const createdOrder = await newOrder.save();
-    return Response.json(
-      { message: "Order has been created", order: createdOrder },
-      {
-        status: 201,
-      }
-    );
-  } catch (err: any) {
-    return Response.json(
-      {
-        message: err.message,
-      },
-      {
-        status: 500,
-      }
-    );
+  } catch (error: any) {
+    return NextResponse.error;
   }
-}) as any;
+};

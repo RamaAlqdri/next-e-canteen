@@ -1,11 +1,10 @@
-import { Product } from "./ProductModels";
-
 export type Canteen = {
-    _id?: string;
-    user: { name: string };
-    name: string;
-    slug: string;
-    image: string;
-    description: string;
-    items: [Product];
-}
+  _id?: string;
+  slug: string;
+  location: string;
+  name: string;
+  image: string;
+  description: string;
+  rating: number;
+  numReviews: number;
+};

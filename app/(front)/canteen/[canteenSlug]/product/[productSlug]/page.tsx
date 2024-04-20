@@ -5,20 +5,20 @@ import AddToCart from "@/components/products/AddToCart";
 import productsService from "@/lib/services/productService";
 import { convertDocToObj } from "@/lib/utils";
 import { formatRupiah } from "@/lib/utils";
+import canteenService from "@/lib/services/canteenService";
 
 
 export async function generateMetadata({
   params,
 }:{
-  params : { slug:string}
+  params : { productSlug:string}
 }){
-  const product = await productsService.getBySlug(params.slug)
+  const product = await productsService.getProductBySlugWithoutCanteen(params.productSlug)
   if (!product){
     return { title: 'Product not Found'}
   }
   return {
     title: product.name,
-    description: product.description,
   }
 }
 
@@ -27,16 +27,17 @@ export async function generateMetadata({
 export default async function ProductDetails({
   params,
 }: {
-  params: { slug: string };
+  params: { productSlug: string };
 }) {
-  const product = await productsService.getBySlug(params.slug)
+  const product = await productsService.getProductBySlugWithoutCanteen(params.productSlug)
+  const canteen = await canteenService.getCanteenData(product.canteenId);
   if (!product) {
     return <div>Product Not Found</div>;
   }
   return (
     <>
       <div className="my-2">
-        <Link href="/"> back to products</Link>
+        <Link href="/"> back</Link>
       </div>
       <div className="grid md:grid-cols-4 md:gap-3">
         <div className="md:col-span-2">
@@ -57,7 +58,7 @@ export default async function ProductDetails({
             <li>
               {product.rating} of {product.numReviews} reviews
             </li>
-            <li>{product.brand}</li>
+            <li>{canteen.name}</li>
             <li>
               <div className="divider"></div>
             </li>
@@ -82,7 +83,7 @@ export default async function ProductDetails({
               {product.countInStock !== 0 && (
                 <div className="card-actions justify-center">
                   <AddToCart
-                    item={{ ...convertDocToObj(product), qty: 0, color: "", size: "" }}
+                    item={{ ...product, qty: 0 }}
                   />
                 </div>
               )}

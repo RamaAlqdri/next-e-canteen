@@ -5,6 +5,7 @@ import Header from "@/components/header/header";
 import Providers from "@/components/Providers"
 import { Poppins } from "next/font/google";
 
+
 // const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
 	subsets: ["latin"],
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Providers>
+      <Providers>
           <div className="min-h-screen flex flex-col items-center">
             <Header />
             {children}

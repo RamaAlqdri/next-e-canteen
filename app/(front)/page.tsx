@@ -10,7 +10,7 @@ import canteenService from "@/lib/services/canteenService";
 import CanteenItem from "@/components/canteen/CanteenItem";
 
 export const metadata: Metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || "e-Canteen",
+  title: process.env.NEXT_PUBLIC_APP_NAME || "e-Canteens",
   description: process.env.NEXT_PUBLIC_APP_DESC || "e-Canteen, lorem ipsum",
 };
 

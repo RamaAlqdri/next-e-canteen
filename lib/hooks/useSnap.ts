@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
 const useSnap = () => {
-  const [snap, setSnap] = useState(null);
+  const [snap, setSnap] = useState(null) as any;
   useEffect(() => {
-    const myMidtransClientKey = process.env.NEXT_PUBLIC_MITRANS_CLIENT_KEY;
+    const myMidtransClientKey = process.env.NEXT_PUBLIC_MITRANS_CLIENT_KEY as string;
     const script = document.createElement("script");
     console.log(myMidtransClientKey);
     script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
     script.setAttribute("data-client-key", myMidtransClientKey);
     script.onload = () => {
-      setSnap(window.snap);
+      setSnap((window as any).snap)
     };
     console.log('tes');
     document.body.appendChild(script);

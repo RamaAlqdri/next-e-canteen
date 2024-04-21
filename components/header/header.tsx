@@ -1,8 +1,28 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import Menu from "./Menu";
+import userService from "@/lib/services/userService";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import useCartService from "@/lib/hooks/useCartStore";
 
-const Header = () => {
+const Header = async () => {
+  // const router = useRouter();
+  // const { items } = useCartService();
+  // const [mounted, setMounted] = useState(false);
+  // useEffect(() => {
+  //   setMounted(true);
+  // }, []);
+
+  // const makeCanteen = () => {
+  //   router.push("/make_canteen");
+  // };
+
+  // const signoutHandler = () => {
+  //   signOut({ callbackUrl: "/signin" });
+  // };
+
+ 
   return (
     <header className="fixed z-20 ">
       <nav className="">

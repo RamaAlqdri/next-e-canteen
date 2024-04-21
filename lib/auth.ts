@@ -21,6 +21,7 @@ export const config = {
         if (credentials == null) return null;
         
         const user:any = await userService.getUserByEmail(credentials.email as string);
+        console.log(user);
         if (user) {
           const isMatch = await bcrypt.compare(
             credentials.password as string,
@@ -29,6 +30,8 @@ export const config = {
           if (isMatch) {
             return user;
           }
+        }else{
+          console.log("User not found");
         }
         return null;
       },
@@ -42,25 +45,32 @@ export const config = {
   callbacks: {
     
     async jwt({ user, trigger, session, token }: any) {
+      console.log(user);
+      console.log(token);
       if (user) {
         token.user = {
           _id: user._id,
           email: user.email,
           name: user.name,
           isAdmin: user.isAdmin,
+          role: user.role,
         }
       }
+      console.log(token);
+      console.log(session)
       if (trigger === "update" && session) {
         token.user = {
           ...token.user,
           email: session.user.email,
           name: session.user.name,
+          role: session.user.role,
         }
       }
       return token
     },
     session: async ({ session, token }: any) => {
       if (token) {
+        console.log(token);
         session.user = token.user;
       }
       return session;

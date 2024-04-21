@@ -1,12 +1,32 @@
 import { cache } from "react";
 import { Product } from "../models/ProductModels";
 import { db } from "../firebase";
-import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
+import { collection,setDoc, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { Canteen } from "../models/CanteenModel";
 import { get } from "http";
 import exp from "constants";
 
 export const revalidate = 3600;
+
+async function createCanteen(canteen: Canteen): Promise<void> {
+
+  try {
+    
+    const docRef = collection(db, "canteen");
+    await setDoc(doc(docRef), {
+      name: canteen.name,
+      location: canteen.location,
+      description: canteen.description,
+      image: canteen.image,
+      numReviews: canteen.numReviews,
+      rating: canteen.rating,
+      slug: canteen.slug,
+
+    });
+  } catch (error) {
+    console.error("Error creating canteen:", error);
+  }
+}
 
 async function getCanteenData(canteenId: string): Promise<Canteen> {
   try {
@@ -64,5 +84,6 @@ const canteenService = {
   getAllCanteenData,
   getCanteenBySlug,
   getCanteenIdBySlug,
+  createCanteen,
 };
 export default canteenService;

@@ -3,20 +3,33 @@ import useCartService from "@/lib/hooks/useCartStore";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import Router, { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { User } from "@/lib/models/UserModel";
+import userService from "@/lib/services/userService";
 const Menu = () => {
+  const router = useRouter();
   const { items } = useCartService();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const makeCanteen = () => {
+    router.push("/make_canteen");
+  };
+
   const signoutHandler = () => {
     signOut({ callbackUrl: "/signin" });
   };
 
   const { data: session } = useSession();
+
+  console.log(session?.user?.name);
+  // const email = session?.user?.email as string;
+  // console.log(email);
+  // const userData = await userService.getUserData(email);
+  // console.log(userData);
 
   return (
     <div>
@@ -78,9 +91,15 @@ const Menu = () => {
                   className="menu dropdown-content z-[1] p-2 shadow bg-base-300 rounded-box w-52"
                 >
                   <li>
-                    <button type="button" onClick={signoutHandler}>
-                      Make a Canteen
-                    </button>
+                    {session?.user?.role === "canteen" ? (
+                      <button type="button" onClick={makeCanteen}>
+                        Your Canteen
+                      </button>
+                    ) : (
+                      <button type="button" onClick={makeCanteen}>
+                        Make a Canteen
+                      </button>
+                    )}
                     <button type="button" onClick={signoutHandler}>
                       Sign Out
                     </button>

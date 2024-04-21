@@ -9,3 +9,6 @@ export function formatRupiah(nominal: number): string {
   const rupiah = nominal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
   return rupiah;
 }
+export const slugify = (text:any) => {
+  return text.toLowerCase().replace(/\s+/g, '-');
+};

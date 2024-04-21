@@ -25,7 +25,8 @@ const Menu = () => {
 
   const { data: session } = useSession();
 
-  console.log(session?.user?.name);
+  console.log(session?.user);
+  const role = session?.user?.role as string;
   // const email = session?.user?.email as string;
   // console.log(email);
   // const userData = await userService.getUserData(email);
@@ -91,7 +92,7 @@ const Menu = () => {
                   className="menu dropdown-content z-[1] p-2 shadow bg-base-300 rounded-box w-52"
                 >
                   <li>
-                    {session?.user?.role === "canteen" ? (
+                    {role === "canteen" ? (
                       <button type="button" onClick={makeCanteen}>
                         Your Canteen
                       </button>

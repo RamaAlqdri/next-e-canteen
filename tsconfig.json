@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/tokenizer/route.js"],
+  "include": ["next-env.d.ts","types/**/*.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/tokenizer/route.js"],
   "exclude": ["node_modules"]
 }

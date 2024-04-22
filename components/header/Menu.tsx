@@ -20,7 +20,12 @@ const Menu = () => {
     router.push("/make_canteen");
   };
   const canteen = () =>{
-    router.push(`/canteen/${session?.user?.canteen}`);
+    if (session?.user?.canteen) {
+      router.push(`/canteen/${session.user.canteen}`);
+    } else {
+      // Handle case when 'canteen' is null or undefined
+      console.error("Canteen not found in session user");
+    }
   }
 
 

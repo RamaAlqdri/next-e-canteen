@@ -45,8 +45,8 @@ export const config = {
   callbacks: {
     
     async jwt({ user, trigger, session, token }: any) {
-      console.log(user);
-      console.log(token);
+      // console.log(user);
+      // console.log(token);
       if (user) {
         token.user = {
           _id: user._id,
@@ -57,8 +57,8 @@ export const config = {
           canteen: user.canteenId,
         }
       }
-      console.log(token);
-      console.log(session)
+      // console.log(token);
+      // console.log(session)
       if (trigger === "update" && session) {
         token.user = {
           ...token.user,
@@ -72,7 +72,7 @@ export const config = {
     },
     session: async ({ session, token }: any) => {
       if (token) {
-        console.log(token);
+        // console.log(token);
         session.user = token.user;
       }
       return session;

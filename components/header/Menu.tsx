@@ -15,6 +15,7 @@ const Menu = () => {
     setMounted(true);
   }, []);
 
+  const { data: session } = useSession();
   const makeCanteen = () => {
     router.push("/make_canteen");
   };
@@ -27,9 +28,8 @@ const Menu = () => {
     signOut({ callbackUrl: "/signin" });
   };
 
-  const { data: session } = useSession();
 
-  console.log(session?.user?.canteen);
+  // console.log(session?.user?.canteen);
   
   // const email = session?.user?.email as string;
   // console.log(email);

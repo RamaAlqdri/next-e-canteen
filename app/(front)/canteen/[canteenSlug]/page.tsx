@@ -51,6 +51,10 @@ export default async function Canteen({
         <div className=" ml-4 w-full flex flex-col  justify-start h-24">
           <p className="font-semibold ">{canteen.name}</p>
           <p className="font-light text-sm">{canteen.location}</p>
+          {/* <p className="font-light text-sm">{canteen.description}</p> */}
+        </div>
+        <div>
+          add product
         </div>
       </div>
       

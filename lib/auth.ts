@@ -54,6 +54,7 @@ export const config = {
           name: user.name,
           isAdmin: user.isAdmin,
           role: user.role,
+          canteen: user.canteenId,
         }
       }
       console.log(token);
@@ -64,6 +65,7 @@ export const config = {
           email: session.user.email,
           name: session.user.name,
           role: session.user.role,
+          canteen: user.canteenId,
         }
       }
       return token

@@ -50,10 +50,10 @@ export default function useCartService() {
     paymentMethod,
     orderBy,
     increase: (item: OrderItem) => {
-      const exist = items.find((x) => x.slug === item.slug);
+      const exist = items.find((x) => x._id === item._id );
       const updateCartItems = exist
         ? items.map((x) =>
-            x.slug === item.slug ? { ...exist, qty: exist.qty + 1 } : x
+            x._id === item._id  ? { ...exist, qty: exist.qty + 1 } : x
           )
         : [...items, { ...item, qty: 1 }];
 
@@ -68,13 +68,13 @@ export default function useCartService() {
       });
     },
     decrease: (item: OrderItem) => {
-      const exist = items.find((x) => x.slug === item.slug);
+      const exist = items.find((x) => x._id === item._id);
       if (!exist) return;
       const updateCartItems =
         exist.qty === 1
-          ? items.filter((x: OrderItem) => x.slug !== item.slug)
+          ? items.filter((x: OrderItem) => x._id !== item._id)
           : items.map((x) =>
-              x.slug === item.slug ? { ...exist, qty: exist.qty - 1 } : x
+              x._id === item._id ? { ...exist, qty: exist.qty - 1 } : x
             );
 
       const { itemsPrice,totalPrice } =

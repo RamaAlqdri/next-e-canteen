@@ -10,7 +10,7 @@ import { formatRupiah } from "@/lib/utils";
 export default function CartDetails() {
   const router = useRouter();
   const { items, itemsPrice, decrease, increase } = useCartService();
-
+  console.log(items);
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -89,9 +89,9 @@ export default function CartDetails() {
                         <li>
                             <button
                                 onClick={()=> router.push('/shipping')}
-                                className="btn btn-primary w-full"
+                                className="btn btn-ePrimary w-full"
                             >
-                                Proceed to Checkout
+                                Bayar
                             </button>
                         </li>
                     </ul>

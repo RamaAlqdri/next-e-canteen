@@ -7,9 +7,13 @@ import AddToCart from "./AddToCart";
 import { convertDocToObj } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
+import { useSession } from "next-auth/react";
 
 export default async function ProductItem({ product }: { product: Product }) {
   const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
+
+  // const { data : session } = useSession();
+  // console.log(session);
   
   // console.log();
   return (

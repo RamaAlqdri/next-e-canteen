@@ -99,7 +99,7 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-primary w-full"
+              className="btn btn-ePrimary w-full"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>

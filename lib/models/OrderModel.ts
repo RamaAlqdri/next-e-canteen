@@ -19,6 +19,7 @@ export type OrderItem = {
   slug: string;
   qty: number;
   image: string;
+  _id: string;
   price: number;
   canteenId: string;
 };

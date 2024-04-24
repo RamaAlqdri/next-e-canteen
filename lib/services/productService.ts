@@ -9,6 +9,7 @@ import {
   where,
   limit,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 export const revalidate = 3600;
@@ -43,6 +44,25 @@ async function getProductBySlugWithoutCanteen(
   } catch (error) {
     console.error("Error fetching product data:", error);
     return {} as Product;
+  }
+}
+async function getProductIdByProductSlugandCanteenSlug(
+  productSlug: string,
+  canteenSlug: string
+): Promise<string> {
+  try {
+    const kantinRef = query(collection(db, "canteen"),where("slug", "==", canteenSlug),limit(1));
+    const kantinData = await getDocs(kantinRef);
+    const productRef = query(
+      collection(db, "canteen", kantinData.docs[0].id, "product"),
+      where("slug", "==", productSlug),
+      limit(1)
+    );
+    const productData = await getDocs(productRef);
+    return productData.docs[0].id;
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    return "" as string;
   }
 }
 
@@ -177,6 +197,11 @@ async function createProduct(product: Product) {
       image: product.image,
       rating: product.rating,
       numReviews: product.numReviews,
+    });
+
+    const productId = await getProductIdByProductSlugandCanteenSlug(product.slug, product.canteenId);
+    await updateDoc(doc(productRef, productId), {
+      _id: productId,
     });
   } catch (error) {
     console.error("Error creating product:", error);

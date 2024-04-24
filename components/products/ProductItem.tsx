@@ -6,9 +6,11 @@ import { formatRupiah } from "@/lib/utils";
 import AddToCart from "./AddToCart";
 import { convertDocToObj } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
+import { Canteen } from "@/lib/models/CanteenModel";
 
 export default async function ProductItem({ product }: { product: Product }) {
-  const canteenData = await canteenService.getCanteenData(product.canteenId);
+  const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
+  // console.log();
   return (
     <div className="card hover:brightness-90 cursor-pointer bg-base-100 drop-shadow-md mb-0 sm:mb-4  ">
       <div className="flex sm:grid ">

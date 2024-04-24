@@ -20,6 +20,7 @@ export type OrderItem = {
   qty: number;
   image: string;
   price: number;
+  canteenId: string;
 };
 
 export type OrderBy = {

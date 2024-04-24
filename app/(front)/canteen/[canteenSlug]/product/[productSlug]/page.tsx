@@ -7,29 +7,31 @@ import { convertDocToObj } from "@/lib/utils";
 import { formatRupiah } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
 
-
 export async function generateMetadata({
   params,
-}:{
-  params : { productSlug:string}
-}){
-  const product = await productsService.getProductBySlugWithoutCanteen(params.productSlug)
-  if (!product){
-    return { title: 'Product not Found'}
+}: {
+  params: { productSlug: string };
+}) {
+  const product = await productsService.getProductBySlugWithoutCanteen(
+    params.productSlug
+  );
+  
+  if (!product) {
+    return { title: "Product not Found" };
   }
   return {
     title: product.name,
-  }
+  };
 }
-
-
 
 export default async function ProductDetails({
   params,
 }: {
   params: { productSlug: string };
 }) {
-  const product = await productsService.getProductBySlugWithoutCanteen(params.productSlug)
+  const product = await productsService.getProductBySlugWithoutCanteen(
+    params.productSlug
+  );
   const canteen = await canteenService.getCanteenData(product.canteenId);
   if (!product) {
     return <div>Product Not Found</div>;
@@ -82,9 +84,7 @@ export default async function ProductDetails({
               </div>
               {product.countInStock !== 0 && (
                 <div className="card-actions justify-center">
-                  <AddToCart
-                    item={{ ...product, qty: 0 }}
-                  />
+                  <AddToCart item={{ ...product, qty: 0 }} />
                 </div>
               )}
             </div>

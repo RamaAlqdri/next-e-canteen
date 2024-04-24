@@ -30,7 +30,10 @@ async function createCanteen(canteen: Canteen): Promise<void> {
 
 async function getCanteenData(canteenId: string): Promise<Canteen> {
   try {
-    const kantinRef = doc(db, "canteen", canteenId);
+    const canteenRef = query(collection(db, "canteen"),where("slug", "==", canteenId),limit(1));
+    const canteenData0 = await getDocs(canteenRef);
+    
+    const kantinRef = doc(db, "canteen", canteenData0.docs[0].id);
     const canteenData = await getDoc(kantinRef);
 
     return canteenData.data() as Canteen;

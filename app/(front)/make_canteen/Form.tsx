@@ -72,11 +72,11 @@ const Form = () => {
   return (
     <div className="max-w-sm mx-auto card bg-base-300 my-4">
       <div className="card-body">
-        <h1 className="card-title">Register Canteen</h1>
+        <h1 className="card-title">Daftarkan Kantin</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
           <div className="my-2">
             <label htmlFor="name" className="label">
-              Name
+              Nama
             </label>
             <input
               type="text"
@@ -92,7 +92,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label htmlFor="location" className="label">
-              Location
+              Lokasi
             </label>
             <input
               type="text"
@@ -112,7 +112,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label htmlFor="description" className="label">
-              Description
+              Deskripsi
             </label>
             <input
               type="text"
@@ -131,12 +131,12 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-primary w-full"
+              className="btn btn-ePrimary w-full"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )}
-              Register
+              Daftarkan
             </button>
           </div>
         </form>

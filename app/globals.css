@@ -16,6 +16,16 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+.btn-eWhite {
+  background-color: #fff;
+  border: 2px solid #EEA147;
+  color: rgb(var(--foreground-rgb));
+}
+.btn-eWhite:hover {
+  background-color: #F7D1A7;
+  border: 2px solid #F7D1A7;
+  color: rgb(var(--foreground-rgb));
+}
 .btn-ePrimary {
   background-color: #EEA147;
   color: rgb(var(--foreground-rgb));

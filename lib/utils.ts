@@ -1,3 +1,5 @@
+import { getSession } from "next-auth/react";
+
 export const round2 = (num: number) =>
   Math.round((num + Number.EPSILON) * 100) / 100;
 
@@ -12,3 +14,7 @@ export function formatRupiah(nominal: number): string {
 export const slugify = (text:any) => {
   return text.toLowerCase().replace(/\s+/g, '-');
 };
+// export const getUserSession = async () => {
+//   const session = await getSession();
+//   return session;
+// }

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+
+import { useSearchParams, useRouter} from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -44,15 +45,15 @@ const Form = () => {
       //   confirmPassword: "",
     },
   });
-  const [countInStock, setCountInStock] = useState(0);
+  const [countInStockValue, setCountInStock] = useState(0);
 
   const handleIncrement = () => {
-    setCountInStock(countInStock + 1);
+    setCountInStock(countInStockValue + 1);
   };
 
   const handleDecrement = () => {
-    if (countInStock > 0) {
-      setCountInStock(countInStock - 1);
+    if (countInStockValue > 0) {
+      setCountInStock(countInStockValue - 1);
     }
   };
 
@@ -62,7 +63,10 @@ const Form = () => {
   //     }
   //   }, [callbackUrl, params, router, session]);
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
+    form.countInStock = countInStockValue;
     const { category, countInStock, name, price, description } = form;
+    
+    // console.log(form);
     try {
       const res = await fetch("/api/products", {
         method: "POST",
@@ -80,7 +84,10 @@ const Form = () => {
       });
       console.log(res);
       if (res.ok) {
-        return router.back();
+        // return router.push(`/canteen/${session?.user.canteen}`);
+        return router.back()
+        // router.reload();
+        // router.refresh
       } else {
         const data = await res.json();
         throw new Error(data.message);
@@ -185,21 +192,21 @@ const Form = () => {
               <button
                 type="button"
                 onClick={handleDecrement}
-                className="btn btn-sm btn-outline"
+                className="btn btn-ePrimary"
               >
                 -
               </button>
               <input
                 type="text"
                 id="countInStock"
-                value={countInStock}
+                value={countInStockValue}
                 readOnly
                 className="input input-bordered w-full max-w-sm text-center"
               />
               <button
                 type="button"
                 onClick={handleIncrement}
-                className="btn btn-sm btn-outline"
+                className="btn btn-ePrimary"
               >
                 +
               </button>
@@ -209,12 +216,12 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-primary w-full"
+              className="btn btn-ePrimary w-full"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )}
-              Buat
+              Tambah
             </button>
           </div>
         </form>

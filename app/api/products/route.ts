@@ -15,7 +15,7 @@ export const POST = async (request: NextRequest) => {
 
   const { category, countInStock, name, price, description, session } =
     await request.json();
-  console.log(category);
+  console.log(countInStock);
   console.log("tes")
 //   const { data: session } = useSession();
   console.log(session);

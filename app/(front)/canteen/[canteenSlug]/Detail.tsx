@@ -7,14 +7,15 @@ import ProductItem from "@/components/products/ProductItem";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const Detail = ({ canteen, products }: { canteen: Canteen; products: any }) => {
+const Detail = ({ canteen }: { canteen: Canteen }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const addProduct = () => {
     // router.push(`/add_product?canteen=${canteen.slug}`);
-    router.push("/add_product");}
+    router.push("/add_product");
+  };
 
-//   console.log(session?.user.canteen);
+  //   console.log(session?.user.canteen);
   if (!canteen) {
     return <div>Canteen Not Found</div>;
   }
@@ -38,14 +39,15 @@ const Detail = ({ canteen, products }: { canteen: Canteen; products: any }) => {
           {/* <p className="font-light text-sm">{canteen.description}</p> */}
         </div>
         {session && session?.user.canteen === canteen.slug && (
-          <button onClick={addProduct} className="btn btn-primary">add product</button>
+          <div className="flex flex-col justify-center gap-2">
+            <button onClick={addProduct} className="font-medium text-sm px-3 h-8 w-[10rem] rounded-lg btn-eWhite ml-4">
+              Tambah Produk
+            </button>
+            <button onClick={addProduct} className="font-medium text-sm px-3 h-8 rounded-lg btn-eWhite ml-4">
+              Edit Kantin
+            </button>
+          </div>
         )}
-      </div>
-
-      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        {products.map((product: any) => (
-          <ProductItem key={product.slug} product={product} />
-        ))}
       </div>
     </>
   );

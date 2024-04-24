@@ -37,10 +37,18 @@ export default async function Canteen({
   const canteenId = await canteenService.getCanteenIdBySlug(params.canteenSlug);
   const products = await productsService.getAllProductsFromCanteen(canteenId);
 
-  console.log(canteen);
-  console.log(canteenId);
-  console.log(products);
+  // console.log(canteen);
+  // console.log(canteenId);
+  // console.log(products);
 
-
-  return <Detail canteen={canteen} products={products} />;
+  return (
+    <>
+      <Detail canteen={canteen} />
+      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        {products.map((product: any) => (
+          <ProductItem key={product.slug} product={product} />
+        ))}
+      </div>
+    </>
+  );
 }

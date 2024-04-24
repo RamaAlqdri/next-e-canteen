@@ -7,15 +7,16 @@ import { convertDocToObj } from "@/lib/utils";
 import { formatRupiah } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
 
+
 export async function generateMetadata({
   params,
 }: {
-  params: { productSlug: string };
+  params: { productSlug: string, canteenSlug: string };
 }) {
   const product = await productsService.getProductBySlugWithoutCanteen(
     params.productSlug
   );
-  
+
   if (!product) {
     return { title: "Product not Found" };
   }
@@ -27,12 +28,13 @@ export async function generateMetadata({
 export default async function ProductDetails({
   params,
 }: {
-  params: { productSlug: string };
+  params: { productSlug: string, canteenSlug: string};
 }) {
-  const product = await productsService.getProductBySlugWithoutCanteen(
-    params.productSlug
-  );
-  const canteen = await canteenService.getCanteenData(product.canteenId);
+  const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
+  const canteenId = await canteenService.getCanteenIdBySlug(params.canteenSlug) as string;
+  const product = await productsService.getProductBySlug(canteenId,params.productSlug);
+  // const product = await productsService.getProduct(params.productSlug, params.canteenSlug)
+  // const canteen = await canteenService.getCanteenData(product.canteenId);
   if (!product) {
     return <div>Product Not Found</div>;
   }

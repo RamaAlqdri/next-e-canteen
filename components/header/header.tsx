@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@react-hook/media-query";
 
 import Menu from "./Menu";
@@ -26,14 +26,25 @@ const Header = () => {
   // const signoutHandler = () => {
   //   signOut({ callbackUrl: "/signin" });
   // };
-  const isLargeScreen = useMediaQuery("(min-width: 1024px)");
-  const isMediumScreen = useMediaQuery("(min-width: 768px)");
-  const isSmallScreen = useMediaQuery("(max-width: 640px)");
+  // const isLargeScreen = useMediaQuery("(min-width: 1024px)");
+  // const isMediumScreen = useMediaQuery("(min-width: 768px)");
+  // const isSmallScreen = useMediaQuery("(max-width: 640px)");
+  const [viewportWidth, setViewportWidth] = useState(document.documentElement.clientWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(document.documentElement.clientWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <header className="fixed z-20 w-full">
       {/* cek media witdh */}
-      {isSmallScreen ? (
+      {viewportWidth <=640 ? (
         <div className="w-full">
           <SearchComponent />
           <MenuMobile />

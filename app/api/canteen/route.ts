@@ -17,7 +17,7 @@ export const POST = async (request: NextRequest) => {
   const slug = name.toLowerCase().replace(/ /g, "-");
   const existingCanteen = await canteenService.getCanteenBySlug(slug);
   if (existingCanteen.name) {
-    console.error("Canteen already exists.");
+    // console.error("Canteen already exists.");
     return Response.json(
       { message: "Canteen already exists." },
       {

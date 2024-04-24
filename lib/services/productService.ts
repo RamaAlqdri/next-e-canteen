@@ -106,7 +106,7 @@ async function getAllProductsFromCanteen(
   try {
     const productRef = collection(db, "canteen", canteenId, "product");
     const snapShot = await getDocs(productRef);
-    console.log(canteenId);
+
     let productList: Product[] = [];
     snapShot.forEach((doc) => {
       // console.log(doc.data());

@@ -6,6 +6,8 @@ import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Span } from "next/dist/trace";
+import ImageUpload from "@/components/image/ImageUpload";
+import Image from "next/image";
 
 type Inputs = {
   category: string;
@@ -20,6 +22,12 @@ const Form = () => {
   const { data: session } = useSession();
   const params = useSearchParams();
   const router = useRouter();
+
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+
+  const handleUpload = (imageUrl: any) => {
+    setUploadedImageUrl(imageUrl);
+  };
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
@@ -68,7 +76,6 @@ const Form = () => {
           price,
           description,
           session,
-          
         }),
       });
       console.log(res);
@@ -91,6 +98,17 @@ const Form = () => {
       <div className="card-body">
         <h1 className="card-title">Tambah Product</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
+          <ImageUpload onUpload={handleUpload} />
+          {/* {uploadedImageUrl && (
+            <div>
+              <h2>Uploaded Image Preview:</h2>
+              <Image
+                src={uploadedImageUrl}
+                alt="Uploaded"
+                style={{ maxWidth: "100%", marginTop: "10px" }}
+              />
+            </div>
+          )} */}
           <div className="my-2">
             <label htmlFor="name" className="label">
               Nama Produk

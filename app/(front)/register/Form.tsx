@@ -68,7 +68,7 @@ const Form = () => {
     }
   };
   return (
-    <div className="max-w-sm mx-auto card bg-base-300 my-4">
+    <div className="max-w-sm mx-auto card bg-white my-4">
       <div className="card-body">
         <h1 className="card-title">Register</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -82,7 +82,7 @@ const Form = () => {
               {...register("name", {
                 required: "Name is required",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.name?.message && (
               <div className="text-error">{errors.name.message}</div>
@@ -102,7 +102,7 @@ const Form = () => {
                   message: "Email is invalid",
                 },
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.email?.message && (
               <div className="text-error">{errors.email.message}</div>
@@ -118,7 +118,7 @@ const Form = () => {
               {...register("password", {
                 required: "Password is required",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.password?.message && (
               <div className="text-error">{errors.password.message}</div>
@@ -138,7 +138,7 @@ const Form = () => {
                   return password === value || "Password do not match";
                 },
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.confirmPassword?.message && (
               <div className="text-error">{errors.confirmPassword.message}</div>
@@ -148,7 +148,7 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-ePrimary w-full"
+              className="btn btn-ePrimary w-full border-0"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>

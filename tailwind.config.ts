@@ -6,6 +6,17 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          warning: "#EEA147",
+          accent: "fff",
+          neutral: "#FFEBD7",
+        },
+      },
+    ],
+  },
   theme: {
     extend: {
       backgroundImage: {

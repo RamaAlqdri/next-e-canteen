@@ -53,7 +53,7 @@ const Form = () => {
           required: required && `${name} is required`,
           pattern: pattern,
         })}
-        className="input input-bordered w-full max-w-sm"
+        className="input bg-gray-100 input-bordered w-full max-w-sm"
       />
       {errors[id]?.message && (
         <div className="text-error">{errors[id]?.message}</div>
@@ -64,18 +64,18 @@ const Form = () => {
   return (
     <div>
       <CheckoutSteps current={0} />
-      <div className="max-w-sm mx-auto card bg-base-300 my-4">
+      <div className="max-w-sm mx-auto card bg-white my-4">
         <div className="card-body">
           <h1 className="card-title">Identitas Anda</h1>
           <form onSubmit={handleSubmit(formSubmit)}>
-            <FormInput name="Full Name" id="fullName" required />
+            <FormInput name="Nama" id="fullName" required />
             <FormInput name="Email" id="email" required/>
             
             <div className="my-2">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn btn-primary w-full"
+                className="btn btn-ePrimary border-0 w-full"
               >
                 {isSubmitting && (
                   <span className="loading loading-spinner"></span>

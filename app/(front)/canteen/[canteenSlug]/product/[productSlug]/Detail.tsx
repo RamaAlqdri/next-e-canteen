@@ -58,7 +58,7 @@ const Detail = ({
           </ul>
         </div>
         <div>
-          <div className="card bg-base-300 shadow-xl mt-3 md:mt-0">
+          <div className="card bg-gray-200 shadow-xl mt-3 md:mt-0">
             <div className="card-body">
               <div className="mb-2 flex justify-between">
                 <div>Price</div>

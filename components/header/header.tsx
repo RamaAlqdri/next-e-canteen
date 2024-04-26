@@ -29,8 +29,12 @@ const Header = () => {
   // const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   // const isMediumScreen = useMediaQuery("(min-width: 768px)");
   // const isSmallScreen = useMediaQuery("(max-width: 640px)");
-  const [viewportWidth, setViewportWidth] = useState(document.documentElement.clientWidth);
-
+  const [viewportWidth, setViewportWidth] = useState(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.clientWidth;
+    }
+    return 0;
+  });
   useEffect(() => {
     const handleResize = () => {
       setViewportWidth(document.documentElement.clientWidth);

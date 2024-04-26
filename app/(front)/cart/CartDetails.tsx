@@ -20,16 +20,16 @@ export default function CartDetails() {
 
   return (
     <>
-      <h1 className="py-4 text-2xl">Shopping Cart</h1>
+      <h1 className="py-4 text-2xl">Keranjang Anda</h1>
       {items.length === 0 ? (
         <div>
-          Cart is Empty.
-          <Link href="/">Go Shopping</Link>
+          Keranjang Kosong.
+          <Link href="/">Ayo Belanja</Link>
         </div>
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
           <div className="overflow-x-auto md:col-span-3">
-            <table className="table">
+            <table className=" table  ">
               <thead>
                 <tr>
                   <th>Item</th>
@@ -43,7 +43,7 @@ export default function CartDetails() {
                     <td>
                       <Link
                         href={`/product/${item.slug}`}
-                        className="flex items-center"
+                        className="flex items-center "
                       >
                         <Image
                           src={item.image}
@@ -56,7 +56,7 @@ export default function CartDetails() {
                     </td>
                     <td>
                         <button
-                            className="btn"
+                            className="btn btn-ePrimary border-0"
                             type="button"
                             onClick={() => decrease(item)}
                         >
@@ -64,7 +64,7 @@ export default function CartDetails() {
                         </button>
                         <span className="px-2">{item.qty}</span>
                         <button
-                            className="btn"
+                            className="btn btn-ePrimary border-0"
                             type="button"
                             onClick={() => increase(item)}
                         >
@@ -78,7 +78,7 @@ export default function CartDetails() {
             </table>
           </div>
           <div>
-            <div className="card bg-base-300">
+            <div className="card bg-gray-200">
                 <div className="card-body">
                     <ul>
                         <li>
@@ -89,7 +89,7 @@ export default function CartDetails() {
                         <li>
                             <button
                                 onClick={()=> router.push('/shipping')}
-                                className="btn btn-ePrimary w-full"
+                                className="btn border-0 btn-ePrimary w-full"
                             >
                                 Bayar
                             </button>

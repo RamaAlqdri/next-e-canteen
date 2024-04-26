@@ -1,3 +1,4 @@
+'use client'
 import { Product } from "@/lib/models/ProductModels";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,18 +10,18 @@ import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { useSession } from "next-auth/react";
 
-export default async function ProductItem({ product }: { product: Product }) {
-  const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
+export default  function ProductItem({ product, canteenName }: { product: Product, canteenName: string}) {
+  // const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
 
   // const { data : session } = useSession();
   // console.log(session);
   
   // console.log();
   return (
-    <div className="card hover:brightness-90 cursor-pointer bg-base-100 drop-shadow-md mb-0 sm:mb-4  ">
+    <div className="card hover:brightness-90 cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
       <div className="flex sm:grid ">
         <div className="h-24 w-24 sm:h-52 sm:w-full m-2 sm:m-0">
-          <Link href={`${canteenData.slug}/product/${product.slug}`} className="">
+          <Link href={`${product.canteenId}/product/${product.slug}`} className="">
             <Image
               src={product.image}
               alt={product.name}
@@ -31,7 +32,7 @@ export default async function ProductItem({ product }: { product: Product }) {
           </Link>
         </div>
         <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between m-4 sm:flex-none sm:justify-normal ">
-          <Link href={`${canteenData.slug}/product/${product.slug}`} className="">
+          <Link href={`${product.canteenId}/product/${product.slug}`} className="">
             <h2 className="card-title font-semibold sm:text-lg text-sm ">
               {product.name}
             </h2>
@@ -52,7 +53,7 @@ export default async function ProductItem({ product }: { product: Product }) {
                 fill="#EEA147"
               />
             </svg>
-            <p className=" sm:text-sm text-xs">{canteenData.name}</p>
+            <p className=" sm:text-sm text-xs">{canteenName}</p>
           </div>
           <div className="flex justify-between ">
             <div className=" flex items-center justify-between ">

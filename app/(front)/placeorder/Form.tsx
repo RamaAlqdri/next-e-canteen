@@ -94,30 +94,30 @@ const Form = () => {
       <CheckoutSteps current={3} />
       <div className="grid md:grid-cols-4 md:gap-5 my-4">
         <div className="overflow-x-auto md:col-span-3">
-          <div className="card bg-base-300">
+          <div className="card bg-white">
             <div className="card-body">
               <h2 className="card-title">Identitas</h2>
               <p>{orderBy.fullName}</p>
               <p>{orderBy.email}</p>
               <div>
-                <Link className="btn" href="/shipping">
+                <Link className="btn btn-accent border-neutral border-2 hover:bg-neutral hover:border-neutral" href="/shipping">
                   Edit
                 </Link>
               </div>
             </div>
           </div>
-          <div className="card bg-base-300 mt-4">
+          <div className="card bg-white mt-4">
             <div className="card-body">
               <h2 className="card-title">Metode Pembayaran</h2>
               <p>{paymentMethod}</p>
               <div>
-                <Link className="btn" href="/payment">
+                <Link className="btn btn-accent border-neutral border-2 hover:bg-neutral hover:border-neutral" href="/payment">
                   Edit
                 </Link>
               </div>
             </div>
           </div>
-          <div className="card bg-base-300 mt-4">
+          <div className="card bg-white mt-4">
             <div className="card-body">
               <h2 className="card-title">Pesanan</h2>
               <table className="table">
@@ -151,7 +151,7 @@ const Form = () => {
                 </tbody>
               </table>
               <div>
-                <Link className="btn" href="/cart">
+                <Link className="btn btn-accent border-neutral border-2 hover:bg-neutral hover:border-neutral" href="/cart">
                   Edit
                 </Link>
               </div>
@@ -159,7 +159,7 @@ const Form = () => {
           </div>
         </div>
         <div>
-          <div className="card bg-base-300">
+          <div className="card bg-white">
             <div className="card-body">
               <h2 className="card-title">Order Summary</h2>
               <ul className="space-y-3">
@@ -180,7 +180,7 @@ const Form = () => {
                   <button
                     onClick={() => placeOrder()}
                     // disabled={isPlacing}
-                    className="btn btn-primary w-full"
+                    className="btn btn-ePrimary border-0  w-full"
                   >
                     {/* {isPlacing && (
                       <span className="loading loading-spinner"></span>

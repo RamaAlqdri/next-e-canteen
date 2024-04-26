@@ -45,18 +45,18 @@ const Form = () => {
   };
 
   return (
-    <div className="max-w-sm mx-auto card bg-base-300 my-4">
+    <div className="max-w-sm mx-auto card bg-white my-4">
       <div className="card-body">
         <h1 className="card-tittle">Sign in</h1>
         {params.get("error") && (
-          <div className="alert text-error">
+          <div className="alert text-error bg-gray-100 border-0">
             {params.get("error") === "CredentialsSignin"
               ? "Invalid email or password"
               : params.get("error")}
           </div>
         )}
         {params.get("success") && (
-          <div className="alert text-success">{params.get("success")}</div>
+          <div className="alert text-success border-0 bg-gray-100">{params.get("success")}</div>
         )}
         <form onSubmit={handleSubmit(formSubmit)}>
           <div className="my-2">
@@ -73,7 +73,7 @@ const Form = () => {
                   message: "Email is invalid",
                 },
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.email?.message && (
               <div className="text-error">{errors.email.message}</div>
@@ -89,7 +89,7 @@ const Form = () => {
               {...register("password", {
                 required: "Password is required",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.password?.message && (
               <div className="text-error">{errors.password.message}</div>
@@ -99,7 +99,7 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-ePrimary w-full"
+              className="btn btn-ePrimary w-full border-0"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>

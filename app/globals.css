@@ -5,17 +5,32 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   /* --background-start-rgb: 214, 219, 220; */
-  --background-start-rgb: 254, 254, 254;
-  --background-end-rgb: 254, 254, 254;
+  --background-start-rgb: 250, 250, 250;
+  --background-end-rgb: 250, 250, 250;
 }
 
-@media (prefers-color-scheme: dark) {
+.radio:checked {
+  box-shadow: 0 0 0 0px ;
+  animation: none;
+  /* @apply shadow-none; */
+}
+
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 0, 0, 255,1.0;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+    --background-opacity: 0.5;
+  }
+} */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255,1.0;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
-}
+} */
 .btn-eWhite {
   background-color: #fff;
   border: 2px solid #EEA147;

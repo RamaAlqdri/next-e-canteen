@@ -43,7 +43,7 @@ const Menu = () => {
 
   return (
     <nav className="">
-        <div className="navbar  w-screen px-10 justify-between bg-base-100 drop-shadow-sm">
+        <div className="navbar  w-screen px-10 justify-between bg-white drop-shadow-sm">
           <Link href="/" className="text-lg">
             <svg
               width="94"
@@ -136,16 +136,16 @@ const Menu = () => {
                       </label>
                       <ul
                         tabIndex={0}
-                        className="menu dropdown-content z-[1] p-2 shadow bg-base-300 rounded-box w-52"
+                        className="menu dropdown-content z-[1] p-2 shadow bg-white rounded-box w-52"
                       >
                         <li>
                           {session?.user?.role === "canteen" ? (
-                            <button type="button" onClick={canteen}>
+                            <button type="button" className="" onClick={canteen}>
                               
                               Your Canteen
                             </button>
                           ) : (
-                            <button type="button" onClick={makeCanteen}>
+                            <button type="button" className="" onClick={makeCanteen}>
                               Make a Canteen
                             </button>
                           )}

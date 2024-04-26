@@ -36,7 +36,7 @@ const SearchComponent = () => {
 
 
   return (
-    <div className="flex items-center justify-center bg-base-100 w-full py-2 drop-shadow-sm">
+    <div className="flex items-center justify-center bg-white w-full py-2 drop-shadow-sm">
       <form onSubmit={handleSubmit} className="flex items-center w-[75%] ">
         <Link href="/" className={`text-lg absolute ml-4 `+logo}>
           <svg
@@ -78,11 +78,11 @@ const SearchComponent = () => {
           placeholder=""
           value={searchQuery}
           onChange={handleChange}
-          className={`w-full  bg-base-200 text-xs rounded-s-full px-4 h-9 focus:outline-none `+padding}
+          className={`w-full  bg-gray-100 text-xs rounded-s-full px-4 h-9 focus:outline-none `+padding}
         />
         <button
           type="submit"
-          className="bg-base-200 text-white px-4 h-9 rounded-r-full focus:outline-none "
+          className="bg-gray-100 text-white px-4 h-9 rounded-r-full focus:outline-none "
         >
           <svg
             width="20"

@@ -10,7 +10,7 @@ import { Canteen } from "@/lib/models/CanteenModel";
 export default function CanteenItem({ canteen }: { canteen: Canteen }) {
   return (
     <div className="flex flex-col items-center hover:brightness-90 cursor-pointer">
-      <div className="rounded-xl overflow-hidden  bg-base-100 drop-shadow-md   mb-4">
+      <div className="rounded-xl overflow-hidden  bg-white drop-shadow-md   mb-4">
         <div className="relative h-48">
           <Link href={`/canteen/${canteen.slug}`}>
             <Image

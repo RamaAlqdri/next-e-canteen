@@ -207,12 +207,37 @@ async function createProduct(product: Product) {
     console.error("Error creating product:", error);
   }
 }
+
+async function getProductByCategoryByCanteenSlug(
+  canteenSlug: string,
+  category: string
+): Promise<Product[]> {
+  try {
+    const canteenRef = query(collection(db, "canteen"),where("slug", "==", canteenSlug),limit(1));
+    const canteenData = await getDocs(canteenRef);
+    const productRef = query(
+      collection(db, "canteen", canteenData.docs[0].id, "product"),
+      where("category", "==", category)
+    );
+    const productData = await getDocs(productRef);
+    let productList: Product[] = [];
+    productData.forEach((doc) => {
+      productList.push(doc.data() as Product);
+    });
+    return productList;
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    return [] as Product[];
+  }
+}
+
 const productsService = {
   getAllProducts,
   getProduct,
   getProductBySlug,
   getAllProductsFromCanteen,
   getProductBySlugWithoutCanteen,
+  getProductByCategoryByCanteenSlug,
   createProduct,
 };
 export default productsService;

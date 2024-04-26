@@ -24,7 +24,7 @@ const Form = () => {
   return (
     <div>
       <CheckoutSteps current={1} />
-      <div className="max-w-sm mx-auto card bg-base-300 my-4">
+      <div className="max-w-sm mx-auto card bg-white my-4">
         <div className="card-body">
           <h1 className="card-title">Metode Pembayaran</h1>
           <form onSubmit={handleSubmit}>
@@ -35,7 +35,7 @@ const Form = () => {
                   <input
                     type="radio"
                     name="paymentMethod"
-                    className="radio"
+                    className="radio radio-warning  "
                     value={payment}
                     checked={selectedPaymentMethod === payment}
                     onChange={() => setSelectedPaymentMethod(payment)}
@@ -44,14 +44,14 @@ const Form = () => {
               </div>
             ))}
             <div className="my-2">
-              <button type="submit" className="btn btn-primary w-full">
+              <button type="submit" className="btn border-0 btn-ePrimary w-full">
                 Next
               </button>
             </div>
             <div className="my-2">
               <button
                 type="button"
-                className="btn w-full my-2"
+                className="btn btn-accent border-neutral border-2 hover:bg-neutral hover:border-neutral w-full my-2"
                 onClick={() => router.back()}
               >
                 Back

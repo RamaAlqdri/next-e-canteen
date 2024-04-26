@@ -15,17 +15,17 @@ export const POST = async (request: NextRequest) => {
 
   const { category, countInStock, name, price, description, session } =
     await request.json();
-  console.log(countInStock);
-  console.log("tes")
-//   const { data: session } = useSession();
+  //   console.log(countInStock);
+  //   console.log("tes")
+  //   const { data: session } = useSession();
   console.log(session);
   const canteenSlug = session?.user.canteen as string;
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const productSlug = name.toLowerCase().replace(/ /g, "-");
   const existingProduct = await productsService.getProductBySlug(
-      canteenSlug,
-      productSlug
-    );
+    canteenSlug,
+    productSlug
+  );
   //   const existingCanteen = await canteenService.getCanteenBySlug(slug);
   if (existingProduct.name) {
     console.error("Produk sudah ada");
@@ -71,3 +71,41 @@ export const POST = async (request: NextRequest) => {
     );
   }
 };
+// export const GET = async (request: NextRequest) => {
+//   try {
+//     // Ambil kategori dari query parameter
+//     const { category, canteenslug } = await request.json();
+
+//     // Pastikan kategori tersedia
+//     if (!category) {
+//       return Response.json(
+//         { message: "Kategori tidak ditemukan" },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Dapatkan produk berdasarkan kategori
+//     const products = await productsService.getProductByCategoryByCanteenSlug(
+//       category as string,
+//       canteenslug as string
+//     );
+
+//     // Pastikan produk ditemukan
+//     if (!products || products.length === 0) {
+//       return Response.json(
+//         { message: "Produk tidak ditemukan untuk kategori ini" },
+//         { status: 404 }
+//       );
+//     }
+
+//     // Kirim produk yang ditemukan
+//     return Response.json(products, { status: 200 });
+//   } catch (error) {
+//     // Tangani kesalahan
+//     console.error("Error:", error);
+//     return Response.json(
+//       { message: "Terjadi kesalahan saat mengambil produk" },
+//       { status: 500 }
+//     );
+//   }
+// };

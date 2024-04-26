@@ -101,7 +101,7 @@ const Form = () => {
     }
   };
   return (
-    <div className="max-w-sm mx-auto card bg-base-300 my-4">
+    <div className="max-w-sm mx-auto card bg-white my-4">
       <div className="card-body">
         <h1 className="card-title">Tambah Product</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -126,7 +126,7 @@ const Form = () => {
               {...register("name", {
                 required: "Nama produk dibutuhkan",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered bg-gray-100 w-full max-w-sm"
             />
             {errors.name?.message && (
               <div className="text-error">{errors.name.message}</div>
@@ -141,7 +141,7 @@ const Form = () => {
               {...register("category", {
                 required: "Kategori produk dibutuhkan",
               })}
-              className="select select-bordered w-full max-w-sm"
+              className="select select-bordered bg-gray-100 w-full max-w-sm"
             >
               {/* <option value="">Pilih Kategori</option> */}
               <option value="makanan">Makanan</option>
@@ -162,7 +162,7 @@ const Form = () => {
               {...register("description", {
                 required: "Deskripsi produk dibutuhkan",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.description?.message && (
               <div className="text-error">{errors.description.message}</div>
@@ -178,7 +178,7 @@ const Form = () => {
               {...register("price", {
                 required: "Harga produk dibutuhkan",
               })}
-              className="input input-bordered w-full max-w-sm"
+              className="input input-bordered w-full max-w-sm bg-gray-100"
             />
             {errors.price?.message && (
               <div className="text-error">{errors.price.message}</div>
@@ -201,7 +201,7 @@ const Form = () => {
                 id="countInStock"
                 value={countInStockValue}
                 readOnly
-                className="input input-bordered w-full max-w-sm text-center"
+                className="input input-bordered w-full max-w-sm text-center bg-gray-100"
               />
               <button
                 type="button"

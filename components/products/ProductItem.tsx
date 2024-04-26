@@ -19,19 +19,19 @@ export default  function ProductItem({ product, canteenName }: { product: Produc
   // console.log();
   return (
     <div className="card hover:brightness-90 cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
-      <div className="flex sm:grid ">
-        <div className="h-24 w-24 sm:h-52 sm:w-full m-2 sm:m-0">
+      <div className="flex sm:grid  ">
+        <div className="h-20 w-20 sm:h-52 sm:w-full m-2 sm:m-0">
           <Link href={`${product.canteenId}/product/${product.slug}`} className="">
             <Image
               src={product.image}
               alt={product.name}
               width={300}
               height={300}
-              className="object-cover sm:h-full h-24 w-24 rounded-2xl sm:w-full"
+              className="object-cover sm:h-full h-20 w-20 rounded-2xl sm:w-full"
             />
           </Link>
         </div>
-        <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between m-4 sm:flex-none sm:justify-normal ">
+        <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 m-2 sm:flex-none sm:justify-normal ">
           <Link href={`${product.canteenId}/product/${product.slug}`} className="">
             <h2 className="card-title font-semibold sm:text-lg text-sm ">
               {product.name}

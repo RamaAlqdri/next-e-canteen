@@ -60,9 +60,7 @@ const Detail = ({
         <div className=" ml-4 w-full flex flex-col   md:h-24 ">
           <div className="flex justify-between">
             <div className="flex">
-              <p className="font-semibold text-lg align-top ">
-                {canteen.name}
-              </p>
+              <p className="font-semibold text-lg align-top ">{canteen.name}</p>
             </div>
             {session && session?.user.canteen === canteen.slug && (
               <button
@@ -87,7 +85,6 @@ const Detail = ({
                     fill="#EEA147"
                   />
                 </svg>
-
               </button>
             )}
           </div>
@@ -141,6 +138,42 @@ const Detail = ({
             </button>
           </div>
         )} */}
+      </div>
+      <div className="mt-2 bg-white rounded-2xl shadow-md py-3 px-3 flex justify-between">
+        <ul className="flex space-x-2">
+          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+            Makanan
+          </li>
+          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+            Minuman
+          </li>
+          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+            Cemilan
+          </li>
+        </ul>
+        {session && session?.user.canteen === canteen.slug && (
+          <button className="flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-0.5 rounded-lg mr-1">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-7 w-7"
+            >
+              <path
+                d="M7.00708 12C7.00708 11.801 7.0861 11.6103 7.22675 11.4696C7.3674 11.329 7.55817 11.25 7.75708 11.25H11.2501V7.75696C11.2501 7.55805 11.3291 7.36728 11.4698 7.22663C11.6104 7.08598 11.8012 7.00696 12.0001 7.00696C12.199 7.00696 12.3898 7.08598 12.5304 7.22663C12.6711 7.36728 12.7501 7.55805 12.7501 7.75696V11.25H16.2431C16.442 11.25 16.6328 11.329 16.7734 11.4696C16.9141 11.6103 16.9931 11.801 16.9931 12C16.9931 12.1989 16.9141 12.3896 16.7734 12.5303C16.6328 12.6709 16.442 12.75 16.2431 12.75H12.7501V16.243C12.7501 16.4419 12.6711 16.6326 12.5304 16.7733C12.3898 16.9139 12.199 16.993 12.0001 16.993C11.8012 16.993 11.6104 16.9139 11.4698 16.7733C11.3291 16.6326 11.2501 16.4419 11.2501 16.243V12.75H7.75708C7.55817 12.75 7.3674 12.6709 7.22675 12.5303C7.0861 12.3896 7.00708 12.1989 7.00708 12Z"
+                fill="#EEA147"
+              />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M7.31709 3.76904C10.4296 3.42399 13.5706 3.42399 16.6831 3.76904C18.5101 3.97304 19.9851 5.41204 20.1991 7.24904C20.5691 10.406 20.5691 13.595 20.1991 16.752C19.9841 18.589 18.5091 20.027 16.6831 20.232C13.5706 20.5771 10.4296 20.5771 7.31709 20.232C5.49009 20.027 4.01509 18.589 3.80109 16.752C3.43186 13.5951 3.43186 10.4059 3.80109 7.24904C4.01509 5.41204 5.49109 3.97304 7.31709 3.76904ZM16.5171 5.25904C13.5149 4.92627 10.4852 4.92627 7.48309 5.25904C6.92733 5.32069 6.40859 5.56791 6.01066 5.96075C5.61274 6.35359 5.35888 6.86912 5.29009 7.42404C4.93443 10.465 4.93443 13.5371 5.29009 16.578C5.35909 17.1328 5.61304 17.6481 6.01095 18.0407C6.40885 18.4334 6.92748 18.6804 7.48309 18.742C10.4601 19.074 13.5401 19.074 16.5171 18.742C17.0725 18.6802 17.5909 18.433 17.9886 18.0404C18.3863 17.6478 18.6401 17.1326 18.7091 16.578C19.0647 13.5371 19.0647 10.465 18.7091 7.42404C18.6399 6.86963 18.386 6.35468 17.9883 5.96226C17.5906 5.56983 17.0724 5.32281 16.5171 5.26104"
+                fill="#EEA147"
+              />
+            </svg>
+          </button>
+        )}
       </div>
       <div className="mt-3 grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {products.map((product: any) => (

@@ -6,6 +6,8 @@ import Image from "next/image";
 import ProductItem from "@/components/products/ProductItem";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { text } from "stream/consumers";
 
 const Detail = ({
   canteen,
@@ -16,10 +18,26 @@ const Detail = ({
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const addProduct = () => {
-    // router.push(`/add_product?canteen=${canteen.slug}`);
-    router.push("/add_product");
-  };
+
+  let categoryList = ['semua','makanan', 'minuman', 'cemilan', ]
+  
+  const [productList, setProductList] = useState(products);
+
+  const setProductbycategory = (category: string) => {
+    if (category === 'semua') {
+      setProductList(products)
+    } else {
+      setProductList(products.filter((product) => product.category === category))
+    }
+  }
+  const setNewCategory = (category: string) => {
+    setCategory(category)
+    setProductbycategory(category)
+  }
+
+  const [category, setCategory] = useState("semua");
+
+
   const makeProduct = () => {
     router.push("/add_product");
   };
@@ -144,15 +162,18 @@ const Detail = ({
       </div>
       <div className="mt-2 bg-white rounded-b-2xl rounded-t-md shadow-md py-3 px-3 flex justify-between">
         <ul className="flex space-x-2">
-          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
-            Makanan
-          </li>
-          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
-            Minuman
-          </li>
-          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
-            Cemilan
-          </li>
+          {categoryList.map((categoryItem) => (
+            <button
+              key={categoryItem}
+              onClick={() => setNewCategory(categoryItem)}
+              // onClick={() => setCategory(category)}
+              className={`capitalize py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] ${
+              categoryItem === category ? " bg-[#EEA147] text-white" : "text-[#EEA147]"
+            }`}
+            >
+              {categoryItem}
+            </button>
+          ))}
         </ul>
         {session && session?.user.canteen === canteen.slug && (
           <button onClick={makeProduct} className=" flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-0.5 rounded-lg mr-1">
@@ -179,7 +200,7 @@ const Detail = ({
         )}
       </div>
       <div className="mt-3 grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        {products.map((product: any) => (
+        {productList.map((product: any) => (
           <ProductItem
             key={product.slug}
             product={product}

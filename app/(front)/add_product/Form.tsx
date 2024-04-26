@@ -101,7 +101,7 @@ const Form = () => {
     }
   };
   return (
-    <div className="max-w-sm mx-auto card bg-white my-4">
+    <div className=" shadow-md rounded-2xl w-full bg-white my-4">
       <div className="card-body">
         <h1 className="card-title">Tambah Product</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
@@ -126,7 +126,7 @@ const Form = () => {
               {...register("name", {
                 required: "Nama produk dibutuhkan",
               })}
-              className="input input-bordered bg-gray-100 w-full max-w-sm"
+              className="text-medium py-2 px-4 border border-gray-300 rounded-lg bg-gray-100 w-full max-w-sm "
             />
             {errors.name?.message && (
               <div className="text-error">{errors.name.message}</div>
@@ -192,7 +192,7 @@ const Form = () => {
               <button
                 type="button"
                 onClick={handleDecrement}
-                className="btn btn-ePrimary"
+                className="btn btn-ePrimary border-0"
               >
                 -
               </button>
@@ -206,7 +206,7 @@ const Form = () => {
               <button
                 type="button"
                 onClick={handleIncrement}
-                className="btn btn-ePrimary"
+                className="btn btn-ePrimary border-0"
               >
                 +
               </button>
@@ -216,7 +216,7 @@ const Form = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn btn-ePrimary w-full"
+              className="btn btn-ePrimary border-0  w-full"
             >
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>

@@ -42,6 +42,23 @@ async function getCanteenData(canteenId: string): Promise<Canteen> {
     return {} as Canteen;
   }
 }
+async function updateCanteenData(canteenSlug: string, canteen: Canteen): Promise<void> {
+  try {
+    const canteenId = await getCanteenIdBySlug(canteenSlug);
+    const canteenRef = doc(db, "canteen", canteenId);
+    await setDoc(canteenRef, {
+      name: canteen.name,
+      location: canteen.location,
+      description: canteen.description,
+      image: canteen.image,
+      numReviews: canteen.numReviews,
+      rating: canteen.rating,
+      slug: canteen.slug,
+    });
+  } catch (error) {
+    console.error("Error updating canteen data:", error);
+  }
+}
 
 async function getCanteenBySlug(slug: string): Promise<Canteen> {
   try {

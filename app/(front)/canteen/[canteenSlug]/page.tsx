@@ -1,3 +1,4 @@
+
 import data from "@/lib/data";
 import Link from "next/link";
 import Image from "next/image";
@@ -36,6 +37,8 @@ export default async function Canteen({
   const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
   const canteenId = await canteenService.getCanteenIdBySlug(params.canteenSlug);
   const products = await productsService.getAllProductsFromCanteen(canteenId);
+
+  // const [product1, setProduct1] = useState(products[0]);
 
   // const [productList, setProductList] = useState(products);
 

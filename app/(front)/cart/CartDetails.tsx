@@ -32,9 +32,9 @@ export default function CartDetails() {
             <table className=" table  ">
               <thead>
                 <tr>
-                  <th>Item</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
+                  <th>Barang</th>
+                  <th>Jumlah</th>
+                  <th>Harga</th>
                 </tr>
               </thead>
               <tbody>

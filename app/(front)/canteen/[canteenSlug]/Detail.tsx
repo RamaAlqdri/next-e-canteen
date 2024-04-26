@@ -20,6 +20,9 @@ const Detail = ({
     // router.push(`/add_product?canteen=${canteen.slug}`);
     router.push("/add_product");
   };
+  const makeProduct = () => {
+    router.push("/add_product");
+  };
   //   const fetchProducts = async () => {
   //     try {
   //       const res = await fetch("/api/products", {
@@ -152,7 +155,7 @@ const Detail = ({
           </li>
         </ul>
         {session && session?.user.canteen === canteen.slug && (
-          <button className="flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-0.5 rounded-lg mr-1">
+          <button onClick={makeProduct} className=" flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-0.5 rounded-lg mr-1">
             <svg
               width="24"
               height="24"

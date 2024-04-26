@@ -18,7 +18,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
               alt={canteen.name}
               width={300}
               height={300}
-              className=" object-cover h-full rounded-b-xl"
+              className=" object-cover h-full rounded-b-sm"
             />
           </Link>
         </div>

@@ -45,7 +45,7 @@ const Detail = ({
   }
   return (
     <>
-      <div className="w-full mt-2 md:h-36 shadow-lg h-24 flex bg-white justify-between items-center  rounded-2xl px-4  ">
+      <div className="w-full mt-2 md:h-36 shadow-lg h-24 flex bg-white justify-between items-center  rounded-t-2xl rounded-b-md px-4  ">
         <div className="md:h-full  justify-center flex items-center ">
           <div className="sm:h-16 sm:w-16 relative  md:w-24 md:h-24  h-16 w-16">
             <Image
@@ -139,15 +139,15 @@ const Detail = ({
           </div>
         )} */}
       </div>
-      <div className="mt-2 bg-white rounded-2xl shadow-md py-3 px-3 flex justify-between">
+      <div className="mt-2 bg-white rounded-b-2xl rounded-t-md shadow-md py-3 px-3 flex justify-between">
         <ul className="flex space-x-2">
-          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
             Makanan
           </li>
-          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
             Minuman
           </li>
-          <li className="py-1 px-3  text-sm rounded-lg border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
+          <li className="py-1 px-3  text-sm rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] text-[#EEA147]">
             Cemilan
           </li>
         </ul>

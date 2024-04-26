@@ -27,11 +27,11 @@ export default  function ProductItem({ product, canteenName }: { product: Produc
               alt={product.name}
               width={300}
               height={300}
-              className="object-cover sm:h-full h-20 w-20 rounded-2xl sm:w-full"
+              className="object-cover sm:h-full h-20 w-20 rounded-2xl sm:rounded-t-2xl sm:rounded-b-sm sm:w-full"
             />
           </Link>
         </div>
-        <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 m-2 sm:flex-none sm:justify-normal ">
+        <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 sm:pl-2 m-2 sm:flex-none sm:justify-normal ">
           <Link href={`${product.canteenId}/product/${product.slug}`} className="">
             <h2 className="card-title font-semibold sm:text-lg text-sm ">
               {product.name}

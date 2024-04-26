@@ -8,7 +8,7 @@ const MenuMobile = () => {
   const path = usePathname();
   const path2 = path.split("/");
   const path3 = path2[1];
-//   console.log(path2[1]);
+  //   console.log(path2[1]);
   const [beranda, setBeranda] = useState("gray");
   const [kantin, setKantin] = useState("gray");
   const [pesanan, setPesanan] = useState("gray");
@@ -25,7 +25,7 @@ const MenuMobile = () => {
       setBerandaGlow("drop-shadow-[0_10px_10px_rgba(237,161,71,0.5)]");
       setKantinGlow("");
       setPesananGlow("");
-    } else if (path3 === "canteen") {
+    } else if (path3 === "canteen" || path3 === "canteens") {
       setKantin("#EEA147");
       setBeranda("gray");
       setPesanan("gray");
@@ -46,11 +46,10 @@ const MenuMobile = () => {
   }, [path3]);
   return (
     <div className="fixed  bottom-0 left-0 w-full px-6 py-1 bg-white drop-shadow-[0_0px_2px_rgba(0,0,0,0.1)] flex items-center justify-around ">
-      <div 
-      onClick={
-        () => router.push("/")
-      }
-      className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg">
+      <button
+        onClick={() => router.push("/")}
+        className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg"
+      >
         <svg
           width="18"
           height="19"
@@ -66,8 +65,11 @@ const MenuMobile = () => {
         </svg>
 
         <span className="text-xs mt-1 opacity-70">Beranda</span>
-      </div>
-      <div className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg">
+      </button>
+      <button
+        onClick={() => router.push("/canteens")}
+        className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg"
+      >
         <svg
           width="30"
           height="30"
@@ -84,9 +86,9 @@ const MenuMobile = () => {
           />
         </svg>
         <span className="text-xs mt-1 opacity-70">Kantin</span>
-      </div>
+      </button>
 
-      <div className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg">
+      <button className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg">
         <svg
           width="18"
           height="20"
@@ -102,7 +104,7 @@ const MenuMobile = () => {
         </svg>
 
         <span className="text-xs mt-1 opacity-70">Pesanan</span>
-      </div>
+      </button>
     </div>
   );
 };

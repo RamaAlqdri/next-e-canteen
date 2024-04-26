@@ -33,12 +33,12 @@
 } */
 .btn-eWhite {
   background-color: #fff;
-  border: 2px solid #EEA147;
+  border: 1px solid #FFEBD7;
   color: rgb(var(--foreground-rgb));
 }
 .btn-eWhite:hover {
-  background-color: #F7D1A7;
-  border: 2px solid #F7D1A7;
+  background-color: #FFEBD7;
+  border: 1px solid #FFEBD7;
   color: rgb(var(--foreground-rgb));
 }
 .btn-ePrimary {

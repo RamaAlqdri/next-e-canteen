@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { User } from "@/lib/models/UserModel";
 import userService from "@/lib/services/userService";
 
-
 const Menu = () => {
   const router = useRouter();
   const { items } = useCartService();
@@ -21,6 +20,7 @@ const Menu = () => {
   const makeCanteen = () => {
     router.push("/make_canteen");
   };
+  const {clear} = useCartService();
   const canteen = () => {
     if (session?.user?.canteen) {
       router.push(`/canteen/${session.user.canteen}`);
@@ -234,7 +234,10 @@ const Menu = () => {
                           </button>
                           <button
                             type="button"
-                            onClick={signoutHandler}
+                            onClick={() => {
+                              clear();
+                              signoutHandler();
+                            }}
                             className="hover:bg-gray-100"
                           >
                             <svg
@@ -246,8 +249,8 @@ const Menu = () => {
                               className="h-5 w-5 mr-2"
                             >
                               <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
                                 d="M7.796 0.24405C9.653 -0.17395 11 1.42205 11 3.00005V17C11 18.578 9.653 20.1741 7.796 19.7561C3.334 18.7521 0 14.7661 0 10.0001C0 5.23405 3.334 1.24805 7.796 0.24405ZM13.293 6.29305C13.4805 6.10558 13.7348 6.00026 14 6.00026C14.2652 6.00026 14.5195 6.10558 14.707 6.29305L17.707 9.29305C17.8945 9.48058 17.9998 9.73489 17.9998 10.0001C17.9998 10.2652 17.8945 10.5195 17.707 10.7071L14.707 13.7071C14.5184 13.8892 14.2658 13.99 14.0036 13.9877C13.7414 13.9854 13.4906 13.8803 13.3052 13.6949C13.1198 13.5095 13.0146 13.2586 13.0123 12.9965C13.01 12.7343 13.1108 12.4817 13.293 12.2931L14.586 11.0001H6C5.73478 11.0001 5.48043 10.8947 5.29289 10.7072C5.10536 10.5196 5 10.2653 5 10.0001C5 9.73483 5.10536 9.48048 5.29289 9.29294C5.48043 9.10541 5.73478 9.00005 6 9.00005H14.586L13.293 7.70705C13.1055 7.51952 13.0002 7.26521 13.0002 7.00005C13.0002 6.73489 13.1055 6.48058 13.293 6.29305Z"
                                 fill="gray"
                               />
@@ -294,7 +297,6 @@ const Menu = () => {
           </div>
         </div>
       </nav>
-      
     </>
   );
 };

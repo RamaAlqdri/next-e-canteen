@@ -19,6 +19,7 @@ const Profil = ({ visible, setVisible }: Props) => {
   const makeCanteen = () => {
     router.push("/make_canteen");
   };
+  const {clear} = useCartService();
   const canteen = () => {
     if (session?.user?.canteen) {
       router.push(`/canteen/${session.user.canteen}`);
@@ -247,6 +248,7 @@ const Profil = ({ visible, setVisible }: Props) => {
             <button
               type="button"
               onClick={() => {
+                clear();
                 signoutHandler();
                 setVisible(false);
               }}

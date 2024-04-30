@@ -19,7 +19,7 @@ export default async function Home() {
   const canteen = await canteenService.getAllCanteenData();
   const products = await productsService.getAllProducts();
   return (
-    <>
+    <div className="mb-20">
       {/* <div className="w-full carousel rounded-box mt-4">
         {featuredProducts.map((product, index) => (
           <div
@@ -65,6 +65,6 @@ export default async function Home() {
           <ProductItem key={product.slug} product={product} />
         ))} */}
       </div>
-    </>
+    </div>
   );
 }

@@ -30,9 +30,11 @@ const SearchComponent = () => {
     }
   }, [searchQuery]);
 
+  const [showProfile, setShowProfile] = useState(false);
+
   return (
     <>
-      <Profil />
+      <Profil visible={showProfile} setVisible={setShowProfile}/>
       <div className="flex items-center justify-center bg-white w-full py-2 drop-shadow-sm">
         <form onSubmit={handleSubmit} className="flex items-center w-[75%] ">
           <Link href="/" className={`text-lg absolute ml-4 ` + logo}>
@@ -104,7 +106,7 @@ const SearchComponent = () => {
         </form>
         {session ? (
           <label className="btn btn-ghost rounded-btn">
-            <div className="relative h-9 w-9  rounded-full overflow-hidden">
+            <button onClick={()=>{setShowProfile(true)}} className="relative h-9 w-9  rounded-full overflow-hidden">
               <Image
                 src="/images/avatar/my.png"
                 alt="avatar"
@@ -112,7 +114,7 @@ const SearchComponent = () => {
                 height={300}
                 className="object-cover"
               />
-            </div>
+            </button>
           </label>
         ) : (
           <button

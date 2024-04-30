@@ -7,16 +7,24 @@ import Router, { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { User } from "@/lib/models/UserModel";
 import userService from "@/lib/services/userService";
-const Profil = () => {
+
+interface Props {
+  visible: boolean;
+  setVisible: any;
+}
+
+const Profil = (
+  { visible, setVisible }: Props
+) => {
   const { data: session } = useSession();
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(true);
 
   return (
     <>
       {visible && (
         <div className="space-y-4 z-30 fixed bg-white h-screen w-screen p-6">
           <div className="flex space-x-2 items-center">
-            <div className="flex items-center justify-center h-7 w-7 rounded-full hover:bg-gray-100">
+            <button onClick={()=>{setVisible(false)}} className="flex items-center justify-center h-7 w-7 rounded-full hover:bg-gray-100">
               <svg
                 width="84"
                 height="79"
@@ -33,7 +41,7 @@ const Profil = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-            </div>
+            </button>
 
             <p className="text-md font-medium">Profilku</p>
           </div>

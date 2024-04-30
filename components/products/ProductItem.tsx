@@ -18,7 +18,7 @@ export default  function ProductItem({ product, canteenName }: { product: Produc
   
   // console.log();
   return (
-    <div className="card hover:brightness-90 cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
+    <div className="card hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
       <div className="flex sm:grid  ">
         <div className="h-20 w-20 sm:h-52 sm:w-full m-2 sm:m-0">
           <Link href={`${product.canteenId}/product/${product.slug}`} className="">

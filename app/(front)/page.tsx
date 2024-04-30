@@ -67,7 +67,7 @@ export default async function Home() {
       </div>
 
       {/* <h2 className="text-2xl py-2">Welcome </h2> */}
-      <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-10">
+      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-10">
         {canteen.slice(0,6).map((canteen) => (
           <CanteenItem key={canteen.slug} canteen={canteen} />
         ))}

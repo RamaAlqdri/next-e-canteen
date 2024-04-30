@@ -47,7 +47,7 @@ const Form = () => {
   return (
     <div className="max-w-sm mx-auto card bg-white my-4">
       <div className="card-body">
-        <h1 className="card-tittle">Sign in</h1>
+        <h1 className="card-tittle">Masuk</h1>
         {params.get("error") && (
           <div className="alert text-error bg-gray-100 border-0">
             {params.get("error") === "CredentialsSignin"
@@ -81,7 +81,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label className="label" htmlFor="password">
-              Password
+              Kata Sandi
             </label>
             <input
               type="password"
@@ -104,13 +104,13 @@ const Form = () => {
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )}
-              Sign in
+              Masuk
             </button>
           </div>
         </form>
         <div>
-          Need an account?{' '}
-          <Link className="link" href={`/register?callbackUrl=${callbackUrl}`}>Register</Link>
+          Belum punya akun?{' '}
+          <Link className="link" href={`/register?callbackUrl=${callbackUrl}`}>Daftar</Link>
         </div>
       </div>
     </div>

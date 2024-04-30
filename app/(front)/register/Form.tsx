@@ -70,11 +70,11 @@ const Form = () => {
   return (
     <div className="max-w-sm mx-auto card bg-white my-4">
       <div className="card-body">
-        <h1 className="card-title">Register</h1>
+        <h1 className="card-title">Daftar</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
           <div className="my-2">
             <label htmlFor="name" className="label">
-              Name
+              Nama Anda
             </label>
             <input
               type="text"
@@ -110,7 +110,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label htmlFor="password" className="label">
-              Password
+              Kata Sandi
             </label>
             <input
               type="password"
@@ -126,7 +126,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label htmlFor="confirmPassword" className="label">
-              Confirm Password
+              Konfirmasi Kata Sandi
             </label>
             <input
               type="password"
@@ -153,15 +153,15 @@ const Form = () => {
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )}
-              Register
+              Daftar
             </button>
           </div>
         </form>
-        <div className="divider"></div>
+        {/* <div className="divider"></div> */}
         <div>
-          Already have an account?{" "}
+          Sudah Punya akun?{" "}
           <Link className="link" href={`/signin?callbackUrl=${callbackUrl}`}>
-            Login
+            Masuk
           </Link>
         </div>
       </div>

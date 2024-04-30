@@ -5,7 +5,7 @@ import productsService from "@/lib/services/productService";
 import { Metadata } from "next";
 import Link from "next/link";
 import { convertDocToObj } from "@/lib/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import canteenService from "@/lib/services/canteenService";
 import CanteenItem from "@/components/canteen/CanteenItem";
 import Image from "next/image";
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
+
   // const featuredProducts = await productsService.getFeatured();
   const canteen = await canteenService.getAllCanteenData();
   const products = await productsService.getAllProducts();
@@ -67,15 +68,25 @@ export default async function Home() {
       </div>
 
       {/* <h2 className="text-2xl py-2">Welcome </h2> */}
-      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-10">
-        {canteen.slice(0,6).map((canteen) => (
+      <div className="mt-3">
+        <p className="text-lg font-medium">Daftar Kantin</p>
+      </div>
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
+        {canteen.slice(0, 6).map((canteen) => (
           <CanteenItem key={canteen.slug} canteen={canteen} />
         ))}
-
+      </div>
+      <div className="mt-3">
+        <p className="text-lg font-medium">Rekomendasi Makanan</p>
+      </div>
+      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
         {products.map((product) => (
-          
           // <div key={product._id}>{product.name}</div>
-          <ProductItem key={product.slug} product={product} canteenName={product.canteenId} />
+          <ProductItem
+            key={product.slug}
+            product={product}
+            canteenName={product.canteenId}
+          />
         ))}
       </div>
     </>

@@ -21,7 +21,7 @@ export default async function Home() {
   const canteen = await canteenService.getAllCanteenData();
   const products = await productsService.getAllProducts();
   return (
-    <>
+    <div className="mb-20">
       {/* <div className="w-full carousel rounded-box mt-4">
         {products.map((product, index) => (
           <div
@@ -68,16 +68,18 @@ export default async function Home() {
       </div>
 
       {/* <h2 className="text-2xl py-2">Welcome </h2> */}
-      <div className="mt-3">
-        <p className="text-lg font-medium">Daftar Kantin</p>
+      <div className="mt-3 ">
+        <p className="text-md font-medium">Rekomendasi Kantin</p>
+        <p className="sm:hidden contents text-xs font-light">Kami pilihin kantin favorit Universitas Mataram</p>
       </div>
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
         {canteen.slice(0, 6).map((canteen) => (
           <CanteenItem key={canteen.slug} canteen={canteen} />
         ))}
       </div>
       <div className="mt-3">
-        <p className="text-lg font-medium">Rekomendasi Makanan</p>
+        <p className="text-md font-medium">Rekomendasi Makanan</p>
+        <p className="sm:hidden contents text-xs font-light">Kami pilihin yang enak dan favorit</p>
       </div>
       <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
         {products.map((product) => (
@@ -89,6 +91,6 @@ export default async function Home() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }

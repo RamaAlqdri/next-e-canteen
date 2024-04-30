@@ -32,9 +32,9 @@ export default function RootLayout({
           <div className="min-h-screen flex flex-col items-center">
             <Header />
             {children}
-            <footer className="footer footer-center p-4  text-base-content">
+            {/* <footer className="footer footer-center p-4  text-base-content">
               <p>Copyright ☠︎ 2023 - All right reserved by Next</p>
-            </footer>
+            </footer> */}
           </div>
         </Providers>
       </body>

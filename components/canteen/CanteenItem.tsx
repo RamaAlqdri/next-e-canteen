@@ -28,8 +28,8 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
               {canteen.name}
             </h2>
           </Link>
-          <div className="mb-2 flex gap-2 items-center">
-            <div className="hidden sm:contents h-4 w-4">
+          <div className="mb-1 mt-1 flex gap-2 items-center">
+            <div className=" h-4 w-4">
               <svg
                 width="22"
                 height="28"
@@ -45,7 +45,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
               </svg>
             </div>
 
-            <p className="sm:w-11/12 hidden sm:contents sm:text-xs text-xs font-light text-wrap truncate">
+            <p className="sm:w-11/12  sm:text-xs text-xs font-light text-wrap truncate">
               {canteen.location}
             </p>
           </div>

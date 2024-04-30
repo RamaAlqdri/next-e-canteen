@@ -126,7 +126,7 @@ const Profil = ({ visible, setVisible }: Props) => {
             ) : (
               <button
                 type="button"
-                className="hover:bg-gray-100 hover:rounded-xl px-4 flex justify-center border-y-[0.5px] w-full py-4 items-center "
+                className="hover:bg-gray-100 hover:rounded-xl px-4 flex justify-between border-y-[0.5px] w-full py-4 items-center "
                 onClick={() => {
                   makeCanteen();
                   setVisible(false);

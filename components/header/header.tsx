@@ -10,6 +10,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useCartService from "@/lib/hooks/useCartStore";
 import SearchComponent from "./SearchMobile";
+import Cart from "../popUp_cart/Cart";
 
 const Header = () => {
   // const router = useRouter();
@@ -56,6 +57,7 @@ const Header = () => {
       ) : (
         <Menu />
       )}
+      <Cart/>
     </header>
   );
 };

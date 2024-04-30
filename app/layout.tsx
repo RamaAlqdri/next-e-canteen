@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import Providers from "@/components/Providers"
 import { Poppins } from "next/font/google";
+import Cart from "@/components/popUp_cart/Cart";
 
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -31,6 +32,7 @@ export default function RootLayout({
       <Providers>
           <div className="min-h-screen flex flex-col items-center">
             <Header />
+            
             {children}
             {/* <footer className="footer footer-center p-4  text-base-content">
               <p>Copyright ☠︎ 2023 - All right reserved by Next</p>

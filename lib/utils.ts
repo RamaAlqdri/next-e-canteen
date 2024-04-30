@@ -18,3 +18,15 @@ export const slugify = (text:any) => {
 //   const session = await getSession();
 //   return session;
 // }
+export function capitalizeText(text: string): string {
+  // Pisahkan kata berdasarkan tanda hubung
+  const words = text.split('-');
+
+  // Ubah setiap kata menjadi kapital
+  const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+
+  // Gabungkan kembali kata-kata tersebut dengan spasi di antara
+  const capitalizedText = capitalizedWords.join(' ');
+
+  return capitalizedText;
+}

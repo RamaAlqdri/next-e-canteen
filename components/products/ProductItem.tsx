@@ -9,6 +9,7 @@ import { convertDocToObj } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { useSession } from "next-auth/react";
+import { capitalizeText } from "@/lib/utils";
 
 export default  function ProductItem({ product, canteenName }: { product: Product, canteenName: string}) {
   // const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
@@ -53,7 +54,7 @@ export default  function ProductItem({ product, canteenName }: { product: Produc
                 fill="#EEA147"
               />
             </svg>
-            <p className=" sm:text-sm text-xs">{canteenName}</p>
+            <p className=" sm:text-sm text-xs">{capitalizeText(canteenName)}</p>
           </div>
           <div className="flex justify-between ">
             <div className=" flex items-center justify-between ">

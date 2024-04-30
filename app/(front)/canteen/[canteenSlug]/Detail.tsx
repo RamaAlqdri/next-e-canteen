@@ -167,7 +167,7 @@ const Detail = ({
               key={categoryItem}
               onClick={() => setNewCategory(categoryItem)}
               // onClick={() => setCategory(category)}
-              className={`capitalize sm:py-1 sm:px-3  px-1  sm:text-sm text-[0.6rem] rounded-xl border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] ${
+              className={`capitalize sm:py-1 sm:px-3  px-1  sm:text-sm text-[0.6rem] rounded-xl border-[0.5px]  sm:border-2 border-[#EEA147] hover:text-white hover:bg-[#EEA147] ${
               categoryItem === category ? " bg-[#EEA147] text-white" : "text-[#EEA147]"
             }`}
             >

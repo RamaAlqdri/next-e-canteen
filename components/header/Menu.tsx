@@ -44,7 +44,7 @@ const Menu = () => {
   // console.log(userData);
 
   return (
-    <>
+    <div className="sm:contents hidden">
       <nav className="">
         <div className="navbar  w-screen px-10 justify-between bg-white drop-shadow-sm">
           <Link href="/" className="text-lg">
@@ -297,7 +297,7 @@ const Menu = () => {
           </div>
         </div>
       </nav>
-    </>
+    </div>
   );
 };
 export default Menu;

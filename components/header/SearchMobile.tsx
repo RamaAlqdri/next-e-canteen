@@ -33,7 +33,7 @@ const SearchComponent = () => {
   const [showProfile, setShowProfile] = useState(false);
 
   return (
-    <>
+    <div className="sm:hidden">
       <Profil visible={showProfile} setVisible={setShowProfile}/>
       <div className="flex items-center justify-center bg-white w-full py-2 drop-shadow-sm">
         <form onSubmit={handleSubmit} className="flex items-center w-[75%] ">
@@ -126,7 +126,7 @@ const SearchComponent = () => {
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

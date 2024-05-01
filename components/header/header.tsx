@@ -49,14 +49,14 @@ const Header = () => {
   return (
     <header className="fixed z-20 w-full">
       {/* cek media witdh */}
-      {viewportWidth <=640 ? (
+      {/* {viewportWidth <=640 ? ( */}
         <div className="w-full">
           <SearchComponent />
           <MenuMobile />
         </div>
-      ) : (
+      {/* ) : ( */}
         <Menu />
-      )}
+      {/* )} */}
       <Cart/>
     </header>
   );

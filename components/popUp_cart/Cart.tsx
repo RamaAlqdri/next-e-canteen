@@ -26,7 +26,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="z-50 bottom-[4.5rem] fixed flex justify-center  w-full">
+    <div className="sm:hidden z-50 bottom-[4.5rem] fixed flex justify-center  w-full">
       <Link
         href={"/cart"}
         className="flex justify-between px-5 items-center text-white  bg-[#EEA147] h-12 w-[90%] opacity-95 rounded-2xl  "

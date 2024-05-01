@@ -45,7 +45,7 @@ const MenuMobile = () => {
     // setBeranda("bg-base-200");
   }, [path3]);
   return (
-    <div className="fixed  bottom-0 left-0 w-full px-6 py-1 bg-white drop-shadow-[0_0px_2px_rgba(0,0,0,0.1)] flex items-center justify-around ">
+    <div className="fixed sm:hidden bottom-0 left-0 w-full px-6 py-1 bg-white drop-shadow-[0_0px_2px_rgba(0,0,0,0.1)] flex items-center justify-around ">
       <button
         onClick={() => router.push("/")}
         className="flex flex-col justify-center items-center hover:bg-base-200 w-20  h-14 rounded-lg"

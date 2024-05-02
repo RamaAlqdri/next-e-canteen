@@ -30,8 +30,6 @@ export default function ProductItem({
   if (path === "/") {
     canteen = "canteen/";
   }
-  console.log(canteen);
-  console.log(path);
 
   return (
     <div className="card hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">

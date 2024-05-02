@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Product } from "@/lib/models/ProductModels";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,19 +10,37 @@ import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { useSession } from "next-auth/react";
 import { capitalizeText } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
-export default  function ProductItem({ product, canteenName }: { product: Product, canteenName: string}) {
+export default function ProductItem({
+  product,
+  canteenName,
+}: {
+  product: Product;
+  canteenName: string;
+}) {
   // const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
 
   // const { data : session } = useSession();
   // console.log(session);
-  
+
   // console.log();
+  const path = usePathname();
+  let canteen = "";
+  if (path === "/") {
+    canteen = "canteen/";
+  }
+  console.log(canteen);
+  console.log(path);
+
   return (
     <div className="card hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
       <div className="flex sm:grid  ">
         <div className="h-20 w-20 sm:h-52 sm:w-full m-2 sm:m-0">
-          <Link href={`${product.canteenId}/product/${product.slug}`} className="">
+          <Link
+            href={`${canteen}${product.canteenId}/product/${product.slug}`}
+            className=""
+          >
             <Image
               src={product.image}
               alt={product.name}
@@ -33,7 +51,10 @@ export default  function ProductItem({ product, canteenName }: { product: Produc
           </Link>
         </div>
         <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 sm:pl-2 m-2 sm:flex-none sm:justify-normal ">
-          <Link href={`${product.canteenId}/product/${product.slug}`} className="">
+          <Link
+            href={`${canteen}${product.canteenId}/product/${product.slug}`}
+            className=""
+          >
             <h2 className="card-title font-semibold sm:text-lg text-sm ">
               {product.name}
             </h2>

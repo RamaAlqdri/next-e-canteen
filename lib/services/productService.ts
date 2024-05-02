@@ -10,7 +10,10 @@ import {
   limit,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
+import { update } from "firebase/database";
+import { Catamaran } from "next/font/google";
 
 export const revalidate = 3600;
 
@@ -51,7 +54,11 @@ async function getProductIdByProductSlugandCanteenSlug(
   canteenSlug: string
 ): Promise<string> {
   try {
-    const kantinRef = query(collection(db, "canteen"),where("slug", "==", canteenSlug),limit(1));
+    const kantinRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", canteenSlug),
+      limit(1)
+    );
     const kantinData = await getDocs(kantinRef);
     const productRef = query(
       collection(db, "canteen", kantinData.docs[0].id, "product"),
@@ -63,6 +70,74 @@ async function getProductIdByProductSlugandCanteenSlug(
   } catch (error) {
     console.error("Error fetching product data:", error);
     return "" as string;
+  }
+}
+
+async function updateProduct(slugBefore: string, product: Product) {
+  try {
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", product.canteenId),
+      limit(1)
+    );
+    const canteenData = await getDocs(canteenRef);
+    const productRef = collection(
+      db,
+      "canteen",
+      canteenData.docs[0].id,
+      "product"
+    );
+    const productId = await getProductIdByProductSlugandCanteenSlug(
+      slugBefore,
+      product.canteenId
+    );
+    await updateDoc(doc(productRef, productId), {
+      canteenId: product.canteenId,
+      name: product.name,
+      category: product.category,
+      description: product.description,
+      price: product.price,
+      countInStock: product.countInStock,
+      slug: product.slug,
+      image: product.image,
+      rating: product.rating,
+      numReviews: product.numReviews,
+    });
+  } catch (error) {
+    console.error("Error updating product:", error);
+  }
+}
+
+async function deleteProduct(canteenSlug: string, productSlug: string) {
+  try {
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", canteenSlug),
+      limit(1)
+    );
+    const canteenData = await getDocs(canteenRef);
+    // const productRef = collection(
+    //   db,
+    //   "canteen",
+    //   canteenData.docs[0].id,
+    //   "product"
+    // );
+    console.log(canteenData)
+    const productId = await getProductIdByProductSlugandCanteenSlug(
+      productSlug,
+      canteenSlug
+    );
+    console.log(productId)
+    const productRef = doc(
+      db,
+      "canteen",
+      canteenData.docs[0].id,
+      "product",
+      productId
+    );
+    await deleteDoc(productRef);
+  } catch (error) {
+    console.error("Error deleting product:", error);
   }
 }
 
@@ -182,10 +257,19 @@ async function getAllProducts(): Promise<Product[]> {
 }
 async function createProduct(product: Product) {
   try {
-    const canteenRef = query(collection(db, "canteen"),where("slug", "==", product.canteenId),limit(1));
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", product.canteenId),
+      limit(1)
+    );
     const canteenData = await getDocs(canteenRef);
-    
-    const productRef = collection(db, "canteen", canteenData.docs[0].id, "product");
+
+    const productRef = collection(
+      db,
+      "canteen",
+      canteenData.docs[0].id,
+      "product"
+    );
     await setDoc(doc(productRef), {
       canteenId: product.canteenId,
       name: product.name,
@@ -199,7 +283,10 @@ async function createProduct(product: Product) {
       numReviews: product.numReviews,
     });
 
-    const productId = await getProductIdByProductSlugandCanteenSlug(product.slug, product.canteenId);
+    const productId = await getProductIdByProductSlugandCanteenSlug(
+      product.slug,
+      product.canteenId
+    );
     await updateDoc(doc(productRef, productId), {
       _id: productId,
     });
@@ -213,7 +300,11 @@ async function getProductByCategoryByCanteenSlug(
   category: string
 ): Promise<Product[]> {
   try {
-    const canteenRef = query(collection(db, "canteen"),where("slug", "==", canteenSlug),limit(1));
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", canteenSlug),
+      limit(1)
+    );
     const canteenData = await getDocs(canteenRef);
     const productRef = query(
       collection(db, "canteen", canteenData.docs[0].id, "product"),
@@ -239,5 +330,7 @@ const productsService = {
   getProductBySlugWithoutCanteen,
   getProductByCategoryByCanteenSlug,
   createProduct,
+  updateProduct,
+  deleteProduct,
 };
 export default productsService;

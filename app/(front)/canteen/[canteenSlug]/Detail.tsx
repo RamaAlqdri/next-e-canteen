@@ -37,6 +37,10 @@ const Detail = ({
 
   const [category, setCategory] = useState("semua");
 
+  const editCanteen = () => {
+    router.push(`/edit_canteen/${canteen.slug}`);
+  }
+
 
   const makeProduct = () => {
     router.push("/add_product");
@@ -86,6 +90,7 @@ const Detail = ({
             {session && session?.user.canteen === canteen.slug && (
               <button
                 //   onClick={fetchProducts}
+                onClick={editCanteen}
                 className="flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-1 rounded-lg"
               >
                 <svg

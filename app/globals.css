@@ -44,10 +44,20 @@
 .btn-ePrimary {
   background-color: #EEA147;
   color: rgb(var(--foreground-rgb));
+  border: none
 }
 .btn-ePrimary:hover {
   background-color: #EFBA46;
   color: rgb(var(--foreground-rgb));
+}
+.btn-Delete {
+  background-color: #d1443d;
+  border:none;
+  color: #fff;
+}
+.btn-Delete:hover {
+  background-color: #e85048;
+  color: #fff;
 }
 .badge-ePrimary {
   background-color: #EEA147;

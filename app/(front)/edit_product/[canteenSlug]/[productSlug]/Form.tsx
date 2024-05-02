@@ -9,8 +9,10 @@ import toast from "react-hot-toast";
 import { Span } from "next/dist/trace";
 import ImageUpload from "@/components/image/ImageUpload";
 import Image from "next/image";
+import { Product } from "@/lib/models/ProductModels";
 
 type Inputs = {
+  slugBefore: string;
   category: string;
   countInStock: number;
   description: string;
@@ -19,10 +21,12 @@ type Inputs = {
   //   image: string;
 };
 
-const Form = () => {
+const Form = ({product}:{product:Product}) => {
   const { data: session } = useSession();
+  console.log(session?.user.canteen)
   const params = useSearchParams();
   const router = useRouter();
+  console.log(product)
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
@@ -37,15 +41,16 @@ const Form = () => {
     formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     defaultValues: {
-      category: "",
-      countInStock: 0,
-      description: "",
-      name: "",
-      price: 0,
+      slugBefore: product.slug,
+      category: product.category,
+      countInStock: product.countInStock,
+      description: product.description,
+      name: product.name,
+      price: product.price,
       //   confirmPassword: "",
     },
   });
-  const [countInStockValue, setCountInStock] = useState(0);
+  const [countInStockValue, setCountInStock] = useState(product.countInStock);
 
   const handleIncrement = () => {
     setCountInStock(countInStockValue + 1);
@@ -64,16 +69,17 @@ const Form = () => {
   //   }, [callbackUrl, params, router, session]);
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     form.countInStock = countInStockValue;
-    const { category, countInStock, name, price, description } = form;
+    const { slugBefore,category, countInStock, name, price, description } = form;
     
     // console.log(form);
     try {
-      const res = await fetch("/api/products/create", {
+      const res = await fetch("/api/products/edit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          slugBefore,
           category,
           countInStock,
           name,
@@ -85,7 +91,7 @@ const Form = () => {
       console.log(res);
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
-        return router.back()
+        return router.push(`/canteen/${session?.user.canteen}`);
         // router.reload();
         // router.refresh
       } else {
@@ -100,6 +106,39 @@ const Form = () => {
       toast.error(err.message || "error");
     }
   };
+
+  const deleteProduct = async () => {
+    try {
+      const res = await fetch("/api/products/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slugBefore: product.slug,
+          canteenslug: product.canteenId,
+          
+        }),
+      });
+      console.log(res);
+      if (res.ok) {
+        // return router.push(`/canteen/${session?.user.canteen}`);
+        return router.push(`/canteen/${session?.user.canteen}`);
+        // router.reload();
+        // router.refresh
+      } else {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+    } catch (err: any) {
+      const error =
+        err.message && err.message.indexOf("E11000") === 0
+          ? "Email is duplicate"
+          : err.message;
+      toast.error(err.message || "error");
+    }
+  }
+
   return (
     <div className=" shadow-md rounded-2xl w-full bg-white my-4">
       <div className="card-body">
@@ -221,10 +260,21 @@ const Form = () => {
               {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )}
-              Tambah
+              Ubah
             </button>
           </div>
         </form>
+            <button
+              // type="submit"
+              // disabled={isSubmitting}
+              onClick={deleteProduct}
+              className="btn btn-Delete border-0  w-full"
+            >
+              {isSubmitting && (
+                <span className="loading loading-spinner"></span>
+              )}
+              Hapus
+            </button>
       </div>
     </div>
   );

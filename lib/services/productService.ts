@@ -12,8 +12,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { update } from "firebase/database";
-import { Catamaran } from "next/font/google";
+
 
 export const revalidate = 3600;
 

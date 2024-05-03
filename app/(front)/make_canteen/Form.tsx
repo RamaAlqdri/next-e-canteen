@@ -71,7 +71,7 @@ const Form = () => {
   };
   return (
     <div className="max-w-sm mx-auto card bg-base-300 my-4">
-      <div className="card-body">
+      <div className="card-body bg-white shadow-md rounded-xl">
         <h1 className="card-title">Daftarkan Kantin</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
           <div className="my-2">

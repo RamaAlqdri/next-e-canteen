@@ -122,10 +122,10 @@ export default function CartDetails() {
                     </li>
                     <li>
                       <button
-                        onClick={() => router.push("/shipping")}
+                        onClick={() => router.push("/order")}
                         className="btn border-0 btn-ePrimary w-full"
                       >
-                        Bayar
+                        Buat Pesanan
                       </button>
                     </li>
                   </ul>

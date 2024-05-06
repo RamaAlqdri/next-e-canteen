@@ -6,6 +6,7 @@ export type Order = {
     fullName: string;
     email: string;
   };
+  canteenName: string;
   paymentMethod: string;
   paymentResult?: { id: string; status: string; email_address: string };
   itemsPrice: number;

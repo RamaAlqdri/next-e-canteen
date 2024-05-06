@@ -11,6 +11,7 @@ type Cart = {
   totalPrice: number;
   paymentMethod: string;
   orderBy: OrderBy;
+
 };
 const initialState: Cart = {
   items: [],
@@ -18,11 +19,12 @@ const initialState: Cart = {
   // taxPrice: 0,
   // shippingPrice: 0,
   totalPrice: 0,
-  paymentMethod: "Paypal",
+  paymentMethod: "QRIS",
   orderBy: {
     fullName: "",
     email: "",
   },
+
 };
 
 export const cartStore = create<Cart>()(
@@ -40,6 +42,7 @@ export default function useCartService() {
     totalPrice,
     paymentMethod,
     orderBy,
+
   } = cartStore();
   return {
     items,
@@ -49,24 +52,41 @@ export default function useCartService() {
     totalPrice,
     paymentMethod,
     orderBy,
+
     increase: (item: OrderItem) => {
-      const exist = items.find((x) => x._id === item._id );
-      const updateCartItems = exist
+      const existingItem = items.find((x) => x._id === item._id);
+
+      // Check if the item being added is from a different canteen
+      const isDifferentCanteen = items.some(
+        (x) => x.canteenId !== item.canteenId
+      );
+
+      if (isDifferentCanteen) {
+        // Show alert if the user tries to add an item from a different canteen
+        window.alert(
+          "Maaf, tidak boleh menambahkan barang dari kantin yang berbeda."
+        );
+        return; // or you can throw an error or prevent further execution
+      }
+
+      const updatedCartItems = existingItem
         ? items.map((x) =>
-            x._id === item._id  ? { ...exist, qty: exist.qty + 1 } : x
+            x._id === item._id
+              ? { ...existingItem, qty: existingItem.qty + 1 }
+              : x
           )
         : [...items, { ...item, qty: 1 }];
 
-      const { itemsPrice, totalPrice } =
-        calcPrice(updateCartItems);
+      const { itemsPrice, totalPrice } = calcPrice(updatedCartItems);
+
+      // Update the cart state
       cartStore.setState({
-        items: updateCartItems,
+        items: updatedCartItems,
         itemsPrice,
-        // shippingPrice,
-        // taxPrice,
         totalPrice,
       });
     },
+
     decrease: (item: OrderItem) => {
       const exist = items.find((x) => x._id === item._id);
       if (!exist) return;
@@ -77,8 +97,7 @@ export default function useCartService() {
               x._id === item._id ? { ...exist, qty: exist.qty - 1 } : x
             );
 
-      const { itemsPrice,totalPrice } =
-        calcPrice(updateCartItems);
+      const { itemsPrice, totalPrice } = calcPrice(updateCartItems);
       cartStore.setState({
         items: updateCartItems,
         itemsPrice,
@@ -112,5 +131,5 @@ const calcPrice = (items: OrderItem[]) => {
     // taxPrice = round2(Number(0.15 * itemsPrice)),
     // totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
     totalPrice = round2(itemsPrice);
-  return { itemsPrice,totalPrice };
+  return { itemsPrice, totalPrice };
 };

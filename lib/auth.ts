@@ -21,7 +21,7 @@ export const config = {
         if (credentials == null) return null;
         
         const user:any = await userService.getUserByEmail(credentials.email as string);
-        console.log(user);
+
         if (user) {
           const isMatch = await bcrypt.compare(
             credentials.password as string,

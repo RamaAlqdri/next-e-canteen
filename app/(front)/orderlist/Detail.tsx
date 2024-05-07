@@ -13,6 +13,7 @@ import Await from "@/components/handle/await";
 import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 const orderlist = [
   {
@@ -68,7 +69,7 @@ const Detail = () => {
                     {orderlist.map((order) => (
                       <button
                         onClick={() => {
-                          router.push(`/order/${order._id}`);
+                          router.push(`/placeorder/${order._id}`);
                         }}
                         key={order._id}
                         className="bg-white space-y-2 py-5 border hover:bg-gray-50 px-5 w-full  rounded-xl"
@@ -88,9 +89,16 @@ const Detail = () => {
                                 className="aspect-square relative rounded-lg"
                               ></Image>
                             </div>
-                            <div className="flex  flex-col  h-full">
-                              <p className="font-medium">
+                            <div className="flex  flex-col  h-full  ">
+                              <p className="font-medium text-start">
                                 {capitalizeText(order.canteenSlug)}
+                              </p>
+                              <p className="text-xs truncate text-start w-[20rem] font-light text-gray-500 ">
+                                {order.items.map((item, index) => (
+                                  <React.Fragment key={index}>
+                                    {item.qty} {item.name}{", "}
+                                  </React.Fragment>
+                                ))}
                               </p>
                               <div className="flex space-x-2 items-center mt-1">
                                 {order.status === 3 ? (

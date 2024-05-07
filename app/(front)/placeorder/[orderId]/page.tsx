@@ -12,7 +12,7 @@ export default async function PalceOrderPage({
   }) {
 
     const order = await ordersService.getOrderById(params.orderId);
-    console.log(order);
+
 
     return <Form order={order}/>
 }

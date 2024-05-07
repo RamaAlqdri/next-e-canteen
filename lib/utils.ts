@@ -6,6 +6,7 @@ export const orderDesc = [
   "Membayar Pesanan",
   "Memeriksa Pembayaran",
   "Pesanan Selesai",
+  "Pesanan Dibatalkan",
 ];
 
 

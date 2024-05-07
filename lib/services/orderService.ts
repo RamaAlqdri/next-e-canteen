@@ -14,47 +14,26 @@ import { set } from "firebase/database";
 
 export const revalidate = 3600;
 
-// async function getOrderById(orderId: string): Promise<Order> {
-//     try{
-        
-//     }catch{
-
-//     }
-// }
-// paymentMethod,
-// orderBy,
-// items,
-// itemsPrice,
-// totalPrice,
-
-// export type Order = {
-//   _id: string;
-//   // user?: { name: string };
-//   items: [OrderItem];
-//   orderBy?: {
-//     fullName: string;
-//     email: string;
+// async function createOrder(paymentMethod: String, items: any, orderBy: any , itemsPrice: number, _id: string) {
+//   const order = {
+//     items: items,
+//     orderBy: orderBy,
+//     paymentMethod: paymentMethod,
+//     itemsPrice: itemsPrice,
+//     isPaid: false,
+//     createdAt: new Date().toISOString(),
 //   };
-//   paymentMethod: string;
-//   paymentResult?: { id: string; status: string; email_address: string };
-//   itemsPrice: number;
-//   isPaid: boolean;
-//   paidAt?: string;
-//   createdAt: string;
-// };
-
-async function createOrder(paymentMethod: String, items: any, orderBy: any , itemsPrice: number, _id: string) {
-  const order = {
-    items: items,
-    orderBy: orderBy,
-    paymentMethod: paymentMethod,
-    itemsPrice: itemsPrice,
-    isPaid: false,
-    createdAt: new Date().toISOString(),
-  };
-  console.log(order);
+//   console.log(order);
+//   try{
+//     await setDoc(doc(db, "order", _id), order);
+//   }catch (error){
+//     console.error("Error creating order:", error);
+//   }
+// }
+async function createOrder(order: Order) {
+  
   try{
-    await setDoc(doc(db, "order", _id), order);
+    await setDoc(doc(db, "order", order._id), order);
   }catch (error){
     console.error("Error creating order:", error);
   }
@@ -63,7 +42,7 @@ async function createOrder(paymentMethod: String, items: any, orderBy: any , ite
 async function getOrderById(orderId: string): Promise<Order> {
   try{
 
-    const q = query(collection(db, "orders"), where("_id", "==", orderId), limit(1));
+    const q = query(collection(db, "order"), where("_id", "==", orderId), limit(1));
     const querySnapshot = await getDocs(q);
     let order: Order = {} as Order;
     querySnapshot.forEach((doc) => {
@@ -75,10 +54,25 @@ async function getOrderById(orderId: string): Promise<Order> {
     return {} as Order;
   }
 }
+async function getAllOrderByUserId(userId: string): Promise<Order[]> {
+  try{
+    const q = query(collection(db, "order"), where("orderBy.email", "==", userId));
+    const querySnapshot = await getDocs(q);
+    let orders: Order[] = [];
+    querySnapshot.forEach((doc) => {
+      orders.push(doc.data() as Order);
+    });
+    return orders;
+  }catch(error){
+    console.error("Error fetching order data:", error);
+    return [];
+  }
+}
 
 const ordersService = {
   createOrder,
   getOrderById,
+  getAllOrderByUserId,
   
 };
 export default ordersService;

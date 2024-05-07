@@ -6,12 +6,10 @@ export type Order = {
     fullName: string;
     email: string;
   };
-  canteenName: string;
+  canteenSlug: string;
   paymentMethod: string;
-  paymentResult?: { id: string; status: string; email_address: string };
   itemsPrice: number;
-  isPaid: boolean;
-  paidAt?: string;
+  status: number;
   createdAt: string;
 };
 

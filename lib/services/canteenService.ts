@@ -1,7 +1,18 @@
 import { cache } from "react";
 import { Product } from "../models/ProductModels";
 import { db } from "../firebase";
-import { collection,setDoc, doc, getDoc, getDocs, limit, query, where, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  where,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { Canteen } from "../models/CanteenModel";
 import { get } from "http";
 import exp from "constants";
@@ -9,9 +20,7 @@ import exp from "constants";
 export const revalidate = 3600;
 
 async function createCanteen(canteen: Canteen): Promise<void> {
-
   try {
-    
     const docRef = collection(db, "canteen");
     await setDoc(doc(docRef), {
       name: canteen.name,
@@ -21,7 +30,6 @@ async function createCanteen(canteen: Canteen): Promise<void> {
       numReviews: canteen.numReviews,
       rating: canteen.rating,
       slug: canteen.slug,
-
     });
   } catch (error) {
     console.error("Error creating canteen:", error);
@@ -30,9 +38,13 @@ async function createCanteen(canteen: Canteen): Promise<void> {
 
 async function getCanteenData(canteenId: string): Promise<Canteen> {
   try {
-    const canteenRef = query(collection(db, "canteen"),where("slug", "==", canteenId),limit(1));
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", canteenId),
+      limit(1)
+    );
     const canteenData0 = await getDocs(canteenRef);
-    
+
     const kantinRef = doc(db, "canteen", canteenData0.docs[0].id);
     const canteenData = await getDoc(kantinRef);
 
@@ -42,7 +54,10 @@ async function getCanteenData(canteenId: string): Promise<Canteen> {
     return {} as Canteen;
   }
 }
-async function updateCanteenData(canteenSlug: string, canteen: Canteen): Promise<void> {
+async function updateCanteenData(
+  canteenSlug: string,
+  canteen: Canteen
+): Promise<void> {
   try {
     const canteenId = await getCanteenIdBySlug(canteenSlug);
     console.log(canteenId);
@@ -65,12 +80,14 @@ async function updateCanteenData(canteenSlug: string, canteen: Canteen): Promise
 async function deleteCanteenData(canteenSlug: string): Promise<void> {
   try {
     const canteenId = await getCanteenIdBySlug(canteenSlug);
-    
+
     // Ambil referensi kantin
     const canteenRef = doc(db, "canteen", canteenId);
 
     // Ambil referensi produk yang terkait dengan kantin
-    const productsSnapshot = await getDocs(collection(db, "canteen", canteenId, "product"));
+    const productsSnapshot = await getDocs(
+      collection(db, "canteen", canteenId, "product")
+    );
 
     // Hapus setiap produk yang terkait
     const productDeletionPromises = productsSnapshot.docs.map(async (doc) => {
@@ -87,10 +104,13 @@ async function deleteCanteenData(canteenSlug: string): Promise<void> {
   }
 }
 
-
 async function getCanteenBySlug(slug: string): Promise<Canteen> {
   try {
-    const canteenRef = query(collection(db, "canteen"),where("slug", "==", slug),limit(1));
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", slug),
+      limit(1)
+    );
     const canteenData = await getDocs(canteenRef);
     return canteenData.docs[0].data() as Canteen;
   } catch (error) {
@@ -100,7 +120,11 @@ async function getCanteenBySlug(slug: string): Promise<Canteen> {
 }
 async function getCanteenIdBySlug(slug: string): Promise<string> {
   try {
-    const canteenRef = query(collection(db, "canteen"),where("slug", "==", slug),limit(1));
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", slug),
+      limit(1)
+    );
     const canteenData = await getDocs(canteenRef);
     return canteenData.docs[0].id;
   } catch (error) {
@@ -112,18 +136,15 @@ async function getCanteenIdBySlug(slug: string): Promise<string> {
 async function getAllCanteenData(): Promise<Canteen[]> {
   try {
     const docRef = collection(db, "canteen");
-    const canteenData = await getDocs(docRef).then((snapShot) => {
-      let canteenList: Canteen[] = [];
-      snapShot.forEach((doc) => {
-        canteenList.push(doc.data() as Canteen);
-      });
-      return canteenList;
+    const snapShot = await getDocs(docRef);
+    const canteenList: Canteen[] = [];
+    snapShot.forEach((doc) => {
+      canteenList.push(doc.data() as Canteen);
     });
-    // console.log(canteenData);
-    return canteenData as Canteen[];
+    return canteenList;
   } catch (error) {
     console.error("Error fetching canteen data:", error);
-    return [] as Canteen[];
+    return [];
   }
 }
 

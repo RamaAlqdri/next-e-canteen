@@ -6,15 +6,65 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { formatRupiah } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { orderBy } from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import { create } from "domain";
+import { nanoid } from "nanoid";
 
 export default function CartDetails() {
   const router = useRouter();
-  const { items, itemsPrice, decrease, increase } = useCartService();
+  const { items, itemsPrice,canteenSlug, decrease, increase, clear } = useCartService();
   // console.log(items);
   const [mounted, setMounted] = useState(false);
+  const {data:session} = useSession();
+
+  
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const createOrder= async () => {
+    try {
+      const transaction_id = `TRX-${nanoid(4)}-${nanoid(8)}`;
+      const res = await fetch("/api/order/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: transaction_id,
+          items,
+          orderBy: {
+            fullName: session?.user?.name,
+            email: session?.user?.email,
+          },
+          canteenSlug,
+          paymentMethod: "QRIS",
+          itemsPrice,
+          status: 0,
+          createdAt: new Date().toISOString(),
+        }),
+      });
+      console.log(res);
+      if (res.ok) {
+        clear();
+        return router.push(
+          `/placeorder/${transaction_id}`
+        );
+      } else {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+    } catch (err: any) {
+      const error =
+        err.message && err.message.indexOf("E11000") === 0
+          ? "Gagal membuat pesanan"
+          : err.message;
+      toast.error(err.message || "error");
+    }
+  };
 
   if (!mounted) return <></>;
 
@@ -122,7 +172,7 @@ export default function CartDetails() {
                     </li>
                     <li>
                       <button
-                        onClick={() => router.push("/order")}
+                        onClick={createOrder}
                         className="btn border-0 btn-ePrimary w-full"
                       >
                         Buat Pesanan

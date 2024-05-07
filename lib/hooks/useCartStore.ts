@@ -8,6 +8,7 @@ type Cart = {
   itemsPrice: number;
   // taxPrice: number;
   // shippingPrice: number;
+  canteenSlug: string;
   totalPrice: number;
   paymentMethod: string;
   orderBy: OrderBy;
@@ -18,6 +19,7 @@ const initialState: Cart = {
   itemsPrice: 0,
   // taxPrice: 0,
   // shippingPrice: 0,
+  canteenSlug: "",
   totalPrice: 0,
   paymentMethod: "QRIS",
   orderBy: {
@@ -39,6 +41,7 @@ export default function useCartService() {
     itemsPrice,
     // taxPrice,
     // shippingPrice,
+    canteenSlug,
     totalPrice,
     paymentMethod,
     orderBy,
@@ -49,6 +52,7 @@ export default function useCartService() {
     itemsPrice,
     // taxPrice,
     // shippingPrice,
+    canteenSlug,
     totalPrice,
     paymentMethod,
     orderBy,
@@ -79,11 +83,13 @@ export default function useCartService() {
 
       const { itemsPrice, totalPrice } = calcPrice(updatedCartItems);
 
+
       // Update the cart state
       cartStore.setState({
         items: updatedCartItems,
         itemsPrice,
         totalPrice,
+        canteenSlug: item.canteenId,
       });
     },
 
@@ -104,6 +110,7 @@ export default function useCartService() {
         // shippingPrice,
         // taxPrice,
         totalPrice,
+        canteenSlug: item.canteenId,
       });
     },
     saveOrderBy: (orderBy: OrderBy) => {
@@ -126,7 +133,9 @@ export default function useCartService() {
 const calcPrice = (items: OrderItem[]) => {
   const itemsPrice = round2(
       items.reduce((acc, items) => acc + items.price * items.qty, 0)
+
     ),
+
     // shippingPrice = round2(itemsPrice > 100 ? 0 : 10),
     // taxPrice = round2(Number(0.15 * itemsPrice)),
     // totalPrice = round2(itemsPrice + shippingPrice + taxPrice);

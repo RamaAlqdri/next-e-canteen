@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import useSWRMutation from "swr/mutation";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, getOrderDescription } from "@/lib/utils";
 import orderService from "@/lib/services/orderService";
 import { Order } from "@/lib/models/OrderModel";
 import useSnap from "@/lib/hooks/useSnap";
@@ -17,94 +17,16 @@ import { Session } from "next-auth/types";
 import { disconnect } from "process";
 import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
+import {ubahFormatTanggal} from "@/lib/utils";
+import {dapatkanWaktu} from "@/lib/utils";
+import { capitalizeText } from "@/lib/utils";
 
-const Form = () => {
+const Form = (
+  { order }: { order: Order }
+) => {
   const router = useRouter();
-  const { paymentMethod, orderBy, items, itemsPrice, totalPrice, clear } =
-    useCartService();
-
-  const placeOrder = async () => {
-    try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          items: items,
-          orderBy: orderBy,
-          paymentMethod: paymentMethod,
-          itemsPrice: itemsPrice,
-          isPaid: false,
-          createdAt: new Date().toISOString(),
-        }),
-      });
-      // console.log(data)
-      console.log(response);
-
-      if (!response.ok) {
-        console.log(response);
-        throw new Error(
-          "Failed to place order. Server responded with status: " +
-            response.status
-        );
-      }
-
-      const data = await response.json();
-      console.log(data);
-      console.log("tes");
-      clear();
-      snapEmbed(data.data.snap_token, "snap-container", {
-        onSuccess: function (result: any) {
-          console.log("success", result);
-          // setSnapShow(false)
-        },
-        onPending: function (result: any) {
-          console.log("pending", result);
-          // setSnapShow(false)
-        },
-        onClose: function () {
-          // setSnapShow(false)
-        },
-      });
-      toast.success("Order placed successfully");
-      // router.push("/");
-      // Redirect or handle response data as needed
-    } catch (error: any) {
-      console.error("Error placing order:", error.message);
-      toast.error("Failed to place order. Please try again later.");
-      // Additional error handling if needed
-    }
-  };
-  // const [kantin, setKantin] = useState<Canteen>();
-  // const [isLoading, setIsLoading] = useState('belum');
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const kantinData = await canteenService.getCanteenData("food-utama");
-  //     setKantin(kantinData);
-  //     setIsLoading('udah');
-  //   }
-  //   fetchData();
-  // }, [kantin]);
 
   const { data: session } = useSession();
-
-  const [status, setStatus] = useState("pay");
-  // confirm, paying, payconfirm, done
-
-  const { snapEmbed } = useSnap();
-
-  // console.log(myPattern)
-
-  useEffect(() => {
-    if (!paymentMethod) {
-      return router.push("/payment");
-    }
-    if (items.length === 0) {
-      // return router.push("/");
-    }
-  }, [items.length, paymentMethod, router]);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -125,17 +47,17 @@ const Form = () => {
           >
             <div className="flex flex-col justify-between space-y-2">
               <p className="font-medium sm:text-sm text-xs">
-                No Pesanan: {"TRX-jtbi-lUMY4F_X"}
+                No Pesanan: {order._id}
               </p>
               <div className="flex items-center text-gray-500 space-x-2 sm:text-xs text-[0.6rem]">
-                <p>04 Mei 2024</p>
+                <p>{ubahFormatTanggal(order.createdAt)}</p>
                 <div className="h-1 w-1 rounded-full bg-gray-500"></div>
-                <p className="">14:02:30 WIB</p>
+                <p className="">{dapatkanWaktu(order.createdAt)}</p>
               </div>
             </div>
             <div className="flex items-center bg-white rounded-full border-[#FFF5EC] border-2 sm:px-4 px-2">
               <p className="sm:font-semibold font-medium text-[#EEA147] sm:text-lg text-xs text-center">
-                Fakultas Teknik
+                {capitalizeText(order.canteenSlug)}
               </p>
             </div>
             {/* {status === 1 && (
@@ -156,7 +78,7 @@ const Form = () => {
                 </tr>
               </thead>
               <tbody className=" ">
-                {items.map((item, index) => (
+                {order.items.map((item, index) => (
                   <tr
                     key={item.slug}
                     className=" border-b-[1px] sm:text-sm text-[0.7rem] border-gray-100 font-light"
@@ -187,7 +109,7 @@ const Form = () => {
 
                   <th className="font-medium py-2 ">Total</th>
                   <th className="font-medium py-2 ">
-                    Rp{formatRupiah(itemsPrice)},00
+                    Rp{formatRupiah(order.itemsPrice)},00
                   </th>
                 </tr>
               </thead>
@@ -204,13 +126,10 @@ const Form = () => {
                     {/* ({items.reduce((a, c) => a + c.qty, 0)})  */}
                   </div>
                   <p className="sm:text-sm text-xs  font-light">
-                    {status === "confirm" && "Menunggu Konfirmasi Kantin"}
-                    {status === "pay" && "Membayar Pesanan"}
-                    {status === "payconfirm" && "Memeriksa Pembayaran"}
-                    {status === "done" && "Pesanan Selesai"}
+                    {getOrderDescription(order.status)}
                   </p>
                 </li>
-                {status === "pay" && session?.user.role == "user" && (
+                {order.status === 1 && session?.user.role == "user" && (
                   <div className="flex justify-center w-full ">
                     <Image
                       src={"/images/qris/qris1.jpeg"}
@@ -224,7 +143,7 @@ const Form = () => {
 
                 {session?.user.role === "user" ? (
                   <li className="flex  justify-center space-x-4">
-                    {status !== "done" && (
+                    {order.status !== 3 && (
                       <button
                         // onClick={() => router.push("/order")}
                         className="btn border-0 btn-Delete "
@@ -232,7 +151,7 @@ const Form = () => {
                         Batalkan Pesanan
                       </button>
                     )}
-                    {status === "pay" && (
+                    {order.status === 1 && (
                       <button
                         // onClick={() => router.push("/order")}
                         className="btn border-0 btn-ePrimary "
@@ -243,7 +162,7 @@ const Form = () => {
                   </li>
                 ) : session?.user.role == "canteen" ? (
                   <li className="flex  justify-center space-x-4">
-                    {status !== "done" && (
+                    {order.status !== 3 && (
                       <button
                         // onClick={() => router.push("/order")}
                         className="btn border-0 btn-Delete "
@@ -251,7 +170,7 @@ const Form = () => {
                         Batalkan Pesanan
                       </button>
                     )}
-                    {status === "confirm" && (
+                    {order.status === 0 && (
                       <button
                         // onClick={() => router.push("/order")}
                         className="btn border-0 btn-ePrimary "
@@ -259,7 +178,7 @@ const Form = () => {
                         Terima Pesanan
                       </button>
                     )}
-                    {status === "payconfirm" && (
+                    {order.status === 2 && (
                       <button
                         // onClick={() => router.push("/order")}
                         className="btn border-0 btn-ePrimary "
@@ -280,3 +199,4 @@ const Form = () => {
   );
 };
 export default Form;
+

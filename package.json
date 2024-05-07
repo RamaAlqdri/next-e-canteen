@@ -24,6 +24,7 @@
     "react-hook-form": "^7.51.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.2.0",
+    "redis": "^4.6.13",
     "swr": "^2.2.5",
     "zustand": "^4.5.2"
   },

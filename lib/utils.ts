@@ -1,5 +1,18 @@
 import { getSession } from "next-auth/react";
 
+
+export const orderDesc = [
+  "Menunggu Konfirmasi Kantin",
+  "Membayar Pesanan",
+  "Memeriksa Pembayaran",
+  "Pesanan Selesai",
+];
+
+
+export function getOrderDescription(status: number) {
+  return orderDesc[status];
+}
+
 export const round2 = (num: number) =>
   Math.round((num + Number.EPSILON) * 100) / 100;
 
@@ -29,4 +42,31 @@ export function capitalizeText(text: string): string {
   const capitalizedText = capitalizedWords.join(' ');
 
   return capitalizedText;
+}
+export function ubahFormatTanggal(tanggalISO: string): string {
+  const tanggal = new Date(tanggalISO);
+  
+  const bulan: string[] = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+
+  const tanggalString = tanggal.getDate().toString();
+  const bulanString = bulan[tanggal.getMonth()];
+  const tahunString = tanggal.getFullYear().toString();
+
+  return `${tanggalString} ${bulanString} ${tahunString}`;
+}
+export function dapatkanWaktu(tanggalISO: string): string {
+  const tanggal = new Date(tanggalISO);
+  
+  const jamString = padZero(tanggal.getHours());
+  const menitString = padZero(tanggal.getMinutes());
+  const detikString = padZero(tanggal.getSeconds());
+
+  return `${jamString}:${menitString}:${detikString}`;
+}
+
+function padZero(n: number): string {
+  return n < 10 ? `0${n}` : `${n}`;
 }

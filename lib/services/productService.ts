@@ -121,12 +121,12 @@ async function deleteProduct(canteenSlug: string, productSlug: string) {
     //   canteenData.docs[0].id,
     //   "product"
     // );
-    console.log(canteenData)
+    console.log(canteenData);
     const productId = await getProductIdByProductSlugandCanteenSlug(
       productSlug,
       canteenSlug
     );
-    console.log(productId)
+    console.log(productId);
     const productRef = doc(
       db,
       "canteen",
@@ -227,33 +227,30 @@ async function getAllProducts(): Promise<Product[]> {
   try {
     const kantinRef = collection(db, "canteen");
     const snapShot = await getDocs(kantinRef);
-    let productList: Product[] = [];
 
-    // Gunakan map untuk membuat array dari seluruh janji productItem
+    // Gunakan map untuk membuat array dari janji-janji produk
     const productPromises = snapShot.docs.map(async (doc) => {
       const kantinId = doc.id;
       const productRef = collection(db, "canteen", kantinId, "product");
       const productSnap = await getDocs(productRef);
 
-      // Masukkan semua item produk ke dalam productList
-
-      productSnap.forEach((doc) => {
-        // console.log(doc.ref.parent.parent?.id);
-        productList.push(doc.data() as Product);
-      });
+      // Mengembalikan array produk
+      return productSnap.docs.map((doc) => doc.data() as Product);
     });
 
-    // Tunggu hingga semua janji productItem selesai
-    await Promise.all(productPromises);
-    // console.log(productList);
+    // Tunggu hingga semua janji produk selesai
+    const productLists = await Promise.all(productPromises);
 
-    return productList;
-    // or any default value you prefer
+    // Gabungkan semua produk menjadi satu array
+    const allProducts = productLists.flat();
+
+    return allProducts;
   } catch (error) {
     console.error("Error fetching product data:", error);
     return [] as Product[];
   }
 }
+
 async function createProduct(product: Product) {
   try {
     const canteenRef = query(

@@ -192,7 +192,7 @@ const Menu = () => {
 
                           <button
                             type="button"
-                            onClick={() => {}}
+                            onClick={() => {router.push('/orderlist')}}
                             className="hover:bg-gray-100"
                           >
                             <svg

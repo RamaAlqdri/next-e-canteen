@@ -6,12 +6,14 @@ import productsService from "@/lib/services/productService";
 import { Metadata } from "next";
 import Link from "next/link";
 import { convertDocToObj } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import canteenService from "@/lib/services/canteenService";
 import CanteenItem from "@/components/canteen/CanteenItem";
 import Image from "next/image";
 import { Product } from "@/lib/models/ProductModels";
 import { Canteen } from "@/lib/models/CanteenModel";
+import Skeleton from "@/components/handle/skeleton";
+import Await from "@/components/handle/await";
 
 const Beranda = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -19,22 +21,25 @@ const Beranda = () => {
   const [canteen, setCanteen] = useState<Canteen[]>([]);
   const [canteenLoading, setCanteenLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const data = await productsService.getAllProducts();
-      setProducts(data);
-      setProductLoading(false);
-    };
-    const fetchCanteen = async () => {
-      const data = await canteenService.getAllCanteenData();
-      setCanteen(data);
-      setCanteenLoading(false);
-    };
-    if (productLoading && canteenLoading) {
-      fetchProducts();
-      fetchCanteen();
-    }
-  }, [canteenLoading, productLoading]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const productsData = await productsService.getAllProducts();
+  //       setProducts(productsData);
+  //       const canteenData = await canteenService.getAllCanteenData();
+  //       setCanteen(canteenData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setProductLoading(false);
+  //       setCanteenLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+  const promiseCanteen = canteenService.getAllCanteenData();
+  const promiseProduct = productsService.getAllProducts();
 
   return (
     <div className="mb-20">
@@ -56,7 +61,7 @@ const Beranda = () => {
           Kami pilihin kantin favorit Universitas Mataram
         </p>
       </div>
-      {canteenLoading && (
+      {/* {canteenLoading && (
         <div className="flex flex-col space-y-6">
           <div className="flex justify-between w-full ">
             <div className="skeleton h-72 w-52 bg-gray-200"></div>
@@ -69,31 +74,43 @@ const Beranda = () => {
             <div className="skeleton h-72 w-52 bg-gray-200"></div>
           </div>
         </div>
-      )}
-      <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
-        {!canteenLoading &&
-          canteen
-            .slice(0, 6)
-            .map((canteen) => (
-              <CanteenItem key={canteen.slug} canteen={canteen} />
-            ))}
-      </div>
+      )} */}
+      <Suspense fallback={<Skeleton />}>
+        <Await promise={promiseCanteen}>
+          {(canteenData) => (
+            <>
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
+                {canteenData.slice(0, 6).map((canteen: any) => (
+                  <CanteenItem key={canteen.slug} canteen={canteen} />
+                ))}
+              </div>
+            </>
+          )}
+        </Await>
+      </Suspense>
       <div className="mt-3">
         <p className="text-md font-medium">Rekomendasi Makanan</p>
         <p className="sm:hidden contents text-xs font-light">
           Kami pilihin yang enak dan favorit
         </p>
       </div>
-      <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
-        {products.map((product) => (
-          // <div key={product._id}>{product.name}</div>
-          <ProductItem
-            key={product.slug}
-            product={product}
-            canteenName={product.canteenId}
-          />
-        ))}
-      </div>
+      <Suspense fallback={<Skeleton />}>
+        <Await promise={promiseProduct}>
+          {(products) => (
+            <>
+              <div className="grid grid-cols-1 gap-2 sm:gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 mt-3">
+                {products.map((product) => (
+                  <ProductItem
+                    key={product.slug}
+                    product={product}
+                    canteenName={product.canteenId}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </Await>
+      </Suspense>
     </div>
   );
 };

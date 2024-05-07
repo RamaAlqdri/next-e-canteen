@@ -68,11 +68,26 @@ async function getAllOrderByUserId(userId: string): Promise<Order[]> {
     return [];
   }
 }
+async function getAllOrderByCanteenSlug(canteenSlug: string): Promise<Order[]> {
+  try{
+    const q = query(collection(db, "order"), where("canteenSlug", "==", canteenSlug));
+    const querySnapshot = await getDocs(q);
+    let orders: Order[] = [];
+    querySnapshot.forEach((doc) => {
+      orders.push(doc.data() as Order);
+    });
+    return orders;
+  }catch(error){
+    console.error("Error fetching order data:", error);
+    return [];
+  }
+}
 
 const ordersService = {
   createOrder,
   getOrderById,
   getAllOrderByUserId,
+  getAllOrderByCanteenSlug,
   
 };
 export default ordersService;

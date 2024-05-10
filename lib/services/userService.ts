@@ -46,6 +46,38 @@ async function getUserByEmail(email: string): Promise<User> {
     return {} as User;
   }
 }
+async function updateUserName(email: string, name: string): Promise<void> {
+  try {
+    const userRef = query(
+      collection(db, "users"),
+      where("email", "==", email),
+      limit(1)
+    );
+    const userData = await getDocs(userRef);
+    const userDoc = userData.docs[0];
+    await updateDoc(doc(db, "users", userDoc.id), {
+      name,
+    });
+  } catch (error) {
+    console.error("Error updating user name:", error);
+  }
+}
+async function updateUserPassword(email: string, password: string): Promise<void> {
+  try {
+    const userRef = query(
+      collection(db, "users"),
+      where("email", "==", email),
+      limit(1)
+    );
+    const userData = await getDocs(userRef);
+    const userDoc = userData.docs[0];
+    await updateDoc(doc(db, "users", userDoc.id), {
+      password,
+    });
+  } catch (error) {
+    console.error("Error updating user password:", error);
+  }
+}
 async function updateUserRole(email: string, role: string): Promise<void> {
   try {
     const userRef = query(
@@ -124,5 +156,7 @@ const userService = {
   updateUserCanteen,
   getUserIdByEmail,
   getUserData,
+  updateUserName,
+  updateUserPassword,
 };
 export default userService;

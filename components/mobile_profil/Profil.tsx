@@ -19,7 +19,7 @@ const Profil = ({ visible, setVisible }: Props) => {
   const makeCanteen = () => {
     router.push("/make_canteen");
   };
-  const {clear} = useCartService();
+  const { clear } = useCartService();
   const canteen = () => {
     if (session?.user?.canteen) {
       router.push(`/canteen/${session.user.canteen}`);
@@ -171,7 +171,10 @@ const Profil = ({ visible, setVisible }: Props) => {
 
             <button
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                router.push('/orderlist')
+                setVisible(false);
+              }}
               className="hover:bg-gray-100 hover:rounded-xl px-4 flex justify-between border-b-[0.5px] w-full py-4 items-center"
             >
               <div className="flex items-center">
@@ -208,7 +211,10 @@ const Profil = ({ visible, setVisible }: Props) => {
             </button>
             <button
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                router.push("/account");
+                setVisible(false);
+              }}
               className="hover:bg-gray-100 hover:rounded-xl px-4 flex justify-between border-b-[0.5px] w-full py-4 items-center"
             >
               <div className="flex items-center">
@@ -227,7 +233,7 @@ const Profil = ({ visible, setVisible }: Props) => {
                     fill="gray"
                   />
                 </svg>
-                Pengaturan
+                Akun
               </div>
               <div className="">
                 <svg

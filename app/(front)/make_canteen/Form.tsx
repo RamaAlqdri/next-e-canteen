@@ -1,24 +1,27 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Span } from "next/dist/trace";
+import { TextInput } from '@tremor/react';
+import ImageUpload from "@/components/image/ImageUpload";
 
 type Inputs = {
   name: string;
   location: string;
   description: string;
-//   image: string;
+  phone: string;
+  //   image: string;
 };
 
 const Form = () => {
   const { data: session } = useSession();
   const params = useSearchParams();
   const router = useRouter();
-//   let callbackUrl = params.get("callbackUrl") || "/";
+  //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
     handleSubmit,
@@ -29,16 +32,23 @@ const Form = () => {
       name: "",
       location: "",
       description: "",
-    //   confirmPassword: "",
+      phone: "",
+      //   confirmPassword: "",
     },
   });
-//   useEffect(() => {
-//     if (session && session.user) {
-//       router.push(callbackUrl);
-//     }
-//   }, [callbackUrl, params, router, session]);
+
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+
+  const handleUpload = (imageUrl: any) => {
+    setUploadedImageUrl(imageUrl);
+  };
+  //   useEffect(() => {
+  //     if (session && session.user) {
+  //       router.push(callbackUrl);
+  //     }
+  //   }, [callbackUrl, params, router, session]);
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
-    const { name, location, description } = form;
+    const { name, location, description, phone } = form;
     try {
       const res = await fetch("/api/canteen/create", {
         method: "POST",
@@ -50,13 +60,12 @@ const Form = () => {
           location,
           description,
           session,
+          phone,
         }),
       });
       console.log(res);
       if (res.ok) {
-        return router.push(
-          "/"
-        );
+        return router.push("/");
       } else {
         const data = await res.json();
         throw new Error(data.message);
@@ -70,76 +79,97 @@ const Form = () => {
     }
   };
   return (
-    <div className="max-w-sm mx-auto card bg-base-300 my-4">
-      <div className="card-body bg-white shadow-md rounded-xl">
-        <h1 className="card-title">Daftarkan Kantin</h1>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <div className="my-2">
-            <label htmlFor="name" className="label">
-              Nama
-            </label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", {
-                required: "Name is required",
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.name?.message && (
-              <div className="text-error">{errors.name.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="location" className="label">
-              Lokasi
-            </label>
-            <input
-              type="text"
-              id="email"
-              {...register("location", {
-                required: "location is required",
-                // pattern: {
-                //   value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                //   message: "Email is invalid",
-                // },
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.location?.message && (
-              <div className="text-error">{errors.location.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="description" className="label">
-              Deskripsi
-            </label>
-            <input
-              type="text"
-              id="description"
-              {...register("description", {
-                required: "Description is required",
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.description?.message && (
-              <div className="text-error">{errors.description.message}</div>
-            )}
-          </div>
-          
-          <div className="my-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-ePrimary w-full"
-            >
-              {isSubmitting && (
-                <span className="loading loading-spinner"></span>
+    <div className="lg:grid lg:grid-cols-6">
+      <div className="lg:col-span-4 my-4">
+        <div className=" bg-white px-8 py-6 shadow-md rounded-xl">
+          <h1 className="card-title">Daftarkan Kantin</h1>
+          <form onSubmit={handleSubmit(formSubmit)} className="space-y-6 mt-6">
+            <div className=" ">
+              <label htmlFor="name" className="ml-4 absolute rounded-full -mt-3 px-2 bg-white ">
+                Nama
+              </label>
+              <input
+                type="text"
+                id="name"
+                {...register("name", {
+                  required: "Name is required",
+                })}
+                className=" w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400 "
+              />
+              {errors.name?.message && (
+                <div className="text-error">{errors.name.message}</div>
               )}
-              Daftarkan
-            </button>
-          </div>
-        </form>
+
+            </div>
+            <div className="pt-2 ">
+              <label htmlFor="phone" className="ml-4 absolute rounded-full -mt-3 px-2 bg-white ">
+                Telepon
+              </label>
+              <input
+                type="text"
+                id="phone"
+                {...register("phone", {
+                  required: "phone is required",
+                })}
+                className=" w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400 "
+              />
+              {errors.name?.message && (
+                <div className="text-error">{errors.name.message}</div>
+              )}
+
+            </div>
+            <div className="pt-2">
+              <label htmlFor="location" className="ml-4 absolute rounded-full -mt-3 px-2  bg-white">
+                Lokasi
+              </label>
+              <textarea
+                id="location"
+                {...register("location", {
+                  required: "location is required",
+                  
+                })}
+                className="w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400"
+              />
+              {errors.location?.message && (
+                <div className="text-error">{errors.location.message}</div>
+              )}
+            </div>
+            <div className="">
+              <label htmlFor="description" className="ml-4 absolute rounded-full -mt-3 px-2  bg-white">
+                Deskripsi
+              </label>
+              <textarea
+                id="description"
+                {...register("description", {
+                  required: "Description is required",
+                })}
+                className="w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400"
+              />
+              {errors.description?.message && (
+                <div className="text-error">{errors.description.message}</div>
+              )}
+            </div>
+            <div>
+              <label htmlFor="image" className="ml-4 absolute rounded-full -mt-3 px-2  ">
+                Gambar Kantin
+              </label>
+              <ImageUpload onUpload={handleUpload} />
+            </div>
+
+            <div className="my-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-ePrimary w-full"
+              >
+                {isSubmitting && (
+                  <span className="loading loading-spinner"></span>
+                )}
+                Daftarkan
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

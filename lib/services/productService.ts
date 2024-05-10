@@ -157,22 +157,22 @@ async function getProductBySlug(
     return {} as Product;
   }
 }
-async function getProductByCanteenSlug(
-  canteenSlug: string
-): Promise<Product[]> {
-  try {
-    const productRef = query(
-      collection(db, "canteen"),
-      where("slug", "==", canteenSlug),
-      limit(1)
-    );
-    const productData = await getDocs(productRef);
-    return productData.docs[0].data() as Product[];
-  } catch (error) {
-    console.error("Error fetching product data:", error);
-    return {} as Product[];
-  }
-}
+// async function getProductByCanteenSlug(
+//   canteenSlug: string
+// ): Promise<Product[]> {
+//   try {
+//     const productRef = query(
+//       collection(db, "canteen"),
+//       where("slug", "==", canteenSlug),
+//       limit(1)
+//     );
+//     const productData = await getDocs(productRef);
+//     return productData.docs[0].data() as Product[];
+//   } catch (error) {
+//     console.error("Error fetching product data:", error);
+//     return {} as Product[];
+//   }
+// }
 
 async function getAllProductsFromCanteen(
   canteenId: string
@@ -189,6 +189,28 @@ async function getAllProductsFromCanteen(
     // console.log(productList);
     return productList;
   } catch (error) {
+    console.error("Error fetching product data:", error);
+    return [] as Product[];
+  }
+}
+async function getProductByCanteenSlug(canteenSlug:string):Promise<Product[]>{
+  try{
+    const canteenRef = query(
+      collection(db, "canteen"),
+      where("slug", "==", canteenSlug),
+      limit(1)
+    );
+    const canteenData = await getDocs(canteenRef);
+    const productRef = query(
+      collection(db, "canteen", canteenData.docs[0].id, "product")
+    );
+    const productData = await getDocs(productRef);
+    let productList: Product[] = [];
+    productData.forEach((doc) => {
+      productList.push(doc.data() as Product);
+    });
+    return productList;
+  }catch(error){
     console.error("Error fetching product data:", error);
     return [] as Product[];
   }
@@ -328,5 +350,6 @@ const productsService = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductByCanteenSlug,
 };
 export default productsService;

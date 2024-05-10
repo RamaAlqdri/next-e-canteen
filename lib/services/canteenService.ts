@@ -77,6 +77,28 @@ async function updateCanteenData(
   }
 }
 
+async function getCanteenImagePath(canteenSlug: string): Promise<string> {
+  try {
+    const canteenId = await getCanteenIdBySlug(canteenSlug);
+    const canteenRef = doc(db, "canteen", canteenId);
+    const canteenData = await getDoc(canteenRef);
+
+    if (canteenData.exists()) {
+      const imageData = canteenData.data();
+      if (imageData) {
+        return imageData.image;
+      } else {
+        return ""; // or some default image path
+      }
+    } else {
+      return ""; // or throw an error if necessary
+    }
+  } catch (error) {
+    console.error("Error fetching canteen image path:", error);
+    return "";
+  }
+}
+
 async function deleteCanteenData(canteenSlug: string): Promise<void> {
   try {
     const canteenId = await getCanteenIdBySlug(canteenSlug);
@@ -156,5 +178,6 @@ const canteenService = {
   createCanteen,
   updateCanteenData,
   deleteCanteenData,
+  getCanteenImagePath,
 };
 export default canteenService;

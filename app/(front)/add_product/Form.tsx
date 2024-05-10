@@ -103,7 +103,7 @@ const Form = () => {
   return (
     <div className=" shadow-md rounded-2xl w-full bg-white my-4">
       <div className="card-body">
-        <h1 className="card-title">Tambah Product</h1>
+        <h1 className="card-title">Tambah Produk</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
           <ImageUpload onUpload={handleUpload} />
           {/* {uploadedImageUrl && (

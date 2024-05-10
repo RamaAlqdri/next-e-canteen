@@ -17,27 +17,25 @@ import { Session } from "next-auth/types";
 import { disconnect } from "process";
 import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
-import {ubahFormatTanggal} from "@/lib/utils";
-import {dapatkanWaktu} from "@/lib/utils";
+import { ubahFormatTanggal } from "@/lib/utils";
+import { dapatkanWaktu } from "@/lib/utils";
 import { capitalizeText } from "@/lib/utils";
 
-const Form = (
-  { order }: { order: Order }
-) => {
+const Form = ({ order }: { order: Order }) => {
   const router = useRouter();
 
   const { data: session } = useSession();
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) return <></>;
+  // const [mounted, setMounted] = useState(false);
+  // useEffect(() => {
+  //   setMounted(true);
+  // }, []);
+  // if (!mounted) return <></>;
 
   return (
     <div className="">
-      <h1 className="card-title mt-8 mb-4">Pesanan Anda</h1>
-      <div className="grid lg:grid-cols-5 gap-4  ">
+      <h1 className="card-title mt-8 mb-4">Detail Pesanan</h1>
+      <div className="grid lg:grid-cols-5 gap-4 ">
         <div className="lg:col-span-3">
           <div
             className="flex justify-between  px-5 py-4 bg-white w-full rounded-t-2xl  bg-center bg-repeat "
@@ -66,7 +64,20 @@ const Form = (
               </div>
             )} */}
           </div>
-          <div className="bg-white py-4 px-5 rounded-b-2xl shadow-md  lg:col-span-3">
+          <div className="bg-white py-4 space-y-2 px-5 rounded-b-2xl shadow-md  lg:col-span-3">
+            <div className="flex flex-col space-y-1 ">
+              <p className="text-md font-medium">Pelanggan</p>
+              <div className="flex space-x-2 text-sm font-light">
+                <div className="">
+                  <p>{`Email`}</p>
+                  <p>{`Nama`}</p>
+                </div>
+                <div className="">
+                  <p>: {order.orderBy?.email}</p>
+                  <p>: {order.orderBy?.fullName}</p>
+                </div>
+              </div>
+            </div>
             <table className="w-full   ">
               <thead className="border-b-[2px] border-gray-200">
                 <tr className="sm:text-base text-xs">
@@ -199,4 +210,3 @@ const Form = (
   );
 };
 export default Form;
-

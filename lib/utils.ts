@@ -60,10 +60,12 @@ export function ubahFormatTanggal(tanggalISO: string): string {
 }
 export function dapatkanWaktu(tanggalISO: string): string {
   const tanggal = new Date(tanggalISO);
+
   
-  const jamString = padZero(tanggal.getHours());
-  const menitString = padZero(tanggal.getMinutes());
-  const detikString = padZero(tanggal.getSeconds());
+  const jamString = padZero(tanggal.getUTCHours());
+  const menitString = padZero(tanggal.getUTCMinutes());
+  const detikString = padZero(tanggal.getUTCSeconds());
+  
 
   return `${jamString}:${menitString}:${detikString}`;
 }

@@ -11,23 +11,35 @@ import { orderBy } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import { create } from "domain";
 import { nanoid } from "nanoid";
+import { format } from "date-fns-tz";
 
 export default function CartDetails() {
   const router = useRouter();
-  const { items, itemsPrice,canteenSlug, decrease, increase, clear } = useCartService();
+  const { items, itemsPrice, canteenSlug, decrease, increase, clear } =
+    useCartService();
   // console.log(items);
   const [mounted, setMounted] = useState(false);
-  const {data:session} = useSession();
+  const { data: session } = useSession();
 
-  
+  const currentUTCDate = new Date();
+  const jakartaTimezone = "Asia/Makassar";
+  const createdAt = format(currentUTCDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
+    timeZone: jakartaTimezone,
+  });
+  console.log(createdAt);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const createOrder= async () => {
+  const createOrder = async () => {
     try {
       const transaction_id = `TRX-${nanoid(4)}-${nanoid(8)}`;
+      const currentUTCDate = new Date();
+      const jakartaTimezone = "Asia/Makassar";
+      const createdAt = format(currentUTCDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
+        timeZone: jakartaTimezone,
+      });
       const res = await fetch("/api/order/create", {
         method: "POST",
         headers: {
@@ -44,15 +56,13 @@ export default function CartDetails() {
           paymentMethod: "QRIS",
           itemsPrice,
           status: 0,
-          createdAt: new Date().toISOString(),
+          createdAt: createdAt,
         }),
       });
-      console.log(res);
+
       if (res.ok) {
         clear();
-        return router.push(
-          `/placeorder/${transaction_id}`
-        );
+        return router.push(`/placeorder/${transaction_id}`);
       } else {
         const data = await res.json();
         throw new Error(data.message);

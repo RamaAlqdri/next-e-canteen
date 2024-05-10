@@ -11,8 +11,8 @@ export default async function PalceOrderPage({
     params: { orderId: string };
   }) {
 
-    const order = await ordersService.getOrderById(params.orderId);
+    // const order = await ordersService.getOrderById(params.orderId);
 
 
-    return <Form order={order}/>
+    return <Form orderId={params.orderId}/>
 }

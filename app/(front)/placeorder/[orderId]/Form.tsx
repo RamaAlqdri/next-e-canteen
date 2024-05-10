@@ -20,17 +20,56 @@ import { Canteen } from "@/lib/models/CanteenModel";
 import { ubahFormatTanggal } from "@/lib/utils";
 import { dapatkanWaktu } from "@/lib/utils";
 import { capitalizeText } from "@/lib/utils";
+import {
+  collection,
+  limit,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-const Form = ({ order }: { order: Order }) => {
+const Form = ({ orderId }: { orderId: string }) => {
   const router = useRouter();
 
   const { data: session } = useSession();
+  const [order, setOrder] = useState<Order | null>(null);
+
+  function updateOrderStatus(status: number) {
+    orderService.updateOrderStatus(orderId, status);
+  } 
 
   // const [mounted, setMounted] = useState(false);
   // useEffect(() => {
   //   setMounted(true);
   // }, []);
   // if (!mounted) return <></>;
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "order"),
+      where("_id", "==", orderId),
+      limit(1)
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot: QuerySnapshot<DocumentData>) => {
+        let orderData: Order | null = null;
+        snapshot.forEach((doc: any) => {
+          orderData = doc.data() as Order;
+        });
+        setOrder(orderData);
+      }
+    );
+
+    // Membersihkan pemantauan saat komponen tidak lagi diperlukan
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (!order) return <></>;
 
   return (
     <div className="">
@@ -154,9 +193,10 @@ const Form = ({ order }: { order: Order }) => {
 
                 {session?.user.role === "user" ? (
                   <li className="flex  justify-center space-x-4">
-                    {order.status !== 3 && (
+                    {order.status !== 4 && order.status !== 3&& (
                       <button
                         // onClick={() => router.push("/order")}
+                        onClick={() => updateOrderStatus(4)}
                         className="btn border-0 btn-Delete "
                       >
                         Batalkan Pesanan
@@ -165,6 +205,7 @@ const Form = ({ order }: { order: Order }) => {
                     {order.status === 1 && (
                       <button
                         // onClick={() => router.push("/order")}
+                        onClick={() => updateOrderStatus(2)}
                         className="btn border-0 btn-ePrimary "
                       >
                         Periksa Pembayaran
@@ -173,9 +214,10 @@ const Form = ({ order }: { order: Order }) => {
                   </li>
                 ) : session?.user.role == "canteen" ? (
                   <li className="flex  justify-center space-x-4">
-                    {order.status !== 3 && (
+                    {order.status !== 4 && order.status !== 3 && (
                       <button
                         // onClick={() => router.push("/order")}
+                        onClick={() => updateOrderStatus(4)}
                         className="btn border-0 btn-Delete "
                       >
                         Batalkan Pesanan
@@ -184,6 +226,7 @@ const Form = ({ order }: { order: Order }) => {
                     {order.status === 0 && (
                       <button
                         // onClick={() => router.push("/order")}
+                        onClick={() => updateOrderStatus(1)}
                         className="btn border-0 btn-ePrimary "
                       >
                         Terima Pesanan
@@ -192,6 +235,7 @@ const Form = ({ order }: { order: Order }) => {
                     {order.status === 2 && (
                       <button
                         // onClick={() => router.push("/order")}
+                        onClick={() => updateOrderStatus(3)}
                         className="btn border-0 btn-ePrimary "
                       >
                         Pembayaran Berhasil

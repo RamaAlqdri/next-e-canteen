@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { useSearchParams, useRouter} from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -19,7 +19,7 @@ type Inputs = {
   //   image: string;
 };
 
-const Form = () => {
+const Form = ({ canteenId }: { canteenId: string }) => {
   const { data: session } = useSession();
   const params = useSearchParams();
   const router = useRouter();
@@ -65,7 +65,7 @@ const Form = () => {
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     form.countInStock = countInStockValue;
     const { category, countInStock, name, price, description } = form;
-    
+
     // console.log(form);
     try {
       const res = await fetch("/api/products/create", {
@@ -79,13 +79,13 @@ const Form = () => {
           name,
           price,
           description,
-          session,
+          canteenId: canteenId,
         }),
       });
       console.log(res);
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
-        return router.back()
+        return router.back();
         // router.reload();
         // router.refresh
       } else {

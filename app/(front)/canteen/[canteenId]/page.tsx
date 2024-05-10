@@ -18,9 +18,9 @@ import Detail from "./Detail";
 export async function generateMetadata({
   params,
 }: {
-  params: { canteenSlug: string };
+  params: { canteenId: string };
 }) {
-  const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
+  const canteen = await canteenService.getCanteenBySlug(params.canteenId);
   if (!canteen) {
     return { title: "Product not Found" };
   }
@@ -32,11 +32,12 @@ export async function generateMetadata({
 export default async function Canteen({
   params,
 }: {
-  params: { canteenSlug: string };
+  params: { canteenId: string };
 }) {
-  const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
-  const canteenId = await canteenService.getCanteenIdBySlug(params.canteenSlug);
-  const products = await productsService.getAllProductsFromCanteen(canteenId);
+  const canteen = await canteenService.getCanteenData(params.canteenId);
+
+  const products = await productsService.getAllProductsFromCanteen(params.canteenId);
+
 
   // const [product1, setProduct1] = useState(products[0]);
 

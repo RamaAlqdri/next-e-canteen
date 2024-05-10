@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 export default async function EditProduct({
     params,
 }: {
-  params: { productSlug: string; canteenSlug: string };
+  params: { productId: string; canteenId: string };
 }) {
 
     console.log(params);
-    const canteenId = await canteenService.getCanteenIdBySlug(params.canteenSlug);
-    const product = await productsService.getProductBySlug(canteenId, params.productSlug);
-    return <Form product={product}/>
+
+    const product = await productsService.getProductById(params.canteenId, params.productId);
+    return <Form product={product} canteenId={params.canteenId}/>
 }

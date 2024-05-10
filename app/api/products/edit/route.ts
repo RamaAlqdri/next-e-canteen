@@ -13,17 +13,16 @@ import { parse } from "path";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { slugBefore, category, countInStock, name, price, description, session } =
+  const { slugBefore, category, countInStock, name, price, description, canteenId } =
     await request.json();
   //   console.log(countInStock);
   //   console.log("tes")
   //   const { data: session } = useSession();
-  console.log(session);
-  const canteenSlug = session?.user.canteen as string;
+  
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const productSlug = name.toLowerCase().replace(/ /g, "-");
-  const existingProduct = await productsService.getProductBySlug(
-    canteenSlug,
+  const existingProduct = await productsService.getProductBySlugByCanteenId(
+    canteenId,
     productSlug
   );
   //   const existingCanteen = await canteenService.getCanteenBySlug(slug);
@@ -37,7 +36,7 @@ export const POST = async (request: NextRequest) => {
     );
   }
   const newProduct = {
-    canteenId: canteenSlug,
+    canteenId,
     name,
     slug: productSlug,
     image: "/images/product/product2.jpg",

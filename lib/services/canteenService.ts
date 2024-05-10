@@ -12,6 +12,7 @@ import {
   where,
   updateDoc,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
 import { Canteen } from "../models/CanteenModel";
 import { get } from "http";
@@ -21,8 +22,8 @@ export const revalidate = 3600;
 
 async function createCanteen(canteen: Canteen): Promise<void> {
   try {
-    const docRef = collection(db, "canteen");
-    await setDoc(doc(docRef), {
+    const canteenRef = collection(db, "canteen");
+    const newCanteenRef = await addDoc(canteenRef, {
       name: canteen.name,
       location: canteen.location,
       description: canteen.description,
@@ -31,6 +32,15 @@ async function createCanteen(canteen: Canteen): Promise<void> {
       rating: canteen.rating,
       slug: canteen.slug,
     });
+
+    // Dapatkan ID kantin yang baru dibuat
+    const canteenId = newCanteenRef.id;
+
+    // Perbarui dokumen kantin dengan ID baru
+    await setDoc(doc(canteenRef, canteenId), {
+      ...canteen, // Salin properti kantin yang lain jika diperlukan
+      _id: canteenId,
+    });
   } catch (error) {
     console.error("Error creating canteen:", error);
   }
@@ -38,14 +48,8 @@ async function createCanteen(canteen: Canteen): Promise<void> {
 
 async function getCanteenData(canteenId: string): Promise<Canteen> {
   try {
-    const canteenRef = query(
-      collection(db, "canteen"),
-      where("slug", "==", canteenId),
-      limit(1)
-    );
-    const canteenData0 = await getDocs(canteenRef);
 
-    const kantinRef = doc(db, "canteen", canteenData0.docs[0].id);
+    const kantinRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(kantinRef);
 
     return canteenData.data() as Canteen;
@@ -77,9 +81,30 @@ async function updateCanteenData(
   }
 }
 
-async function getCanteenImagePath(canteenSlug: string): Promise<string> {
+
+async function getCanteenName(canteenId: string): Promise<string> {
   try {
-    const canteenId = await getCanteenIdBySlug(canteenSlug);
+    const canteenRef = doc(db, "canteen", canteenId);
+    const canteenData = await getDoc(canteenRef);
+    if (canteenData.exists()) {
+      const nameData = canteenData.data();
+      if (nameData) {
+        return nameData.name;
+      } else {
+        return ""; // or some default image path
+      }
+    } else {
+      return ""; // or throw an error if necessary
+    }
+  } catch (error) {
+    console.error("Error fetching canteen name:", error);
+    return "";
+  }
+}
+
+async function getCanteenImagePath(canteenId: string): Promise<string> {
+  try {
+    
     const canteenRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(canteenRef);
 

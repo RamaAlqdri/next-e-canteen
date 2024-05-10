@@ -25,6 +25,7 @@ const Menu = () => {
     router.push("/make_canteen");
   };
   const { clear } = useCartService();
+
   const canteen = () => {
     if (session?.user?.canteen) {
       router.push(`/canteen/${session.user.canteen}`);
@@ -40,7 +41,10 @@ const Menu = () => {
     signOut({ callbackUrl: "/signin" });
   };
 
-  const promiseImage = canteenService.getCanteenImagePath(
+  // const promiseImage = canteenService.getCanteenImagePath(
+  //   session?.user?.canteen as string
+  // );
+  const promiseCanteen = canteenService.getCanteenData(
     session?.user?.canteen as string
   );
 
@@ -122,37 +126,44 @@ const Menu = () => {
                   <li>
                     <div className="dropdown dropdown-bottom dropdown-end">
                       <label tabIndex={0} className="btn btn-ghost rounded-btn">
-                        {session.user.role === "canteen"
-                          ? capitalizeText(session.user.canteen as string)
-                          : session.user.name}
                         {session.user.role === "canteen" ? (
-                          <Suspense fallback={<div className="h-10 w-10 bg-gray-300 ml-2 rounded-full"></div>}>
-                            <Await promise={promiseImage}>
-                              {(image) => {
+                          <Suspense
+                            fallback={
+                              <div className="h-10 w-10 bg-gray-300 ml-2 rounded-full"></div>
+                            }
+                          >
+                            <Await promise={promiseCanteen}>
+                              {(canteen) => {
                                 return (
-                                  <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
-                                    <Image
-                                      src={image}
-                                      alt="avatar"
-                                      width={300}
-                                      height={300}
-                                      className="object-cover h-full w-full"
-                                    />
-                                  </div>
+                                  <>
+                                    {canteen.name}
+                                    <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
+                                      <Image
+                                        src={canteen.image}
+                                        alt="avatar"
+                                        width={300}
+                                        height={300}
+                                        className="object-cover h-full w-full"
+                                      />
+                                    </div>
+                                  </>
                                 );
                               }}
                             </Await>
                           </Suspense>
                         ) : (
-                          <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
-                            <Image
-                              src="/images/avatar/my.png"
-                              alt="avatar"
-                              width={300}
-                              height={300}
-                              className="object-cover"
-                            />
-                          </div>
+                          <>
+                            {session.user.name}
+                            <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
+                              <Image
+                                src="/images/avatar/my.png"
+                                alt="avatar"
+                                width={300}
+                                height={300}
+                                className="object-cover"
+                              />
+                            </div>
+                          </>
                         )}
                       </label>
                       <ul

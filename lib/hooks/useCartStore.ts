@@ -8,10 +8,10 @@ type Cart = {
   itemsPrice: number;
   // taxPrice: number;
   // shippingPrice: number;
-  canteenSlug: string;
+  canteenId: string;
   totalPrice: number;
   paymentMethod: string;
-  orderBy: OrderBy;
+  customerId: string;
 
 };
 const initialState: Cart = {
@@ -19,13 +19,10 @@ const initialState: Cart = {
   itemsPrice: 0,
   // taxPrice: 0,
   // shippingPrice: 0,
-  canteenSlug: "",
+  canteenId: "",
   totalPrice: 0,
   paymentMethod: "QRIS",
-  orderBy: {
-    fullName: "",
-    email: "",
-  },
+  customerId: ""
 
 };
 
@@ -41,10 +38,10 @@ export default function useCartService() {
     itemsPrice,
     // taxPrice,
     // shippingPrice,
-    canteenSlug,
+    canteenId,
     totalPrice,
     paymentMethod,
-    orderBy,
+    customerId,
 
   } = cartStore();
   return {
@@ -52,10 +49,10 @@ export default function useCartService() {
     itemsPrice,
     // taxPrice,
     // shippingPrice,
-    canteenSlug,
+    canteenId,
     totalPrice,
     paymentMethod,
-    orderBy,
+    customerId,
 
     increase: (item: OrderItem) => {
       const existingItem = items.find((x) => x._id === item._id);
@@ -89,7 +86,7 @@ export default function useCartService() {
         items: updatedCartItems,
         itemsPrice,
         totalPrice,
-        canteenSlug: item.canteenId,
+        canteenId: item.canteenId,
       });
     },
 
@@ -110,12 +107,12 @@ export default function useCartService() {
         // shippingPrice,
         // taxPrice,
         totalPrice,
-        canteenSlug: item.canteenId,
+        canteenId: item.canteenId,
       });
     },
     saveOrderBy: (orderBy: OrderBy) => {
       cartStore.setState({
-        orderBy,
+        customerId,
       });
     },
     savePaymentMethod: (paymentMethod: string) => {

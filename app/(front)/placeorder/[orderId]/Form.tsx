@@ -28,8 +28,9 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { User } from "@/lib/models/UserModel";
 
-const Form = ({ orderId }: { orderId: string }) => {
+const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , user:User}) => {
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -94,7 +95,7 @@ const Form = ({ orderId }: { orderId: string }) => {
             </div>
             <div className="flex items-center bg-white rounded-full border-[#FFF5EC] border-2 sm:px-4 px-2">
               <p className="sm:font-semibold font-medium text-[#EEA147] sm:text-lg text-xs text-center">
-                {capitalizeText(order.canteenSlug)}
+                {canteen.name}
               </p>
             </div>
             {/* {status === 1 && (
@@ -112,8 +113,8 @@ const Form = ({ orderId }: { orderId: string }) => {
                   <p>{`Nama`}</p>
                 </div>
                 <div className="">
-                  <p>: {order.orderBy?.email}</p>
-                  <p>: {order.orderBy?.fullName}</p>
+                  <p>: {user.email}</p>
+                  <p>: {user.name}</p>
                 </div>
               </div>
             </div>

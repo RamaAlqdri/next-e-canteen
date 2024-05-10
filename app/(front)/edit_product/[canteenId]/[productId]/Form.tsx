@@ -21,9 +21,9 @@ type Inputs = {
   //   image: string;
 };
 
-const Form = ({ product }: { product: Product }) => {
+const Form = ({ product, canteenId }: { product: Product, canteenId:string }) => {
   const { data: session } = useSession();
-  console.log(session?.user.canteen);
+
   const params = useSearchParams();
   const router = useRouter();
   console.log(product);
@@ -86,13 +86,13 @@ const Form = ({ product }: { product: Product }) => {
           name,
           price,
           description,
-          session,
+          canteenId,
         }),
       });
-      console.log(res);
+
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
-        return router.push(`/canteen/${session?.user.canteen}`);
+        return router.back();
         // router.reload();
         // router.refresh
       } else {
@@ -117,13 +117,13 @@ const Form = ({ product }: { product: Product }) => {
         },
         body: JSON.stringify({
           slugBefore: product.slug,
-          canteenslug: product.canteenId,
+          canteenId: product.canteenId,
         }),
       });
       console.log(res);
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
-        return router.push(`/canteen/${session?.user.canteen}`);
+        return router.back();
         // router.reload();
         // router.refresh
       } else {

@@ -3,8 +3,8 @@
 "use client";
 import { Metadata } from "next";
 import UserBeranda from "./user_home";
-import CanteenBeranda from "./canteen_home";
-import AdminBeranda from "./admin_home";
+import CanteenBeranda from "@/components/canteen/canteen_home";
+import AdminBeranda from "@/components/admin/admin_home";
 import { useSession } from "next-auth/react";
 
 // export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function Home() {
 
 
   if (session?.user?.role === "canteen") {
-    return <CanteenBeranda/>;
+    return <CanteenBeranda props={""}/>;
   } else if (session?.user?.role === "admin") {
     return <AdminBeranda/>;
   } else if (session?.user?.role === "blu") {

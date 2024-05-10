@@ -50,7 +50,7 @@ export default function ProductItem({
         </div>
         <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 sm:pl-2 m-2 sm:flex-none sm:justify-normal ">
           <Link
-            href={`${canteen}${product.canteenId}/product/${product.slug}`}
+            href={`${canteen}${product.canteenId}/product/${product._id}`}
             className=""
           >
             <h2 className="card-title font-semibold sm:text-lg text-sm ">

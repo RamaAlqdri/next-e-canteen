@@ -97,9 +97,9 @@ async function getAllOrderByUserId(userId: string): Promise<Order[]> {
     return [];
   }
 }
-async function getAllOrderByCanteenSlug(canteenSlug: string): Promise<Order[]> {
+async function getAllOrderByCanteenId(canteenId: string): Promise<Order[]> {
   try{
-    const q = query(collection(db, "order"), where("canteenSlug", "==", canteenSlug));
+    const q = query(collection(db, "order"), where("canteenId", "==", canteenId));
     const querySnapshot = await getDocs(q);
     let orders: Order[] = [];
     querySnapshot.forEach((doc) => {
@@ -111,9 +111,9 @@ async function getAllOrderByCanteenSlug(canteenSlug: string): Promise<Order[]> {
     return [];
   }
 }
-async function getAllOrderByCanteenSlugAndStatus(canteenSlug: string, status: number): Promise<Order[]> {
+async function getAllOrderByCanteenIdAndStatus(canteenId: string, status: number): Promise<Order[]> {
   try{
-    const q = query(collection(db, "order"), where("canteenSlug", "==", canteenSlug), where("status", "==", status));
+    const q = query(collection(db, "order"), where("canteenId", "==", canteenId), where("status", "==", status));
     const querySnapshot = await getDocs(q);
     let orders: Order[] = [];
     querySnapshot.forEach((doc) => {
@@ -130,10 +130,10 @@ const ordersService = {
   createOrder,
   getOrderById,
   getAllOrderByUserId,
-  getAllOrderByCanteenSlug,
+  getAllOrderByCanteenId,
   getRealTimeOrderById,
   updateOrderStatus,
-  getAllOrderByCanteenSlugAndStatus,
+  getAllOrderByCanteenIdAndStatus,
   
 };
 export default ordersService;

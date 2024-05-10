@@ -6,9 +6,9 @@ import canteenService from '@/lib/services/canteenService';
 export async function generateMetadata({
     params,
   }: {
-    params: { canteenSlug: string };
+    params: { canteenId: string };
   }) {
-    const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
+    const canteen = await canteenService.getCanteenData(params.canteenId);
     if (!canteen) {
       return { title: "Product not Found" };
     }
@@ -20,8 +20,8 @@ export async function generateMetadata({
   export default async function EditCanteen({
     params,
   }: {
-    params: { canteenSlug: string };
+    params: { canteenId: string };
   }) {
-    const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
+    const canteen = await canteenService.getCanteenData(params.canteenId);
     return <Form canteen={canteen}/>
 }

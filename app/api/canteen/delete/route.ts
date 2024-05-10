@@ -21,9 +21,17 @@ export const POST = async (request: NextRequest) => {
 
   try {
     // canteenService.createCanteen(newCanteen);
+    const canteenId = await canteenService.getCanteenIdBySlug(slugBefore);
     canteenService.deleteCanteenData(slugBefore);
-    userService.updateUserRole(session.user.email, "user");
-    userService.updateUserCanteen(session.user.email, "");
+    if(session.user.role == "admin"){
+      
+      userService.updateUserRolebyCanteenId(canteenId, "user");
+      userService.updateUserCanteenByCanteenId(canteenId, "");
+    }else{
+
+      userService.updateUserRole(session.user.email, "user");
+      userService.updateUserCanteen(session.user.email, "");
+    }
     // userService.createUser(newUser);
 
     return Response.json(

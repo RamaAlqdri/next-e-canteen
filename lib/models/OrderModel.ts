@@ -2,11 +2,8 @@ export type Order = {
   _id: string;
   // user?: { name: string };
   items: [OrderItem];
-  orderBy?: {
-    fullName: string;
-    email: string;
-  };
-  canteenSlug: string;
+  customerId: string;
+  canteenId: string;
   paymentMethod: string;
   itemsPrice: number;
   status: number;
@@ -21,9 +18,4 @@ export type OrderItem = {
   _id: string;
   price: number;
   canteenId: string;
-};
-
-export type OrderBy = {
-  fullName: string;
-  email: string;
 };

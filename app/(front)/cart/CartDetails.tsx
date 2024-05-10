@@ -15,18 +15,19 @@ import { format } from "date-fns-tz";
 
 export default function CartDetails() {
   const router = useRouter();
-  const { items, itemsPrice, canteenSlug, decrease, increase, clear } =
+  const { items, itemsPrice, canteenId, decrease, increase, clear } =
     useCartService();
   // console.log(items);
   const [mounted, setMounted] = useState(false);
   const { data: session } = useSession();
+  console.log(session);
 
-  const currentUTCDate = new Date();
-  const jakartaTimezone = "Asia/Makassar";
-  const createdAt = format(currentUTCDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
-    timeZone: jakartaTimezone,
-  });
-  console.log(createdAt);
+  // const currentUTCDate = new Date();
+  // const jakartaTimezone = "Asia/Makassar";
+  // const createdAt = format(currentUTCDate, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", {
+  //   timeZone: jakartaTimezone,
+  // });
+  // console.log(createdAt);
 
   useEffect(() => {
     setMounted(true);
@@ -48,11 +49,8 @@ export default function CartDetails() {
         body: JSON.stringify({
           _id: transaction_id,
           items,
-          orderBy: {
-            fullName: session?.user?.name,
-            email: session?.user?.email,
-          },
-          canteenSlug,
+          customerId: session?.user?._id,
+          canteenId,
           paymentMethod: "QRIS",
           itemsPrice,
           status: 0,

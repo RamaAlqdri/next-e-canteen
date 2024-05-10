@@ -18,8 +18,8 @@ export const POST = async (request: NextRequest) => {
   const {
     _id,
     items,
-    orderBy,
-    canteenSlug,
+    customerId,
+    canteenId,
     paymentMethod,
     itemsPrice,
     status,
@@ -32,8 +32,8 @@ export const POST = async (request: NextRequest) => {
   const newOrder = {
     _id,
     items,
-    orderBy,
-    canteenSlug,
+    customerId,
+    canteenId,
     paymentMethod,
     itemsPrice,
     status,

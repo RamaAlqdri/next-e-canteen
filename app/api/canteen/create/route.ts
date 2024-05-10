@@ -10,7 +10,7 @@ import { getSession, useSession } from "next-auth/react";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { name, location, description, session } = await request.json();
+  const { name, location, description, session,phone } = await request.json();
   console.log(session);
 
   //   const hashedPassword = bcrypt.hashSync(password, 5);
@@ -33,11 +33,13 @@ export const POST = async (request: NextRequest) => {
     numReviews: 0,
     rating: 0,
     slug,
+    phone,
   } as Canteen;
   try {
     canteenService.createCanteen(newCanteen);
+    const canteenId = await canteenService.getCanteenIdBySlug(slug);
     userService.updateUserRole(session.user.email, "canteen");
-    userService.updateUserCanteen(session.user.email, slug);
+    userService.updateUserCanteen(session.user.email, canteenId);
     // userService.createUser(newUser);
 
     return Response.json(

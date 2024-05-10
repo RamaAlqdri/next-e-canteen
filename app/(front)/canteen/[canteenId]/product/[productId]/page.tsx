@@ -12,10 +12,11 @@ import Detail from "./Detail";
 export async function generateMetadata({
   params,
 }: {
-  params: { productSlug: string; canteenSlug: string };
+  params: { productId: string; canteenId: string };
 }) {
-  const product = await productsService.getProductBySlugWithoutCanteen(
-    params.productSlug
+  const product = await productsService.getProductById(
+    params.canteenId,
+    params.productId
   );
 
   if (!product) {
@@ -29,17 +30,14 @@ export async function generateMetadata({
 export default async function ProductDetails({
   params,
 }: {
-  params: { productSlug: string; canteenSlug: string };
+  params: { productId: string; canteenId: string };
 }) {
   // const { data: session } = useSession();
   // console.log(session);
-  const canteen = await canteenService.getCanteenBySlug(params.canteenSlug);
-  const canteenId = (await canteenService.getCanteenIdBySlug(
-    params.canteenSlug
-  )) as string;
-  const product = await productsService.getProductBySlug(
-    canteenId,
-    params.productSlug
+  const canteen = await canteenService.getCanteenData(params.canteenId);
+  const product = await productsService.getProductById(
+    params.canteenId,
+    params.productId
   );
   // const product = await productsService.getProduct(params.productSlug, params.canteenSlug)
   // const canteen = await canteenService.getCanteenData(product.canteenId);

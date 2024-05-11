@@ -14,6 +14,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import canteenService from "@/lib/services/canteenService";
 
 const orderlist = [
   {
@@ -53,8 +54,9 @@ const Detail = () => {
   const router = useRouter();
 
   const promiseOrder = ordersService.getAllOrderByUserId(
-    session?.user.email as string
+    session?.user._id as string
   );
+  const promiseCanteenName = (canteenId: string) => {return canteenService.getCanteenName(canteenId);}
 
   return (
     <div className="">
@@ -90,9 +92,14 @@ const Detail = () => {
                               ></Image>
                             </div>
                             <div className="flex  flex-col  h-full  ">
-                              <p className="font-medium text-start">
-                                {capitalizeText(order.canteenSlug)}
-                              </p>
+                              <Await promise={promiseCanteenName(order.canteenId)}>
+                                {(canteenName) => (
+                                  <p className="font-medium text-start">
+                                    {canteenName}
+                                  </p>
+                                )}
+                              </Await>
+                              
                               <p className="text-xs truncate text-start w-[20rem] font-light text-gray-500 ">
                                 {order.items.map((item, index) => (
                                   <React.Fragment key={index}>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { round2 } from "../utils";
-import { OrderItem, OrderBy, Order } from "../models/OrderModel";
+import { OrderItem, Order } from "../models/OrderModel";
 import { persist } from "zustand/middleware";
 
 type Cart = {
@@ -110,7 +110,7 @@ export default function useCartService() {
         canteenId: item.canteenId,
       });
     },
-    saveOrderBy: (orderBy: OrderBy) => {
+    saveOrderBy: () => {
       cartStore.setState({
         customerId,
       });

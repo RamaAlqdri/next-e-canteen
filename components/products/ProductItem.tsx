@@ -36,7 +36,7 @@ export default function ProductItem({
       <div className="flex sm:grid  ">
         <div className="h-20 w-20 sm:h-52 sm:w-full m-2 sm:m-0">
           <Link
-            href={`${canteen}${product.canteenId}/product/${product.slug}`}
+            href={`${canteen}${product.canteenId}/product/${product._id}`}
             className=""
           >
             <Image

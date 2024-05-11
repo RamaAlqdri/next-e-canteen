@@ -85,7 +85,7 @@ async function getOrderById(orderId: string): Promise<Order> {
 }
 async function getAllOrderByUserId(userId: string): Promise<Order[]> {
   try{
-    const q = query(collection(db, "order"), where("orderBy.email", "==", userId));
+    const q = query(collection(db, "order"), where("customerId", "==", userId));
     const querySnapshot = await getDocs(q);
     let orders: Order[] = [];
     querySnapshot.forEach((doc) => {

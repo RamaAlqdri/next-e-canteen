@@ -12,7 +12,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
     <div className="card hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
       <div className="grid  ">
         <div className="w-full aspect-square sm:h-52 sm:w-full m-0">
-          <Link href={`/canteen/${canteen.slug}`} className="">
+          <Link href={`/canteen/${canteen._id}`} className="">
             <Image
               src={canteen.image}
               alt={canteen.name}
@@ -23,7 +23,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
           </Link>
         </div>
         <div className="  sm:w-[87%]  py-1 pl-2 m-2 flex-none justify-normal ">
-          <Link href={`/canteen/${canteen.slug}`} className="">
+          <Link href={`/canteen/${canteen._id}`} className="">
             <h2 className=" font-semibold sm:text-lg text-xs ">
               {canteen.name}
             </h2>

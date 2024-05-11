@@ -20,7 +20,7 @@ export async function generateMetadata({
 }: {
   params: { canteenId: string };
 }) {
-  const canteen = await canteenService.getCanteenBySlug(params.canteenId);
+  const canteen = await canteenService.getCanteenData(params.canteenId);
   if (!canteen) {
     return { title: "Product not Found" };
   }

@@ -21,6 +21,8 @@ import { ubahFormatTanggal } from "@/lib/utils";
 import { dapatkanWaktu } from "@/lib/utils";
 import { capitalizeText } from "@/lib/utils";
 import {
+  DocumentData,
+  QuerySnapshot,
   collection,
   limit,
   onSnapshot,

@@ -20,6 +20,30 @@ import exp from "constants";
 
 export const revalidate = 3600;
 
+
+async function getCanteenName(canteenId: string): Promise<string> {
+  try {
+    console.log(canteenId);
+    const canteenRef = doc(db, "canteen", canteenId);
+    const canteenData = await getDoc(canteenRef);
+    if (canteenData) {
+      const nameData = canteenData.data();
+      console.log(canteenData.data() as Canteen);
+      if (nameData) {
+        return nameData.name;
+      } else {
+        return ""; // or some default image path
+      }
+    } else {
+      console.log("No such document!");
+      return ""; // or throw an error if necessary
+    }
+  } catch (error) {
+    console.error("Error fetching canteen name:", error);
+    return "";
+  }
+}
+
 async function createCanteen(canteen: Canteen): Promise<void> {
   try {
     const canteenRef = collection(db, "canteen");
@@ -78,27 +102,6 @@ async function updateCanteenData(
     });
   } catch (error) {
     console.error("Error updating canteen data:", error);
-  }
-}
-
-
-async function getCanteenName(canteenId: string): Promise<string> {
-  try {
-    const canteenRef = doc(db, "canteen", canteenId);
-    const canteenData = await getDoc(canteenRef);
-    if (canteenData.exists()) {
-      const nameData = canteenData.data();
-      if (nameData) {
-        return nameData.name;
-      } else {
-        return ""; // or some default image path
-      }
-    } else {
-      return ""; // or throw an error if necessary
-    }
-  } catch (error) {
-    console.error("Error fetching canteen name:", error);
-    return "";
   }
 }
 
@@ -204,5 +207,6 @@ const canteenService = {
   updateCanteenData,
   deleteCanteenData,
   getCanteenImagePath,
+  getCanteenName,
 };
 export default canteenService;

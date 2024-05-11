@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import UserBeranda from "./user_home";
 import CanteenBeranda from "@/components/canteen/canteen_home";
 import AdminBeranda from "@/components/admin/admin_home";
+import BLUBeranda from "@/components/blu/blu_home";
 import { useSession } from "next-auth/react";
 
 // export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function Home() {
   } else if (session?.user?.role === "admin") {
     return <AdminBeranda/>;
   } else if (session?.user?.role === "blu") {
-    return <div>BLU</div>;
+    return <BLUBeranda/>;
   }else{
     return <UserBeranda />
   }

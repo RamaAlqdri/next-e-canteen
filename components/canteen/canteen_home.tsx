@@ -48,7 +48,8 @@ interface props {
   canteenSlug?: string | null;
 }
 
-const CanteenBeranda = ({ props = "" }:{props:string}) => {
+const CanteenBeranda = ({ props = "" }: { props: string }) => {
+  const { data: session } = useSession();
   return (
     // {handleStatistic("harian")}
     <div className="lg:grid lg:grid-cols-6">
@@ -63,31 +64,37 @@ const CanteenBeranda = ({ props = "" }:{props:string}) => {
             <Tab className="" value="1">
               Ringkasan
             </Tab>
-            <Tab value="2">Produk</Tab>
-            <Tab value="3">Pesanan</Tab>
+            {session?.user.role !== "blu" ? (
+              <>
+                <Tab value="2">Produk</Tab>
+                <Tab value="3">Pesanan</Tab>
+              </>
+            ) : (
+              <></>
+            )}
           </TabList>
-          {props!=="" ? (
+          {props !== "" ? (
             <TabPanels className="">
               <TabPanel className="pb-10">
-                <Dashboard props={props}/>
+                <Dashboard props={props} />
               </TabPanel>
               <TabPanel className="pb-10">
                 <ProductList props={props} />
               </TabPanel>
               <TabPanel className="pb-10">
-                <OrderList props={props}/>
+                <OrderList props={props} />
               </TabPanel>
             </TabPanels>
           ) : (
             <TabPanels className="">
               <TabPanel className="pb-10">
-                <Dashboard props={""}/>
+                <Dashboard props={""} />
               </TabPanel>
               <TabPanel className="pb-10">
                 <ProductList props={""} />
               </TabPanel>
               <TabPanel className="pb-10">
-                <OrderList props={""}/>
+                <OrderList props={""} />
               </TabPanel>
             </TabPanels>
           )}
@@ -98,10 +105,10 @@ const CanteenBeranda = ({ props = "" }:{props:string}) => {
 };
 export default CanteenBeranda;
 
-const ProductList = ({ props = "" }:{props:string}) => {
+const ProductList = ({ props = "" }: { props: string }) => {
   const { data: session } = useSession();
   let canteenId = "";
-  if (props!=="") {
+  if (props !== "") {
     canteenId = props as string;
   } else {
     canteenId = session?.user?.canteen as string;
@@ -112,7 +119,56 @@ const ProductList = ({ props = "" }:{props:string}) => {
 
   return (
     <div>
-      <Suspense fallback={<div>Loading</div>}>
+      <Suspense
+        fallback={
+          <div className=" space-y-4">
+            <div className="w-full animate-pulse bg-white rounded-b-2xl p-6 h-[5rem]">
+              <div className="w-full h-full bg-gray-200 rounded-xl"></div>
+            </div>
+
+            <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+              <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+              <div className="w-full h-full flex flex-col justify-between py-1">
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+              </div>
+            </div>
+            <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+              <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+              <div className="w-full h-full flex flex-col justify-between py-1">
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+              </div>
+            </div>
+            <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+              <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+              <div className="w-full h-full flex flex-col justify-between py-1">
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+              </div>
+            </div>
+            <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+              <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+              <div className="w-full h-full flex flex-col justify-between py-1">
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+              </div>
+            </div>
+            <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+              <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+              <div className="w-full h-full flex flex-col justify-between py-1">
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+                <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+              </div>
+            </div>
+          </div>
+        }
+      >
         <Await promise={promiseProductCanteen}>
           {(products) => (
             <div className="space-y-3">
@@ -213,25 +269,72 @@ const ProductList = ({ props = "" }:{props:string}) => {
   );
 };
 
-const OrderList = ({ props = "" }:{props:string}) => {
+const OrderList = ({ props = "" }: { props: string }) => {
   const { data: session } = useSession();
   let canteenId = "";
-  if (props!=="") {
+  if (props !== "") {
     canteenId = props as string;
   } else {
     canteenId = session?.user?.canteen as string;
   }
   const router = useRouter();
 
-  const promiseUser = (userId:string) => {
+  const promiseUser = (userId: string) => {
     return userService.getUserDataById(userId);
   };
-    
 
-  const promiseOrderCanteen =
-    ordersService.getAllOrderByCanteenId(canteenId);
+  const promiseOrderCanteen = ordersService.getAllOrderByCanteenId(canteenId);
   return (
-    <Suspense fallback={<div>Loading</div>}>
+    <Suspense
+      fallback={
+        <div className=" space-y-4">
+          <div className="w-full animate-pulse bg-white rounded-b-2xl p-6 h-[5rem]">
+            <div className="w-full h-full bg-gray-200 rounded-xl"></div>
+          </div>
+
+          <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+            <div className="w-full h-full flex flex-col justify-between py-1">
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+            </div>
+          </div>
+          <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+            <div className="w-full h-full flex flex-col justify-between py-1">
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+            </div>
+          </div>
+          <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+            <div className="w-full h-full flex flex-col justify-between py-1">
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+            </div>
+          </div>
+          <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+            <div className="w-full h-full flex flex-col justify-between py-1">
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+            </div>
+          </div>
+          <div className="h-[8rem] flex space-x-4 w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="h-[5rem] w-[5.5rem] bg-gray-200 rounded-2xl"></div>
+            <div className="w-full h-full flex flex-col justify-between py-1">
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[10rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[6rem]"></div>
+              <div className="bg-gray-200 rounded-md h-[1.1rem] w-[12rem]"></div>
+            </div>
+          </div>
+        </div>
+      }
+    >
       <Await promise={promiseOrderCanteen}>
         {(orderlist) => (
           <div className="space-y-3 ">
@@ -262,11 +365,8 @@ const OrderList = ({ props = "" }:{props:string}) => {
                     <div className="flex  flex-col  h-full  ">
                       <Await promise={promiseUser(order.customerId)}>
                         {(user) => (
-                          <p className="font-medium text-start">
-                            {user?.name}
-                          </p>
+                          <p className="font-medium text-start">{user?.name}</p>
                         )}
-
                       </Await>
                       {/* <p className="font-medium text-start">
                         {order.orderBy?.fullName}
@@ -337,7 +437,7 @@ const OrderList = ({ props = "" }:{props:string}) => {
   );
 };
 
-const Dashboard = ({ props = "" }:{props:string}) => {
+const Dashboard = ({ props = "" }: { props: string }) => {
   const [totalPendapatan, setTotalPendapatan] = useState(0);
   const [data, setData] = useState<any>([]);
   const [dataMakanan, setDataMakanan] = useState<any>([]);
@@ -345,7 +445,7 @@ const Dashboard = ({ props = "" }:{props:string}) => {
 
   const { data: session } = useSession();
   let canteenId = "";
-  if (props!=="") {
+  if (props !== "") {
     canteenId = props as string;
   } else {
     canteenId = session?.user?.canteen as string;
@@ -373,7 +473,29 @@ const Dashboard = ({ props = "" }:{props:string}) => {
   );
 
   return (
-    <Suspense fallback={<div>loading</div>}>
+    <Suspense
+      fallback={
+        <div className=" space-y-4">
+          <div className="w-full animate-pulse bg-white rounded-b-2xl p-6 h-[5rem]">
+            <div className="w-full h-full bg-gray-200 rounded-xl"></div>
+          </div>
+          <div className="animate-pulse flex space-x-4">
+            <div className=" w-full h-52 flex flex-col items-center  bg-white shadow-md p-6 rounded-2xl">
+              <div className="w-full h-1/5 bg-gray-200  rounded-xl"></div>
+              <div className="w-full h-3/5 mt-6 aspect-square bg-gray-200  rounded-2xl"></div>
+            </div>
+            <div className=" w-full h-52 flex flex-col items-center  bg-white shadow-md p-6 rounded-2xl">
+              <div className="w-full h-1/5 bg-gray-200  rounded-xl"></div>
+              <div className="w-full h-3/5 mt-6 aspect-square bg-gray-200  rounded-2xl"></div>
+            </div>
+          </div>
+          <div className="h-[23rem] w-full animate-pulse bg-white p-6 rounded-2xl ">
+            <div className="w-full h-[2rem] bg-gray-200  rounded-xl "></div>
+            <div className="w-full h-5/6 mt-6 aspect-square bg-gray-200  rounded-2xl"></div>
+          </div>
+        </div>
+      }
+    >
       <Await promise={promiseOrderCanteen}>
         {(orders) => {
           // handleStatistic("harian", orders);

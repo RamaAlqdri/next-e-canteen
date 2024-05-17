@@ -197,7 +197,6 @@ async function getAllCanteenData(): Promise<Canteen[]> {
     return [];
   }
 }
-
 const canteenService = {
   getCanteenData,
   getAllCanteenData,

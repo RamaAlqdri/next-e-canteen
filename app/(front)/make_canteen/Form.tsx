@@ -6,14 +6,18 @@ import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Span } from "next/dist/trace";
-import { TextInput } from '@tremor/react';
+import { TextInput } from "@tremor/react";
 import ImageUpload from "@/components/image/ImageUpload";
+import InputWithLabel from "@/components/input/input";
+import TextareaWithLabel from "@/components/input/textarea";
+import { error } from "console";
 
 type Inputs = {
   name: string;
   location: string;
   description: string;
   phone: string;
+
   //   image: string;
 };
 
@@ -21,6 +25,13 @@ const Form = () => {
   const { data: session } = useSession();
   const params = useSearchParams();
   const router = useRouter();
+
+  const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
+  const [uploadImageQris, setUploadImageQris] = useState(null);
+
+  console.log(uploadImageCanteen);
+  console.log(uploadImageQris);
+
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
@@ -33,20 +44,11 @@ const Form = () => {
       location: "",
       description: "",
       phone: "",
+
       //   confirmPassword: "",
     },
   });
 
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
-
-  const handleUpload = (imageUrl: any) => {
-    setUploadedImageUrl(imageUrl);
-  };
-  //   useEffect(() => {
-  //     if (session && session.user) {
-  //       router.push(callbackUrl);
-  //     }
-  //   }, [callbackUrl, params, router, session]);
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, location, description, phone } = form;
     try {
@@ -61,6 +63,8 @@ const Form = () => {
           description,
           session,
           phone,
+          uploadImageCanteen,
+          uploadImageQris,
         }),
       });
       console.log(res);
@@ -80,80 +84,78 @@ const Form = () => {
   };
   return (
     <div className="lg:grid lg:grid-cols-6">
-      <div className="lg:col-span-4 my-4">
-        <div className=" bg-white px-8 py-6 shadow-md rounded-xl">
+      <div className="lg:col-span-3 my-4">
+        <div className=" bg-white px-8 py-6 shadow-md rounded-2xl">
           <h1 className="card-title">Daftarkan Kantin</h1>
           <form onSubmit={handleSubmit(formSubmit)} className="space-y-6 mt-6">
-            <div className=" ">
-              <label htmlFor="name" className="ml-4 absolute rounded-full -mt-3 px-2 bg-white ">
-                Nama
-              </label>
-              <input
+            <div>
+              <InputWithLabel
+                htmlFor="name"
+                label="Nama"
                 type="text"
-                id="name"
-                {...register("name", {
-                  required: "Name is required",
-                })}
-                className=" w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400 "
+                error={errors.name?.message}
+                register={register}
+                name="name"
+                validationSchema={{
+                  required: "Nama wajib diisi",
+                }}
               />
-              {errors.name?.message && (
-                <div className="text-error">{errors.name.message}</div>
-              )}
-
             </div>
             <div className="pt-2 ">
-              <label htmlFor="phone" className="ml-4 absolute rounded-full -mt-3 px-2 bg-white ">
-                Telepon
-              </label>
-              <input
+              <InputWithLabel
+                htmlFor="phone"
+                label="Telepon"
                 type="text"
-                id="phone"
-                {...register("phone", {
-                  required: "phone is required",
-                })}
-                className=" w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400 "
+                error={errors.phone?.message}
+                register={register}
+                name="phone"
+                validationSchema={{
+                  required: "No Telepon wajib diisi",
+                }}
               />
-              {errors.name?.message && (
-                <div className="text-error">{errors.name.message}</div>
-              )}
-
             </div>
             <div className="pt-2">
-              <label htmlFor="location" className="ml-4 absolute rounded-full -mt-3 px-2  bg-white">
-                Lokasi
-              </label>
-              <textarea
-                id="location"
-                {...register("location", {
-                  required: "location is required",
-                  
-                })}
-                className="w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400"
+              <TextareaWithLabel
+                htmlFor="location"
+                label="Lokasi"
+                error={errors.location?.message}
+                register={register}
+                name="location"
+                validationSchema={{
+                  required: "Lokasi wajib diisi",
+                }}
               />
-              {errors.location?.message && (
-                <div className="text-error">{errors.location.message}</div>
-              )}
             </div>
             <div className="">
-              <label htmlFor="description" className="ml-4 absolute rounded-full -mt-3 px-2  bg-white">
-                Deskripsi
-              </label>
-              <textarea
-                id="description"
-                {...register("description", {
-                  required: "Description is required",
-                })}
-                className="w-full focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-2 border-1 px-6 border-gray-400"
+              <TextareaWithLabel
+                htmlFor="description"
+                label="Deskripsi"
+                error={errors.description?.message}
+                register={register}
+                name="description"
+                validationSchema={{
+                  required: "Deskripsi wajib diisi",
+                }}
               />
-              {errors.description?.message && (
-                <div className="text-error">{errors.description.message}</div>
-              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="imageProfile"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                Profil Kantin
+              </label>
+              <ImageUpload maxSize={200} setImageFile={setUploadImageCanteen} />
             </div>
             <div>
-              <label htmlFor="image" className="ml-4 absolute rounded-full -mt-3 px-2  ">
-                Gambar Kantin
+              <label
+                htmlFor="imageQris"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                QRIS
               </label>
-              <ImageUpload onUpload={handleUpload} />
+              <ImageUpload maxSize={500} setImageFile={setUploadImageQris} />
             </div>
 
             <div className="my-2">

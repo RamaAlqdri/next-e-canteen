@@ -42,13 +42,13 @@
   color: rgb(var(--foreground-rgb));
 }
 .btn-ePrimary {
-  background-color: #EEA147;
-  color: rgb(var(--foreground-rgb));
+  background-color: #EEA061;
+  color: #fff;
   border: none
 }
 .btn-ePrimary:hover {
-  background-color: #EFBA46;
-  color: rgb(var(--foreground-rgb));
+  background-color: #F4C089;
+  color: #fff;
 }
 .btn-Delete {
   background-color: #d1443d;

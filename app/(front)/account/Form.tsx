@@ -3,15 +3,11 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import toast from "react-hot-toast";
-
-
-
-
+import ImageUpload from "@/components/image/ImageUpload";
+import InputWithLabel from "@/components/input/input";
 import { useSession } from "next-auth/react";
 
 import { useForm } from "react-hook-form";
-
-
 
 import { SubmitHandler } from "react-hook-form";
 
@@ -25,7 +21,8 @@ type Inputs = {
 
 const Form = () => {
   const { data: session } = useSession();
-  
+  const [imageProfile, setImageProfile] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -82,75 +79,80 @@ const Form = () => {
   if (!mounted) return <></>;
 
   return (
-    <div className="max-w-sm mx-auto card bg-white my-4">
-      <div className="card-body">
-        <h1 className="card-title">Akun Anda</h1>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <div className="my-2">
-            <label htmlFor="name" className="label">
-              Nama Anda
-            </label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", {
-                required: "Name is required",
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.name?.message && (
-              <div className="text-error">{errors.name.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="password" className="label">
-              Kata Sandi Baru
-            </label>
-            <input
-              type="password"
-              id="password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.password?.message && (
-              <div className="text-error">{errors.password.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="confirmPassword" className="label">
-              Konfirmasi Kata Sandi
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              {...register("confirmPassword", {
-                required: "Confirm Password is required",
-                validate: (value) => {
-                  const { password } = getValues();
-                  return password === value || "Password do not match";
-                },
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.confirmPassword?.message && (
-              <div className="text-error">{errors.confirmPassword.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-ePrimary w-full border-0"
-            >
-              {isSubmitting && (
-                <span className="loading loading-spinner"></span>
-              )}
-              Perbarui
-            </button>
-          </div>
-        </form>
+    <div className="lg:grid lg:grid-cols-6">
+      <div className="lg:col-span-3 my-4">
+        <div className="bg-white px-8 py-6 shadow-md rounded-2xl">
+          <h1 className="card-title">Akun Anda</h1>
+          <form className="space-y-8 mt-6" onSubmit={handleSubmit(formSubmit)}>
+            <div className="my-2">
+              <InputWithLabel
+                htmlFor="name"
+                type="text"
+                label="Nama Anda"
+                register={register}
+                validationSchema={{
+                  required: "Nama wajib diisi",
+                }}
+                name="name"
+                error={errors.name?.message}
+              />
+              
+            </div>
+            <div className="my-2">
+              <InputWithLabel
+                htmlFor="password"
+                type={"password"}
+                label="Kata Sandi Baru"
+                register={register}
+                validationSchema={{
+                  required: "Kata sandi wajib diis",
+                }}
+                name="password"
+                
+                error={errors.password?.message}
+              />
+            </div>
+            <div className="my-2">
+              <InputWithLabel
+                type="password"
+                htmlFor="password"
+                label="Konfirmasi Kata Sandi "
+                
+                register={register}
+                name="confirmPassword"
+                validationSchema={{
+                  required: "Konfirmasi kata sandi wajib diisi",
+                  validate: (value:any) => {
+                    const { password } = getValues();
+                    return password === value || "Kata sandi tidak cocok";
+                  },
+                }}
+                error={errors.confirmPassword?.message}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="imageProfile"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                Profil Anda
+              </label>
+              <ImageUpload maxSize={200} setImageFile={setImageProfile} />
+            </div>
+            <div className="my-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-ePrimary w-full border-0"
+              >
+                {isSubmitting && (
+                  <span className="loading loading-spinner"></span>
+                )}
+                Perbarui
+              </button>
+            </div>
+          </form>
+        </div>
         {/* <div className="divider"></div> */}
       </div>
     </div>

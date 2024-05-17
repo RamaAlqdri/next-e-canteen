@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -9,6 +9,9 @@ import { Span } from "next/dist/trace";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import CSS
+import InputWithLabel from "@/components/input/input";
+import TextareaWithLabel from "@/components/input/textarea";
+import ImageUpload from "@/components/image/ImageUpload";
 
 type Inputs = {
   slugBefore: string;
@@ -23,6 +26,9 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
   const { data: session } = useSession();
   const params = useSearchParams();
   const router = useRouter();
+  const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
+  const [uploadImageQris, setUploadImageQris] = useState(null);
+
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
@@ -118,87 +124,92 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
   };
 
   return (
-    <div className="max-w-sm mx-auto card bg-base-300 my-4">
-      <div className="card-body">
-        <h1 className="card-title">Sunting Kantin</h1>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <div className="my-2">
-            <label htmlFor="name" className="label">
-              Nama
-            </label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", {
-                required: "Name is required",
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.name?.message && (
-              <div className="text-error">{errors.name.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="location" className="label">
-              Lokasi
-            </label>
-            <input
-              type="text"
-              id="email"
-              {...register("location", {
-                required: "location is required",
-                // pattern: {
-                //   value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                //   message: "Email is invalid",
-                // },
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.location?.message && (
-              <div className="text-error">{errors.location.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="description" className="label">
-              Deskripsi
-            </label>
-            <input
-              type="text"
-              id="description"
-              {...register("description", {
-                required: "Description is required",
-              })}
-              className="input input-bordered w-full max-w-sm"
-            />
-            {errors.description?.message && (
-              <div className="text-error">{errors.description.message}</div>
-            )}
-          </div>
+    <div className="lg:grid lg:grid-cols-6">
+      <div className="lg:col-span-3 my-4">
+        <div className="bg-white px-8 py-6 shadow-md rounded-2xl">
+          <h1 className="card-title">Sunting Kantin</h1>
+          <form onSubmit={handleSubmit(formSubmit)} className="space-y-6 mt-6">
+            <div className="">
+              <InputWithLabel
+                htmlFor="name"
+                label="Nama Kantin"
+                type="text"
+                error={errors.name?.message}
+                register={register}
+                name="name"
+                validationSchema={{
+                  required: "Nama wajib diisi",
+                }}
+              />
+            </div>
+            <div className="pt-2">
+              <TextareaWithLabel
+                htmlFor="location"
+                label="Lokasi"
+                error={errors.location?.message}
+                register={register}
+                name="location"
+                validationSchema={{
+                  required: "Lokasi wajib diisi",
+                }}
+              />
+            </div>
+            <div className="">
+              <TextareaWithLabel
+                htmlFor="description"
+                label="Deskripsi"
+                error={errors.description?.message}
+                register={register}
+                name="description"
+                validationSchema={{
+                  required: "Deskripsi wajib diisi",
+                }}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="imageProfile"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                Profil Kantin
+              </label>
+              <ImageUpload maxSize={200} setImageFile={setUploadImageCanteen} />
+            </div>
+            <div>
+              <label
+                htmlFor="imageQris"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                QRIS
+              </label>
+              <ImageUpload maxSize={500} setImageFile={setUploadImageQris} />
+            </div>
 
-          <div className="my-2 space-y-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-ePrimary w-full mt-2"
-            >
-              {isSubmitting && (
-                <span className="loading loading-spinner"></span>
-              )}
-              Ubah
-            </button>
-          </div>
-        </form>
-        <button
-          // type="submit"
-          // disabled={isSubmitting}
-          onClick={deleteCanteen}
-          className="btn btn-Delete w-full"
-        >
-          {/* {isSubmitting && (
+            <div className="my-2 space-y-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-ePrimary w-full"
+              >
+                {isSubmitting && (
+                  <span className="loading loading-spinner"></span>
+                )}
+                Ubah
+              </button>
+            </div>
+          </form>
+          <button
+            // type="submit"
+            // disabled={isSubmitting}
+            onClick={deleteCanteen}
+            className="btn btn-Delete w-full mt-2"
+          >
+            {/* {isSubmitting && (
                 <span className="loading loading-spinner"></span>
               )} */}
-          Hapus Kantin
-        </button>
+            Hapus Kantin
+          </button>
+        </div>
       </div>
     </div>
   );

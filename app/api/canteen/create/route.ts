@@ -10,21 +10,24 @@ import { getSession, useSession } from "next-auth/react";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { name, location, description, session,phone } = await request.json();
+  const { name, location, description, session,phone, uploadImageCanteen, uploadImageQris } = await request.json();
   console.log(session);
+
+
+  console.log(name, location, description, phone, uploadImageCanteen, uploadImageQris);
 
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const slug = name.toLowerCase().replace(/ /g, "-");
-  const existingCanteen = await canteenService.getCanteenBySlug(slug);
-  if (existingCanteen.name) {
-    // console.error("Canteen already exists.");
-    return Response.json(
-      { message: "Canteen already exists." },
-      {
-        status: 400,
-      }
-    );
-  }
+  // const existingCanteen = await canteenService.getCanteenBySlug(slug);
+  // if (existingCanteen.name) {
+  //   // console.error("Canteen already exists.");
+  //   return Response.json(
+  //     { message: "Canteen already exists." },
+  //     {
+  //       status: 400,
+  //     }
+  //   );
+  // }
   const newCanteen = {
     name,
     location,
@@ -36,10 +39,10 @@ export const POST = async (request: NextRequest) => {
     phone,
   } as Canteen;
   try {
-    canteenService.createCanteen(newCanteen);
-    const canteenId = await canteenService.getCanteenIdBySlug(slug);
-    userService.updateUserRole(session.user.email, "canteen");
-    userService.updateUserCanteen(session.user.email, canteenId);
+    // canteenService.createCanteen(newCanteen);
+    // const canteenId = await canteenService.getCanteenIdBySlug(slug);
+    // userService.updateUserRole(session.user.email, "canteen");
+    // userService.updateUserCanteen(session.user.email, canteenId);
     // userService.createUser(newUser);
 
     return Response.json(

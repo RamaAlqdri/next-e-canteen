@@ -1,4 +1,4 @@
-export type Order = {
+export type OrderDetail = {
   _id: string;
   // user?: { name: string };
   items: [OrderItem];
@@ -8,6 +8,20 @@ export type Order = {
   itemsPrice: number;
   status: number;
   createdAt: string;
+  readBy: {
+    customer: boolean;
+    canteen: boolean;
+  };
+};
+export type Order = {
+  _id: string;
+  readBy: {
+    customer: boolean;
+    canteen: boolean;
+  };
+  customerId: string;
+  canteenId: string;
+  status: number;
 };
 
 export type OrderItem = {
@@ -18,4 +32,6 @@ export type OrderItem = {
   _id: string;
   price: number;
   canteenId: string;
+  
+
 };

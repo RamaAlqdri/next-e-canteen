@@ -14,16 +14,18 @@ export async function generateMetadata({
 }: {
   params: { productId: string; canteenId: string };
 }) {
-  const product = await productsService.getProductById(
-    params.canteenId,
-    params.productId
-  );
+  // const product = await productsService.getProductById(
+  //   params.canteenId,
+  //   params.productId
+  // );
 
-  if (!product) {
-    return { title: "Product not Found" };
-  }
+  // if (!product) {
+  //   return { title: "Product not Found" };
+  // }
   return {
-    title: product.name,
+    // title: product.name,
+    title: "produk",
+
   };
 }
 
@@ -34,19 +36,10 @@ export default async function ProductDetails({
 }) {
   // const { data: session } = useSession();
   // console.log(session);
-  const canteen = await canteenService.getCanteenData(params.canteenId);
-  const product = await productsService.getProductById(
-    params.canteenId,
-    params.productId
-  );
-  // const product = await productsService.getProduct(params.productSlug, params.canteenSlug)
-  // const canteen = await canteenService.getCanteenData(product.canteenId);
-  if (!product) {
-    return <div>Product Not Found</div>;
-  }
+  
   return (
     <>
-      <Detail canteen={canteen} product={product} />
+      <Detail canteenId={params.canteenId} productId={params.productId} />
     </>
   );
 }

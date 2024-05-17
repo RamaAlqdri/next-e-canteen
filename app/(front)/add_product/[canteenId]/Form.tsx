@@ -105,7 +105,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
       <div className="card-body">
         <h1 className="card-title">Tambah Produk</h1>
         <form onSubmit={handleSubmit(formSubmit)}>
-          <ImageUpload onUpload={handleUpload} />
+          {/* <ImageUpload onUpload={handleUpload} /> */}
           {/* {uploadedImageUrl && (
             <div>
               <h2>Uploaded Image Preview:</h2>

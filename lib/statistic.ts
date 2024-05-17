@@ -1,8 +1,8 @@
-import { Order } from "./models/OrderModel";
+import { OrderDetail } from "./models/OrderModel";
 
 
 function getDataTahun(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number
 ): { Bulan: string; Pendapatan: number }[] {
   // Inisialisasi array untuk menyimpan data per bulan
@@ -30,7 +30,7 @@ function getDataTahun(
   return dataBulan;
 }
 function getDataHarian(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number,
   day: number
@@ -79,7 +79,7 @@ function getDataHarian(
   return dataHarian;
 }
 function getDataBulanan(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number
 ): { Minggu: string; Pendapatan: number }[] {
@@ -157,7 +157,7 @@ function getMonthName(month: number): string {
 }
 
 function getDataMakananTahunan(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number
 ): { name: string; value: number }[] {
   // Inisialisasi objek untuk menyimpan jumlah makanan yang dibeli
@@ -192,7 +192,7 @@ function getDataMakananTahunan(
   return result;
 }
 function getDataMakananHarian(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number,
   day: number
@@ -235,7 +235,7 @@ function getDataMakananHarian(
   return result;
 }
 function getDataMakananBulanan(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number
 ): { name: string; value: number }[] {
@@ -315,7 +315,7 @@ export const dataFormatterSingkat = (number: number) => {
   return formattedNumber.replace(",00", "");
 };
 
-function getTotalPendapatanTahunan(orders: Order[], year: number): number {
+function getTotalPendapatanTahunan(orders: OrderDetail[], year: number): number {
   // Filter pesanan berdasarkan tahun
   const ordersTahun = orders.filter(
     (order) => new Date(order.createdAt).getFullYear() === year
@@ -330,7 +330,7 @@ function getTotalPendapatanTahunan(orders: Order[], year: number): number {
   return totalPendapatanTahunan;
 }
 function getTotalPendapatanHarian(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number,
   day: number
@@ -357,7 +357,7 @@ function getTotalPendapatanHarian(
   return totalPendapatanHarian;
 }
 function getTotalPendapatanBulanan(
-  orders: Order[],
+  orders: OrderDetail[],
   year: number,
   month: number
 ): number {
@@ -378,7 +378,7 @@ function getTotalPendapatanBulanan(
   return totalPendapatanBulanan;
 }
 
-export function getStatisticCanteen(type: string, order: Order[]) {
+export function getStatisticCanteen(type: string, order: OrderDetail[]) {
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth() + 1; // Ingat bahwa bulan dimulai dari 0 (Januari) hingga 11 (Desember)

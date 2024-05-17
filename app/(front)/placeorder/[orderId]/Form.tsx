@@ -1,25 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import useCartService from "@/lib/hooks/useCartStore";
-import CheckoutSteps from "@/components/CheckoutSteps";
-import Link from "next/link";
 import Image from "next/image";
-import toast from "react-hot-toast";
-import useSWRMutation from "swr/mutation";
 import { formatRupiah, getOrderDescription } from "@/lib/utils";
 import orderService from "@/lib/services/orderService";
-import { Order } from "@/lib/models/OrderModel";
-import useSnap from "@/lib/hooks/useSnap";
+import { OrderDetail } from "@/lib/models/OrderModel";
 import { useSession } from "next-auth/react";
-import { stat } from "fs";
-import { Session } from "next-auth/types";
-import { disconnect } from "process";
-import canteenService from "@/lib/services/canteenService";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { ubahFormatTanggal } from "@/lib/utils";
 import { dapatkanWaktu } from "@/lib/utils";
-import { capitalizeText } from "@/lib/utils";
 import {
   DocumentData,
   QuerySnapshot,
@@ -31,22 +20,20 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { User } from "@/lib/models/UserModel";
+import canteenService from "@/lib/services/canteenService";
+import userService from "@/lib/services/userService";
 
-const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , user:User}) => {
-  const router = useRouter();
-
+const Form = ({ orderId }: { orderId: string }) => {
   const { data: session } = useSession();
-  const [order, setOrder] = useState<Order | null>(null);
+  const [order, setOrder] = useState<OrderDetail | null>();
 
   function updateOrderStatus(status: number) {
     orderService.updateOrderStatus(orderId, status);
-  } 
+  }
 
-  // const [mounted, setMounted] = useState(false);
-  // useEffect(() => {
-  //   setMounted(true);
-  // }, []);
-  // if (!mounted) return <></>;
+  const [canteen, setCanteen] = useState<Canteen>();
+  const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const q = query(
@@ -54,22 +41,34 @@ const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , u
       where("_id", "==", orderId),
       limit(1)
     );
-
     const unsubscribe = onSnapshot(
       q,
-      (snapshot: QuerySnapshot<DocumentData>) => {
-        let orderData: Order | null = null;
+      async (snapshot: QuerySnapshot<DocumentData>) => {
+        let orderData = null as OrderDetail | null;
         snapshot.forEach((doc: any) => {
-          orderData = doc.data() as Order;
+          orderData = doc.data() as OrderDetail;
         });
         setOrder(orderData);
+        if (orderData) {
+          try {
+            const [canteenData, userData] = await Promise.all([
+              canteenService.getCanteenData(orderData.canteenId),
+              userService.getUserDataById(orderData.customerId),
+            ]);
+            setCanteen(canteenData);
+            setUser(userData);
+          } catch (error) {
+            console.error("Error fetching canteen data:", error);
+          }
+        }
+        setLoading(false);
       }
     );
 
-    // Membersihkan pemantauan saat komponen tidak lagi diperlukan
     return () => {
       unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!order) return <></>;
@@ -97,7 +96,7 @@ const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , u
             </div>
             <div className="flex items-center bg-white rounded-full border-[#FFF5EC] border-2 sm:px-4 px-2">
               <p className="sm:font-semibold font-medium text-[#EEA147] sm:text-lg text-xs text-center">
-                {canteen.name}
+                {canteen?.name}
               </p>
             </div>
             {/* {status === 1 && (
@@ -115,8 +114,8 @@ const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , u
                   <p>{`Nama`}</p>
                 </div>
                 <div className="">
-                  <p>: {user.email}</p>
-                  <p>: {user.name}</p>
+                  <p>: {user?.email}</p>
+                  <p>: {user?.name}</p>
                 </div>
               </div>
             </div>
@@ -196,7 +195,7 @@ const Form = ({ orderId, canteen, user }: { orderId: string, canteen:Canteen , u
 
                 {session?.user.role === "user" ? (
                   <li className="flex  justify-center space-x-4">
-                    {order.status !== 4 && order.status !== 3&& (
+                    {order.status !== 4 && order.status !== 3 && (
                       <button
                         // onClick={() => router.push("/order")}
                         onClick={() => updateOrderStatus(4)}

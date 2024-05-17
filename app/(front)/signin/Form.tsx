@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import InputWithLabel from "@/components/input/input";
+import Image from "next/image";
 
 type Inputs = {
   email: string;
@@ -37,7 +39,10 @@ const Form = () => {
   }, [callbackUrl, params, router, session]);
 
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
+    console.log("Form values:", form);
     const { email, password } = form;
+    console.log(email, password);
+
     signIn("credentials", {
       email,
       password,
@@ -45,72 +50,82 @@ const Form = () => {
   };
 
   return (
-    <div className="max-w-sm mx-auto card bg-white my-4">
-      <div className="card-body">
-        <h1 className="card-tittle">Masuk</h1>
-        {params.get("error") && (
-          <div className="alert text-error bg-gray-100 border-0">
-            {params.get("error") === "CredentialsSignin"
-              ? "Invalid email or password"
-              : params.get("error")}
-          </div>
-        )}
-        {params.get("success") && (
-          <div className="alert text-success border-0 bg-gray-100">{params.get("success")}</div>
-        )}
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <div className="my-2">
-            <label htmlFor="email" className="label">
-              Email
-            </label>
-            <input
-              type="text"
-              id="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                  message: "Email is invalid",
-                },
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.email?.message && (
-              <div className="text-error">{errors.email.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label className="label" htmlFor="password">
-              Kata Sandi
-            </label>
-            <input
-              type="password"
-              id="password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.password?.message && (
-              <div className="text-error">{errors.password.message}</div>
-            )}
-          </div>
-          <div className="my-4">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-ePrimary w-full border-0"
+    <div className="flex justify-center ">
+      <div className="w-[50rem] mt-12 ">
+        <div className="bg-white h-[30rem]  shadow-md rounded-3xl flex overflow-hidden">
+          <div className="w-7/12 px-10  flex justify-center flex-col">
+            <h1 className="text-center font-medium text-xl">Masuk</h1>
+            <form
+              className="space-y-6 mt-6"
+              onSubmit={handleSubmit(formSubmit)}
             >
-              {isSubmitting && (
-                <span className="loading loading-spinner"></span>
-              )}
-              Masuk
-            </button>
+              <div className="">
+                <InputWithLabel
+                  register={register}
+                  validationSchema={{
+                    required: "Email wajib diisi",
+                  }}
+                  name="email"
+                  htmlFor="email"
+                  type="text"
+                  label="Email"
+                  error={errors.email?.message}
+                />
+              </div>
+              <div className="">
+                <InputWithLabel
+                  htmlFor="password"
+                  type="password"
+                  label="Kata Sandi"
+                  name="password"
+                  error={errors.password?.message}
+                  register={register}
+                  validationSchema={{
+                    required: "Password wajib diisi",
+                  }}
+                />
+              </div>
+              <div className="">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn btn-ePrimary w-full border-0 rounded-xl font-normal"
+                >
+                  {isSubmitting && (
+                    <span className="loading loading-spinner"></span>
+                  )}
+                  Masuk
+                </button>
+                {/* <button
+                  onClick={() => {
+                    // signIn("google");
+                    // console.log(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+                  }}
+                  className="btn btn-ePrimary w-full border-0 rounded-xl font-normal"
+                >
+                  Google
+                </button> */}
+              </div>
+            </form>
+            <div className="text-sm text-center text-gray-500 mt-12">
+              Belum punya akun?{" "}
+              <Link
+                className="link text-[#EEA061] font-semibold"
+                href={`/register?callbackUrl=${callbackUrl}`}
+              >
+                Daftar
+              </Link>
+            </div>
           </div>
-        </form>
-        <div>
-          Belum punya akun?{' '}
-          <Link className="link" href={`/register?callbackUrl=${callbackUrl}`}>Daftar</Link>
+          <div className=" overflow-hidden w-5/12 opacity-40 ">
+            <Image
+              src="/images/login/login.jpg"
+              alt="login"
+              width={300}
+              height={300}
+              className="object-cover w-full h-full"
+            />
+          </div>
         </div>
       </div>
     </div>

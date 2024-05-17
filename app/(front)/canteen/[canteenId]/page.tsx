@@ -22,7 +22,7 @@ export async function generateMetadata({
 }) {
   const canteen = await canteenService.getCanteenData(params.canteenId);
   if (!canteen) {
-    return { title: "Product not Found" };
+    return { title: "Produk tidak ditemukan" };
   }
   return {
     title: canteen.name,
@@ -34,22 +34,10 @@ export default async function Canteen({
 }: {
   params: { canteenId: string };
 }) {
-  const canteen = await canteenService.getCanteenData(params.canteenId);
-
-  const products = await productsService.getAllProductsFromCanteen(params.canteenId);
-
-
-  // const [product1, setProduct1] = useState(products[0]);
-
-  // const [productList, setProductList] = useState(products);
-
-  // console.log(canteen);
-  // console.log(canteenId);
-  // console.log(products);
-
+  
   return (
     <>
-      <Detail canteen={canteen} products={products} />
+      <Detail canteenId={params.canteenId}  />
     </>
   );
 }

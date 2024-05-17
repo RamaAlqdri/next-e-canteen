@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { Order } from "../models/OrderModel";
+import { OrderDetail } from "../models/OrderModel";
 import { db } from "../firebase";
 import {
   collection,
@@ -32,21 +32,21 @@ export const revalidate = 3600;
 //   }
 // }
 
-async function getRealTimeOrderById(orderId: string): Promise<Order> {
+async function getRealTimeOrderById(orderId: string): Promise<OrderDetail> {
   try {
     const q = query(collection(db, "order"), where("_id", "==", orderId), limit(1));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      let order: Order = {} as Order;
+      let order: OrderDetail = {} as OrderDetail;
       snapshot.forEach((doc) => {
-        order = doc.data() as Order;
+        order = doc.data() as OrderDetail;
       });
       // Do something with the real-time order data
       console.log("Real-time order data:", order);
     });
-    return {} as Order;
+    return {} as OrderDetail;
   } catch (error) {
     console.error("Error fetching order data:", error);
-    return {} as Order;
+    return {} as OrderDetail;
   }
 }
 
@@ -59,7 +59,7 @@ async function updateOrderStatus(orderId: string, status: number) {
   }
 }
 
-async function createOrder(order: Order) {
+async function createOrder(order: OrderDetail) {
   
   try{
     await setDoc(doc(db, "order", order._id), order);
@@ -68,28 +68,28 @@ async function createOrder(order: Order) {
   }
 }
 
-async function getOrderById(orderId: string): Promise<Order> {
+async function getOrderById(orderId: string): Promise<OrderDetail> {
   try{
 
     const q = query(collection(db, "order"), where("_id", "==", orderId), limit(1));
     const querySnapshot = await getDocs(q);
-    let order: Order = {} as Order;
+    let order: OrderDetail = {} as OrderDetail;
     querySnapshot.forEach((doc) => {
-      order = doc.data() as Order;
+      order = doc.data() as OrderDetail;
     });
-    return order as Order;
+    return order as OrderDetail;
   }catch(error){
     console.error("Error fetching order data:", error);
-    return {} as Order;
+    return {} as OrderDetail;
   }
 }
-async function getAllOrderByUserId(userId: string): Promise<Order[]> {
+async function getAllOrderByUserId(userId: string): Promise<OrderDetail[]> {
   try{
     const q = query(collection(db, "order"), where("customerId", "==", userId));
     const querySnapshot = await getDocs(q);
-    let orders: Order[] = [];
+    let orders: OrderDetail[] = [];
     querySnapshot.forEach((doc) => {
-      orders.push(doc.data() as Order);
+      orders.push(doc.data() as OrderDetail);
     });
     return orders;
   }catch(error){
@@ -97,13 +97,13 @@ async function getAllOrderByUserId(userId: string): Promise<Order[]> {
     return [];
   }
 }
-async function getAllOrderByCanteenId(canteenId: string): Promise<Order[]> {
+async function getAllOrderByCanteenId(canteenId: string): Promise<OrderDetail[]> {
   try{
     const q = query(collection(db, "order"), where("canteenId", "==", canteenId));
     const querySnapshot = await getDocs(q);
-    let orders: Order[] = [];
+    let orders: OrderDetail[] = [];
     querySnapshot.forEach((doc) => {
-      orders.push(doc.data() as Order);
+      orders.push(doc.data() as OrderDetail);
     });
     return orders;
   }catch(error){
@@ -111,13 +111,13 @@ async function getAllOrderByCanteenId(canteenId: string): Promise<Order[]> {
     return [];
   }
 }
-async function getAllOrderByCanteenIdAndStatus(canteenId: string, status: number): Promise<Order[]> {
+async function getAllOrderByCanteenIdAndStatus(canteenId: string, status: number): Promise<OrderDetail[]> {
   try{
     const q = query(collection(db, "order"), where("canteenId", "==", canteenId), where("status", "==", status));
     const querySnapshot = await getDocs(q);
-    let orders: Order[] = [];
+    let orders: OrderDetail[] = [];
     querySnapshot.forEach((doc) => {
-      orders.push(doc.data() as Order);
+      orders.push(doc.data() as OrderDetail);
     });
     return orders;
   }catch(error){

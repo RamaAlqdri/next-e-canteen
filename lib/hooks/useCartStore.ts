@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { round2 } from "../utils";
-import { OrderItem, Order } from "../models/OrderModel";
+import { OrderItem, OrderDetail } from "../models/OrderModel";
 import { persist } from "zustand/middleware";
 
 type Cart = {

@@ -1,12 +1,17 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import dbConnect from "./dbConnect";
-import {User} from "./models/UserModel"
+import { User } from "./models/UserModel";
+import GoogleProvider from "next-auth/providers/google";
 import userService from "./services/userService";
 import bcrypt from "bcryptjs";
 
 export const config = {
   providers: [
+    // GoogleProvider({
+    //   clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+    // }),
     CredentialsProvider({
       credentials: {
         email: {
@@ -17,10 +22,12 @@ export const config = {
         },
       },
       async authorize(credentials) {
-        
         if (credentials == null) return null;
-        
-        const user:any = await userService.getUserByEmail(credentials.email as string);
+        console.log("Authorizing user:", credentials.email);
+
+        const user: any = await userService.getUserByEmail(
+          credentials.email as string
+        );
 
         if (user) {
           const isMatch = await bcrypt.compare(
@@ -30,7 +37,7 @@ export const config = {
           if (isMatch) {
             return user;
           }
-        }else{
+        } else {
           console.log("User not found");
         }
         return null;
@@ -43,7 +50,6 @@ export const config = {
     error: "/signin",
   },
   callbacks: {
-    
     async jwt({ user, trigger, session, token }: any) {
       // console.log(user);
       // console.log(token);
@@ -55,7 +61,7 @@ export const config = {
           isAdmin: user.isAdmin,
           role: user.role,
           canteen: user.canteenId,
-        }
+        };
       }
       // console.log(token);
       // console.log(session)
@@ -66,9 +72,9 @@ export const config = {
           name: session.user.name,
           role: session.user.role,
           canteen: user.canteenId,
-        }
+        };
       }
-      return token
+      return token;
     },
     session: async ({ session, token }: any) => {
       if (token) {
@@ -86,5 +92,3 @@ export const {
   signIn,
   signOut,
 } = NextAuth(config);
-
-

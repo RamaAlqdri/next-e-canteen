@@ -11,7 +11,9 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  addDoc,
 } from "firebase/firestore";
+import { Comments } from "../models/CommentModel";
 
 export const revalidate = 3600;
 
@@ -251,9 +253,7 @@ async function getProductByCanteenSlug(
     return [] as Product[];
   }
 }
-async function getProductByCanteenId(
-  canteenId: string
-): Promise<Product[]> {
+async function getProductByCanteenId(canteenId: string): Promise<Product[]> {
   try {
     const canteenRef = query(
       collection(db, "canteen"),
@@ -399,8 +399,58 @@ async function getProductByCategoryByCanteenSlug(
     return [] as Product[];
   }
 }
+async function getCommentFromProduct(
+  canteenId: string,
+  productId: string
+): Promise<Comments[]> {
+  try {
+    const productRef = query(
+      collection(db, "canteen", canteenId, "product", productId, "comment")
+    );
+    const productData = await getDocs(productRef);
+    let commentList: Comments[] = [];
+    productData.forEach((doc) => {
+      commentList.push(doc.data() as Comments);
+    });
+    return commentList;
+  } catch (error) {
+    console.error("Error fetching comment data:", error);
+    return [] as Comments[];
+  }
+}
+async function writeComment(
+  canteenId: string,
+  productId: string,
+  comment: Comments
+) {
+  try {
+    const productRef = collection(
+      db,
+      "canteen",
+      canteenId,
+      "product",
+      productId,
+      "comment"
+    );
+    const newComment = await addDoc(productRef, {
+      // _id:
+      rating: comment.rating,
+      content: comment.content,
+    });
+
+    const commentId = newComment.id;
+    await setDoc(doc(productRef, commentId), {
+      ...comment,
+      _id: commentId,
+    });
+  } catch (error) {
+    console.error("Error writing comment data:", error);
+  }
+}
 
 const productsService = {
+  writeComment,
+  getCommentFromProduct,
   getAllProducts,
   getProduct,
   getProductByCanteenId,

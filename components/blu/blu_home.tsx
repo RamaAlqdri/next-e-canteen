@@ -30,7 +30,7 @@ import {
   dataFormatterSingkat,
   dataFormatter,
 } from "@/lib/statistic";
-import { Order } from "@/lib/models/OrderModel";
+import { OrderDetail } from "@/lib/models/OrderModel";
 import { useSession } from "next-auth/react";
 import ordersService from "@/lib/services/orderService";
 import {

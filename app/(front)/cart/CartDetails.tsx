@@ -20,7 +20,7 @@ export default function CartDetails() {
   // console.log(items);
   const [mounted, setMounted] = useState(false);
   const { data: session } = useSession();
-  console.log(session);
+  // console.log(session);
 
   // const currentUTCDate = new Date();
   // const jakartaTimezone = "Asia/Makassar";
@@ -55,6 +55,10 @@ export default function CartDetails() {
           itemsPrice,
           status: 0,
           createdAt: createdAt,
+          readBy: {
+            customer: false,
+            canteen : false
+          }
         }),
       });
 

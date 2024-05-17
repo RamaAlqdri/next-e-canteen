@@ -1,6 +1,6 @@
 // 'use client'
 import productsService from "@/lib/services/productService";
-import { Order } from "@/lib/models/OrderModel";
+import { OrderDetail } from "@/lib/models/OrderModel";
 import ordersService from "@/lib/services/orderService";
 import { nanoid } from "nanoid";
 import { NextRequest } from "next/server";
@@ -24,6 +24,7 @@ export const POST = async (request: NextRequest) => {
     itemsPrice,
     status,
     createdAt,
+    readBy,
   } = await request.json();
 
   //   const hashedPassword = bcrypt.hashSync(password, 5);
@@ -38,7 +39,8 @@ export const POST = async (request: NextRequest) => {
     itemsPrice,
     status,
     createdAt,
-  } as Order;
+    readBy,
+  } as OrderDetail;
   try {
     ordersService.createOrder(newOrder);
     // userService.createUser(newUser);

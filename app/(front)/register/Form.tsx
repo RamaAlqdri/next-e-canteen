@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Span } from "next/dist/trace";
+import InputWithLabel from "@/components/input/input";
+import Image from "next/image";
 
 type Inputs = {
   name: string;
@@ -68,101 +69,108 @@ const Form = () => {
     }
   };
   return (
-    <div className="max-w-sm mx-auto card bg-white my-4">
-      <div className="card-body">
-        <h1 className="card-title">Daftar</h1>
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <div className="my-2">
-            <label htmlFor="name" className="label">
-              Nama Anda
-            </label>
-            <input
-              type="text"
-              id="name"
-              {...register("name", {
-                required: "Name is required",
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.name?.message && (
-              <div className="text-error">{errors.name.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="email" className="label">
-              Email
-            </label>
-            <input
-              type="text"
-              id="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
-                  message: "Email is invalid",
-                },
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.email?.message && (
-              <div className="text-error">{errors.email.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="password" className="label">
-              Kata Sandi
-            </label>
-            <input
-              type="password"
-              id="password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.password?.message && (
-              <div className="text-error">{errors.password.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <label htmlFor="confirmPassword" className="label">
-              Konfirmasi Kata Sandi
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              {...register("confirmPassword", {
-                required: "Confirm Password is required",
-                validate: (value) => {
-                  const { password } = getValues();
-                  return password === value || "Password do not match";
-                },
-              })}
-              className="input input-bordered w-full max-w-sm bg-gray-100"
-            />
-            {errors.confirmPassword?.message && (
-              <div className="text-error">{errors.confirmPassword.message}</div>
-            )}
-          </div>
-          <div className="my-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-ePrimary w-full border-0"
+    <div className="flex justify-center">
+      <div className="w-[50rem] mt-12">
+        <div className="bg-white h-[30rem]  shadow-md rounded-3xl flex overflow-hidden">
+          <div className="w-7/12 px-10  flex justify-center flex-col">
+            <h1 className="text-center font-medium text-xl">Daftar</h1>
+            <form
+              className="space-y-6 mt-6"
+              onSubmit={handleSubmit(formSubmit)}
             >
-              {isSubmitting && (
-                <span className="loading loading-spinner"></span>
-              )}
-              Daftar
-            </button>
+              <div className="">
+                <InputWithLabel
+                  register={register}
+                  validationSchema={{
+                    required: "Nama wajib diisi",
+                  }}
+                  name="name"
+                  htmlFor="name"
+                  type="text"
+                  label="Nama Anda"
+                  error={errors.name?.message}
+                />
+              </div>
+              <div className="">
+                <InputWithLabel
+                  register={register}
+                  validationSchema={{
+                    required: "Email wajib diisi",
+                    pattern: {
+                      value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
+                      message: "Email is invalid",
+                    },
+                  }}
+                  name="email"
+                  htmlFor="email"
+                  type="text"
+                  label="Email"
+                  error={errors.email?.message}
+                />
+              </div>
+              <div className="">
+                <InputWithLabel
+                  register={register}
+                  validationSchema={{
+                    required: "Kata sandi wajib diisi",
+                  }}
+                  name="password"
+                  htmlFor="password"
+                  type="password"
+                  label="Kata Sandi"
+                  error={errors.password?.message}
+                />
+              </div>
+              <div className="my-2">
+                <InputWithLabel
+                  register={register}
+                  validationSchema={{
+                    required: "Kata sandi wajib diisi",
+                    validate: (value:any) => {
+                      const { password } = getValues();
+                      return password === value || "Password do not match";
+                    },
+                  }}
+                  name="confirmPassword"
+                  htmlFor="confirmPassword"
+                  type="password"
+                  label="Konfirmasi Kata Sandi"
+                  error={errors.confirmPassword?.message}
+                />
+              </div>
+              <div className="my-2">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn btn-ePrimary w-full border-0 rounded-xl font-normal"
+                >
+                  {isSubmitting && (
+                    <span className="loading loading-spinner"></span>
+                  )}
+                  Daftar
+                </button>
+              </div>
+            </form>
+
+            <div className="text-sm text-center text-gray-500 mt-4">
+              Sudah Punya akun?{" "}
+              <Link
+                className="link text-[#EEA061] font-semibold"
+                href={`/signin?callbackUrl=${callbackUrl}`}
+              >
+                Masuk
+              </Link>
+            </div>
           </div>
-        </form>
-        {/* <div className="divider"></div> */}
-        <div>
-          Sudah Punya akun?{" "}
-          <Link className="link" href={`/signin?callbackUrl=${callbackUrl}`}>
-            Masuk
-          </Link>
+          <div className=" overflow-hidden w-5/12 opacity-40 ">
+            <Image
+              src="/images/login/login.jpg"
+              alt="register"
+              width={300}
+              height={300}
+              className="object-cover w-full h-full"
+            />
+          </div>
         </div>
       </div>
     </div>

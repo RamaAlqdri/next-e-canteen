@@ -14,10 +14,10 @@ import { usePathname } from "next/navigation";
 
 export default function ProductItem({
   product,
-  canteenName,
+  // canteenName,
 }: {
   product: Product;
-  canteenName: string;
+  // canteenName: string;
 }) {
   // const canteenData = await canteenService.getCanteenData(product.canteenId) as Canteen;
 
@@ -32,9 +32,9 @@ export default function ProductItem({
   }
 
   return (
-    <div className="card hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
-      <div className="flex sm:grid  ">
-        <div className="h-20 w-20 sm:h-52 sm:w-full m-2 sm:m-0">
+    <div className="rounded-3xl hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
+      <div className="  ">
+        <div className="w-full aspect-square  h-[65%]  sm:w-full p-3">
           <Link
             href={`${canteen}${product.canteenId}/product/${product._id}`}
             className=""
@@ -44,27 +44,27 @@ export default function ProductItem({
               alt={product.name}
               width={300}
               height={300}
-              className="object-cover sm:h-full h-20 w-20 rounded-2xl sm:rounded-t-2xl sm:rounded-b-sm sm:w-full"
+              className="object-cover h-full rounded-2xl  w-full"
             />
           </Link>
         </div>
-        <div className=" w-2/3 sm:w-[87%] flex flex-col justify-between py-1 sm:pl-2 m-2 sm:flex-none sm:justify-normal ">
+        <div className="pb-4 pl-4    justify-normal  ">
           <Link
             href={`${canteen}${product.canteenId}/product/${product._id}`}
             className=""
           >
-            <h2 className="card-title font-semibold sm:text-lg text-sm ">
+            <h2 className="font-semibold text-sm ">
               {product.name}
             </h2>
           </Link>
-          <div className="mb-2 flex gap-2 items-center">
+          <div className="mb-1 mt-1 flex gap-2 items-center">
             <svg
               width="18"
               height="18"
               viewBox="0 0 18 18"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="drop-shadow-[0_10px_10px_rgba(237,161,71,0.5)] sm:w-5 sm:h-5 h-4 w-4"
+              className="drop-shadow-[0_10px_10px_rgba(237,161,71,0.5)] h-4 w-4"
             >
               <path
                 fillRule="evenodd"
@@ -73,16 +73,16 @@ export default function ProductItem({
                 fill="#EEA147"
               />
             </svg>
-            <p className=" sm:text-sm text-xs">{capitalizeText(canteenName)}</p>
+            {/* <p className=" sm:text-sm text-xs">{capitalizeText(canteenName)}</p> */}
           </div>
           <div className="flex justify-between ">
             <div className=" flex items-center justify-between ">
-              <span className="sm:text-md text-base sm:font-semibold font-medium">
+              <span className="text-base font-semibold">
                 Rp {formatRupiah(product.price)},00
               </span>
               {"  "}
             </div>
-            <div>
+            <div className="mr-4">
               <AddToCart
                 item={{
                   ...product,

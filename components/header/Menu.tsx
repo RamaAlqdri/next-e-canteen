@@ -56,7 +56,7 @@ const Menu = () => {
   // console.log(userData);
 
   return (
-    <div className="sm:contents hidden">
+    <div className="sm:contents hiddens">
       <nav className="">
         <div className="navbar  w-screen px-10 justify-between bg-white drop-shadow-sm">
           <Link href="/" className="text-lg">
@@ -301,7 +301,7 @@ const Menu = () => {
               ) : (
                 <li>
                   <button
-                    className="font-medium px-3 h-10 rounded-lg btn-ePrimary ml-4"
+                    className="btn-ePrimary w-20 text-sm border-0 rounded-xl font-normal h-10"
                     type="button"
                     onClick={() => signIn()}
                   >

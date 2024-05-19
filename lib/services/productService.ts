@@ -24,7 +24,7 @@ async function getProductById(
   try {
     const productRef = query(
       collection(db, "canteen", canteenId, "product"),
-      where("_id", "==", productId),
+      where("id", "==", productId),
       limit(1)
     );
     const productData = await getDocs(productRef);
@@ -91,7 +91,7 @@ async function getProductIdByProductSlugandCanteenId(
   try {
     const kantinRef = query(
       collection(db, "canteen"),
-      where("_id", "==", canteenId),
+      where("id", "==", canteenId),
       limit(1)
     );
     const kantinData = await getDocs(kantinRef);
@@ -112,7 +112,7 @@ async function updateProduct(slugBefore: string, product: Product) {
   try {
     const canteenRef = query(
       collection(db, "canteen"),
-      where("_id", "==", product.canteenId),
+      where("id", "==", product.canteenId),
       limit(1)
     );
     const canteenData = await getDocs(canteenRef);
@@ -147,7 +147,7 @@ async function deleteProduct(canteenId: string, productSlug: string) {
   try {
     const canteenRef = query(
       collection(db, "canteen"),
-      where("_id", "==", canteenId),
+      where("id", "==", canteenId),
       limit(1)
     );
     const canteenData = await getDocs(canteenRef);
@@ -257,7 +257,7 @@ async function getProductByCanteenId(canteenId: string): Promise<Product[]> {
   try {
     const canteenRef = query(
       collection(db, "canteen"),
-      where("_id", "==", canteenId),
+      where("id", "==", canteenId),
       limit(1)
     );
     const canteenData = await getDocs(canteenRef);
@@ -337,7 +337,7 @@ async function createProduct(product: Product) {
   try {
     const canteenRef = query(
       collection(db, "canteen"),
-      where("_id", "==", product.canteenId),
+      where("id", "==", product.canteenId),
       limit(1)
     );
     const canteenData = await getDocs(canteenRef);
@@ -366,7 +366,7 @@ async function createProduct(product: Product) {
       product.canteenId
     );
     await updateDoc(doc(productRef, productId), {
-      _id: productId,
+      id: productId,
     });
   } catch (error) {
     console.error("Error creating product:", error);
@@ -424,6 +424,7 @@ async function writeComment(
   comment: Comments
 ) {
   try {
+    console.log("hehe")
     const productRef = collection(
       db,
       "canteen",
@@ -437,12 +438,14 @@ async function writeComment(
       rating: comment.rating,
       content: comment.content,
     });
+    console.log("hehe")
 
     const commentId = newComment.id;
     await setDoc(doc(productRef, commentId), {
       ...comment,
-      _id: commentId,
+      id: commentId,
     });
+    console.log("hehe")
   } catch (error) {
     console.error("Error writing comment data:", error);
   }

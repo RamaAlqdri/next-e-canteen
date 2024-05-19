@@ -10,6 +10,7 @@ import {
   where,
   limit,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { set } from "firebase/database";
 
@@ -34,7 +35,11 @@ export const revalidate = 3600;
 
 async function getRealTimeOrderById(orderId: string): Promise<OrderDetail> {
   try {
-    const q = query(collection(db, "order"), where("_id", "==", orderId), limit(1));
+    const q = query(
+      collection(db, "order"),
+      where("id", "==", orderId),
+      limit(1)
+    );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       let order: OrderDetail = {} as OrderDetail;
       snapshot.forEach((doc) => {
@@ -60,31 +65,47 @@ async function updateOrderStatus(orderId: string, status: number) {
 }
 
 async function createOrder(order: OrderDetail) {
-  
-  try{
-    await setDoc(doc(db, "order", order._id), order);
-  }catch (error){
+  try {
+    const docRef = doc(db, "order", order.id as string);
+    await setDoc(docRef, order);
+  } catch (error) {
     console.error("Error creating order:", error);
+  }
+}
+async function updateReadOrder(orderId: string) {
+  // const readBy = {
+  //   canteen: true,
+  // };
+  try {
+    const orderRef = doc(db, "order", orderId);
+    await updateDoc(orderRef, {
+      'readBy.canteen': true,
+    });
+  } catch (error) {
+    console.error("Error updating order status:", error);
   }
 }
 
 async function getOrderById(orderId: string): Promise<OrderDetail> {
-  try{
-
-    const q = query(collection(db, "order"), where("_id", "==", orderId), limit(1));
+  try {
+    const q = query(
+      collection(db, "order"),
+      where("id", "==", orderId),
+      limit(1)
+    );
     const querySnapshot = await getDocs(q);
     let order: OrderDetail = {} as OrderDetail;
     querySnapshot.forEach((doc) => {
       order = doc.data() as OrderDetail;
     });
     return order as OrderDetail;
-  }catch(error){
+  } catch (error) {
     console.error("Error fetching order data:", error);
     return {} as OrderDetail;
   }
 }
 async function getAllOrderByUserId(userId: string): Promise<OrderDetail[]> {
-  try{
+  try {
     const q = query(collection(db, "order"), where("customerId", "==", userId));
     const querySnapshot = await getDocs(q);
     let orders: OrderDetail[] = [];
@@ -92,41 +113,54 @@ async function getAllOrderByUserId(userId: string): Promise<OrderDetail[]> {
       orders.push(doc.data() as OrderDetail);
     });
     return orders;
-  }catch(error){
+  } catch (error) {
     console.error("Error fetching order data:", error);
     return [];
   }
 }
-async function getAllOrderByCanteenId(canteenId: string): Promise<OrderDetail[]> {
-  try{
-    const q = query(collection(db, "order"), where("canteenId", "==", canteenId));
+async function getAllOrderByCanteenId(
+  canteenId: string
+): Promise<OrderDetail[]> {
+  try {
+    const q = query(
+      collection(db, "order"),
+      where("canteenId", "==", canteenId)
+    );
     const querySnapshot = await getDocs(q);
     let orders: OrderDetail[] = [];
     querySnapshot.forEach((doc) => {
       orders.push(doc.data() as OrderDetail);
     });
     return orders;
-  }catch(error){
+  } catch (error) {
     console.error("Error fetching order data:", error);
     return [];
   }
 }
-async function getAllOrderByCanteenIdAndStatus(canteenId: string, status: number): Promise<OrderDetail[]> {
-  try{
-    const q = query(collection(db, "order"), where("canteenId", "==", canteenId), where("status", "==", status));
+async function getAllOrderByCanteenIdAndStatus(
+  canteenId: string,
+  status: number
+): Promise<OrderDetail[]> {
+  try {
+    const q = query(
+      collection(db, "order"),
+      where("canteenId", "==", canteenId),
+      where("status", "==", status)
+    );
     const querySnapshot = await getDocs(q);
     let orders: OrderDetail[] = [];
     querySnapshot.forEach((doc) => {
       orders.push(doc.data() as OrderDetail);
     });
     return orders;
-  }catch(error){
+  } catch (error) {
     console.error("Error fetching order data:", error);
     return [];
   }
 }
 
 const ordersService = {
+  updateReadOrder,
   createOrder,
   getOrderById,
   getAllOrderByUserId,
@@ -134,6 +168,5 @@ const ordersService = {
   getRealTimeOrderById,
   updateOrderStatus,
   getAllOrderByCanteenIdAndStatus,
-  
 };
 export default ordersService;

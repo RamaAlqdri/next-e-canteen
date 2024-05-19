@@ -36,7 +36,7 @@ export default function ProductItem({
       <div className="  ">
         <div className="w-full aspect-square  h-[65%]  sm:w-full p-3">
           <Link
-            href={`${canteen}${product.canteenId}/product/${product._id}`}
+            href={`${canteen}${product.canteenId}/product/${product.id}`}
             className=""
           >
             <Image
@@ -50,7 +50,7 @@ export default function ProductItem({
         </div>
         <div className="pb-4 pl-4    justify-normal  ">
           <Link
-            href={`${canteen}${product.canteenId}/product/${product._id}`}
+            href={`${canteen}${product.canteenId}/product/${product.id}`}
             className=""
           >
             <h2 className="font-semibold text-sm ">

@@ -39,9 +39,9 @@ const Form = () => {
   }, [callbackUrl, params, router, session]);
 
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
-    console.log("Form values:", form);
+    // console.log("Form values:", form);
     const { email, password } = form;
-    console.log(email, password);
+    // console.log(email, password);
 
     signIn("credentials", {
       email,

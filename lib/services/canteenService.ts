@@ -63,19 +63,20 @@ async function createCanteen(canteen: Canteen): Promise<void> {
     // Perbarui dokumen kantin dengan ID baru
     await setDoc(doc(canteenRef, canteenId), {
       ...canteen, // Salin properti kantin yang lain jika diperlukan
-      _id: canteenId,
+      id: canteenId,
     });
   } catch (error) {
     console.error("Error creating canteen:", error);
   }
 }
 
-async function getCanteenData(canteenId: string): Promise<Canteen> {
+async function getCanteenData(canteenId: any): Promise<Canteen> {
   try {
+    console.log(canteenId);
 
     const kantinRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(kantinRef);
-
+    console.log(canteenData.data());
     return canteenData.data() as Canteen;
   } catch (error) {
     console.error("Error fetching canteen data:", error);

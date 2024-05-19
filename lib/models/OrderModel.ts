@@ -1,5 +1,5 @@
 export type OrderDetail = {
-  _id: string;
+  id?: string;
   // user?: { name: string };
   items: [OrderItem];
   customerId: string;
@@ -12,9 +12,10 @@ export type OrderDetail = {
     customer: boolean;
     canteen: boolean;
   };
+  
 };
 export type Order = {
-  _id: string;
+  id?: string;
   readBy: {
     customer: boolean;
     canteen: boolean;
@@ -29,7 +30,7 @@ export type OrderItem = {
   slug: string;
   qty: number;
   image: string;
-  _id: string;
+  id?: string;
   price: number;
   canteenId: string;
   

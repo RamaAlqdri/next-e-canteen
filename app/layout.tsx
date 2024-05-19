@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
-import Providers from "@/components/Providers"
+import SessionProviders from "@/components/SessionProvider"
 import { Poppins } from "next/font/google";
 import Cart from "@/components/popUp_cart/Cart";
 
@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-      <Providers>
+      <SessionProviders>
           <div className="min-h-screen flex flex-col items-center">
             <Header />
             
@@ -38,7 +38,7 @@ export default function RootLayout({
               <p>Copyright ☠︎ 2023 - All right reserved by Next</p>
             </footer> */}
           </div>
-        </Providers>
+        </SessionProviders>
       </body>
     </html>
   );

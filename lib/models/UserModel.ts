@@ -1,9 +1,9 @@
 export type User = {
-  _id?: string;
+  id?: string;
   name: string;
   email: string;
   password: string;
   role: string;
-  phone?: string;
+  image: string;
   canteenId?: string;
 };

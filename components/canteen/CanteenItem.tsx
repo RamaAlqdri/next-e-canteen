@@ -12,7 +12,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
     <div className="rounded-3xl hover:brightness-90  cursor-pointer bg-white drop-shadow-md mb-0 sm:mb-4  ">
       <div className="   ">
         <div className="w-full aspect-square  h-[65%]  sm:w-full p-3">
-          <Link href={`/canteen/${canteen._id}`} className="">
+          <Link href={`/canteen/${canteen.id}`} className="">
             <Image
               src={canteen.image}
               alt={canteen.name}
@@ -23,7 +23,7 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
           </Link>
         </div>
         <div className="pb-4 pl-4    justify-normal ">
-          <Link href={`/canteen/${canteen._id}`} className="">
+          <Link href={`/canteen/${canteen.id}`} className="">
             <h2 className=" font-semibold text-sm ">
               {canteen.name}
             </h2>

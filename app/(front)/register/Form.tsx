@@ -7,6 +7,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import InputWithLabel from "@/components/input/input";
 import Image from "next/image";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 type Inputs = {
   name: string;
@@ -33,6 +35,12 @@ const Form = () => {
       confirmPassword: "",
     },
   });
+
+  const signup: SubmitHandler<Inputs> = async (form) => {
+    const { name, email, password } = form;
+    createUserWithEmailAndPassword(auth, email, password);
+  };
+
   useEffect(() => {
     if (session && session.user) {
       router.push(callbackUrl);
@@ -41,31 +49,32 @@ const Form = () => {
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, email, password } = form;
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: name,
+
       });
-      if (res.ok) {
-        return router.push(
-          "/signin?callbackUrl=${callbackUrl}&success=Account has been created"
-        );
-      } else {
-        const data = await res.json();
-        throw new Error(data.message);
+  
+      await sendEmailVerification(user);
+      toast.success("Email verifikasi telah dikirim ke email anda");
+  
+      // Optional: Redirect or perform additional actions after successful registration
+      router.push("/signin?callbackUrl=${callbackUrl}&success=Account has been created");
+  
+    } catch (error: any) {
+      console.error("Error in form submission:", error);
+      let errorMessage = "An error occurred";
+  
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "Email sudah ada";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "Email anda salah";
+      } else if (error.code === "auth/weak-password") {
+        errorMessage = "Password anda lemah";
       }
-    } catch (err: any) {
-      const error =
-        err.message && err.message.indexOf("E11000") === 0
-          ? "Email is duplicate"
-          : err.message;
-      toast.error(err.message || "error");
+  
+      toast.error(errorMessage);
     }
   };
   return (
@@ -126,7 +135,7 @@ const Form = () => {
                   register={register}
                   validationSchema={{
                     required: "Kata sandi wajib diisi",
-                    validate: (value:any) => {
+                    validate: (value: any) => {
                       const { password } = getValues();
                       return password === value || "Password do not match";
                     },

@@ -11,6 +11,8 @@ import canteenService from "@/lib/services/canteenService";
 import { capitalizeText } from "@/lib/utils";
 import { Suspense } from "react";
 import Await from "@/components/handle/await";
+import { Canteen } from "@/lib/models/CanteenModel";
+// import Papa from "papaparse";
 
 const Menu = () => {
   const router = useRouter();
@@ -27,8 +29,8 @@ const Menu = () => {
   const { clear } = useCartService();
 
   const canteen = () => {
-    if (session?.user?.canteen) {
-      router.push(`/canteen/${session.user.canteen}`);
+    if (session?.user?.canteenId) {
+      router.push(`/canteen/${session.user.canteenId}`);
     } else {
       // Handle case when 'canteen' is null or undefined
       console.error("Canteen not found in session user");
@@ -44,9 +46,44 @@ const Menu = () => {
   // const promiseImage = canteenService.getCanteenImagePath(
   //   session?.user?.canteen as string
   // );
-  const promiseCanteen = canteenService.getCanteenData(
-    session?.user?.canteen as string
-  );
+  // const promiseCanteen = canteenService.getCanteenData(
+  //   session?.user?.canteenId as string
+  // );
+  const [canteenData, setCanteenData] = useState<Canteen>();
+  let canteenId = session?.user?.canteenId as string;
+  const [hasFetched, setHasFetched] = useState(false);
+  // setCanteenId(session?.user?.canteenId as string);
+
+  console.log(canteenId);
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        if (canteenData === undefined && canteenId && !hasFetched) {
+          console.log(canteenId);
+          const fetchedCanteenData = await canteenService.getCanteenData(
+            canteenId
+          );
+          console.log(fetchedCanteenData);
+          setCanteenData(fetchedCanteenData);
+
+          console.log("Data fetched");
+          setHasFetched(true);
+        } else {
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // if (session?.user?.canteenId) {
+    if (canteenData === undefined) {
+      fetchData();
+    }
+    // }
+    console.log(canteenData);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canteenId]);
 
   // console.log(session?.user?.canteen);
 
@@ -127,30 +164,22 @@ const Menu = () => {
                     <div className="dropdown dropdown-bottom dropdown-end">
                       <label tabIndex={0} className="btn btn-ghost rounded-btn">
                         {session.user.role === "canteen" ? (
-                          <Suspense
-                            fallback={
-                              <div className="h-10 w-10 bg-gray-300 ml-2 rounded-full"></div>
-                            }
-                          >
-                            <Await promise={promiseCanteen}>
-                              {(canteen) => {
-                                return (
-                                  <>
-                                    {canteen.name}
-                                    <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
-                                      <Image
-                                        src={canteen.image}
-                                        alt="avatar"
-                                        width={300}
-                                        height={300}
-                                        className="object-cover h-full w-full"
-                                      />
-                                    </div>
-                                  </>
-                                );
-                              }}
-                            </Await>
-                          </Suspense>
+                          canteenData?.name ? (
+                            <div className="flex items-center space-x-2">
+                              <p>{canteenData.name}</p>
+                              <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
+                                <Image
+                                  src={canteenData.image}
+                                  alt="avatar"
+                                  width={300}
+                                  height={300}
+                                  className="object-cover h-full w-full"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="h-10 w-10 bg-gray-300 ml-2 rounded-full"></div>
+                          )
                         ) : (
                           <>
                             {session.user.name}

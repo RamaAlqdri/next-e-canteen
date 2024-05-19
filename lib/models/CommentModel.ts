@@ -1,5 +1,5 @@
 export type Comments = {
-  _id: string;
+  id?: string;
   content: string;
   rating: number;
 };

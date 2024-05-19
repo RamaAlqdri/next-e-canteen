@@ -1,35 +1,23 @@
-import NextAuth from "next-auth";
-import type { NextAuthConfig } from "next-auth";
+import { withAuth } from "next-auth/middleware";
 
-const authConfig = {
-  providers: [],
+export default withAuth({
   callbacks: {
-    authorized({ request, auth }: any) {
+    authorized({ token, req }) {
       const protectedPaths = [
-        // /\/shipping/,
-        // /\/payment/,
-        // /\/place-order/,
         /\/profile/,
-        // /\/order\/(.*)/,
         /\/admin/,
       ];
-      const { pathname } = request.nextUrl;
-      if (protectedPaths.some((p) => p.test(pathname))) return !!auth;
+      const { pathname } = req.nextUrl;
+      // Jika jalur dilindungi, pastikan token ada
+      if (protectedPaths.some((p) => p.test(pathname))) return !!token;
+      // Untuk jalur lain, izinkan akses
       return true;
     },
   },
-} satisfies NextAuthConfig;
+});
 
-export const { auth: middleware } = NextAuth(authConfig);
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };

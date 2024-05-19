@@ -234,7 +234,7 @@ const Detail = ({
               <div className="space-y-2 mt-4">
                 {commentList.map((comment) => (
                   <div
-                    key={comment._id}
+                    key={comment.id}
                     className="space-y-1 items-center w-full border rounded-2xl py-2 px-4 "
                   >
                     <div className="rating  rating-xs ">

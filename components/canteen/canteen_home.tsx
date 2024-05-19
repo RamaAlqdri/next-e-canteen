@@ -30,239 +30,251 @@ import {
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Product } from "@/lib/models/ProductModels";
+import {
+  DocumentData,
+  QuerySnapshot,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import productsService from "@/lib/services/productService";
+import ordersService from "@/lib/services/orderService";
+// import Papa from "papaparse";
 // import { CSVLink, CSVDownload } from "react-csv";
 
-const order = [
-  {
-    _id: "TRX-8dzc-b1Aj-Hcl",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    createdAt: "2024-05-11T04:38:16.908Z",
-    customerId: "7fJaAEqBz1YtgwKaVWe3",
-    items: [
-      {
-        _id: "LWGNs50hsv3IZ91Ur2rX",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "makanan",
-        countInStock: 4,
-        description: "Makanan Enak",
-        image: "/images/product/product2.jpg",
-        name: "Nasi Kebuli",
-        numReviews: 0,
-        price: 8000,
-        qty: 1,
-        rating: 0,
-        slug: "nasi-kebuli",
-      },
-    ],
-    itemsPrice: 8000,
-    paymentMethod: "QRIS",
-    status: 3,
-    readBy: {
-      customer: false,
-      canteen: true,
-    },
-  },
-  {
-    _id: "TRX-hF2O-HHLki-Nt",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    createdAt: "2024-05-11T12:18:00.951Z",
-    customerId: "7fJaAEqBz1YtgwKaVWe3",
-    items: [
-      {
-        _id: "LWGNs50hsv3IZ91Ur2rX",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "makanan",
-        countInStock: 4,
-        description: "Makanan Enak",
-        image: "/images/product/product2.jpg",
-        name: "Nasi Goreng",
-        numReviews: 0,
-        price: 8000,
-        qty: 3,
-        rating: 0,
-        slug: "nasi-goreng",
-      },
-      {
-        _id: "aL65uv5TH6GKD2LYscVW",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "minuman",
-        countInStock: 2,
-        description: "Minuman Dingin Enak",
-        image: "/images/product/product2.jpg",
-        name: "Es Teh",
-        numReviews: 0,
-        price: 12000,
-        qty: 1,
-        rating: 0,
-        slug: "es-teh",
-      },
-    ],
-    itemsPrice: 36000,
-    paymentMethod: "QRIS",
-    readBy: {
-      customer: false,
-      canteen: false,
-    },
-    status: 5,
-  },
-  {
-    _id: "TRX-wrZu-43GmOKQ7",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    createdAt: "2024-05-11T07:52:09.713Z",
-    customerId: "7fJaAEqBz1YtgwKaVWe3",
-    items: [
-      {
-        _id: "aL65uv5TH6GKD2LYscVW",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "minuman",
-        countInStock: 2,
-        description: "Minuman Dingin Enak",
-        image: "/images/product/product2.jpg",
-        name: "Es Teh",
-        numReviews: 0,
-        price: 12000,
-        qty: 1,
-        rating: 0,
-        slug: "es-teh",
-      },
-      {
-        _id: "LWGNs50hsv3IZ91Ur2rX",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "makanan",
-        countInStock: 4,
-        description: "Makanan Enak",
-        image: "/images/product/product2.jpg",
-        name: "Nasi Goreng",
-        numReviews: 0,
-        price: 8000,
-        qty: 1,
-        rating: 0,
-        slug: "nasi-goreng",
-      },
-    ],
-    itemsPrice: 20000,
-    paymentMethod: "QRIS",
-    readBy: {
-      customer: false,
-      canteen: true,
-    },
-    status: 4,
-  },
-  {
-    _id: "TRX-8AuY-Ys-AXiFv",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    createdAt: "2024-05-17T23:56:46.538Z",
-    customerId: "7fJaAEqBz1YtgwKaVWe3",
-    items: [
-      {
-        _id: "aL65uv5TH6GKD2LYscVW",
-        canteenId: "nBxAIxKSeNQPM3tJolxo",
-        category: "minuman",
-        countInStock: 2,
-        description: "Minuman Dingin Enak",
-        image: "/images/product/product2.jpg",
-        name: "Es Teh",
-        numReviews: 0,
-        price: 12000,
-        qty: 1,
-        rating: 0,
-        slug: "es-teh",
-      },
-    ],
-    itemsPrice: 12000,
-    paymentMethod: "QRIS",
-    readBy: {
-      customer: false,
-      canteen: false,
-    },
-    status: 4,
-  },
-];
+// const order = [
+//   {
+//     _id: "TRX-8dzc-b1Aj-Hcl",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     createdAt: "2024-05-11T04:38:16.908Z",
+//     customerId: "7fJaAEqBz1YtgwKaVWe3",
+//     items: [
+//       {
+//         _id: "LWGNs50hsv3IZ91Ur2rX",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "makanan",
+//         countInStock: 4,
+//         description: "Makanan Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Nasi Kebuli",
+//         numReviews: 0,
+//         price: 8000,
+//         qty: 1,
+//         rating: 0,
+//         slug: "nasi-kebuli",
+//       },
+//     ],
+//     itemsPrice: 8000,
+//     paymentMethod: "QRIS",
+//     status: 3,
+//     readBy: {
+//       customer: false,
+//       canteen: true,
+//     },
+//   },
+//   {
+//     _id: "TRX-hF2O-HHLki-Nt",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     createdAt: "2024-05-11T12:18:00.951Z",
+//     customerId: "7fJaAEqBz1YtgwKaVWe3",
+//     items: [
+//       {
+//         _id: "LWGNs50hsv3IZ91Ur2rX",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "makanan",
+//         countInStock: 4,
+//         description: "Makanan Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Nasi Goreng",
+//         numReviews: 0,
+//         price: 8000,
+//         qty: 3,
+//         rating: 0,
+//         slug: "nasi-goreng",
+//       },
+//       {
+//         _id: "aL65uv5TH6GKD2LYscVW",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "minuman",
+//         countInStock: 2,
+//         description: "Minuman Dingin Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Es Teh",
+//         numReviews: 0,
+//         price: 12000,
+//         qty: 1,
+//         rating: 0,
+//         slug: "es-teh",
+//       },
+//     ],
+//     itemsPrice: 36000,
+//     paymentMethod: "QRIS",
+//     readBy: {
+//       customer: false,
+//       canteen: false,
+//     },
+//     status: 5,
+//   },
+//   {
+//     _id: "TRX-wrZu-43GmOKQ7",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     createdAt: "2024-05-11T07:52:09.713Z",
+//     customerId: "7fJaAEqBz1YtgwKaVWe3",
+//     items: [
+//       {
+//         _id: "aL65uv5TH6GKD2LYscVW",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "minuman",
+//         countInStock: 2,
+//         description: "Minuman Dingin Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Es Teh",
+//         numReviews: 0,
+//         price: 12000,
+//         qty: 1,
+//         rating: 0,
+//         slug: "es-teh",
+//       },
+//       {
+//         _id: "LWGNs50hsv3IZ91Ur2rX",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "makanan",
+//         countInStock: 4,
+//         description: "Makanan Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Nasi Goreng",
+//         numReviews: 0,
+//         price: 8000,
+//         qty: 1,
+//         rating: 0,
+//         slug: "nasi-goreng",
+//       },
+//     ],
+//     itemsPrice: 20000,
+//     paymentMethod: "QRIS",
+//     readBy: {
+//       customer: false,
+//       canteen: true,
+//     },
+//     status: 4,
+//   },
+//   {
+//     _id: "TRX-8AuY-Ys-AXiFv",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     createdAt: "2024-05-17T23:56:46.538Z",
+//     customerId: "7fJaAEqBz1YtgwKaVWe3",
+//     items: [
+//       {
+//         _id: "aL65uv5TH6GKD2LYscVW",
+//         canteenId: "nBxAIxKSeNQPM3tJolxo",
+//         category: "minuman",
+//         countInStock: 2,
+//         description: "Minuman Dingin Enak",
+//         image: "/images/product/product2.jpg",
+//         name: "Es Teh",
+//         numReviews: 0,
+//         price: 12000,
+//         qty: 1,
+//         rating: 0,
+//         slug: "es-teh",
+//       },
+//     ],
+//     itemsPrice: 12000,
+//     paymentMethod: "QRIS",
+//     readBy: {
+//       customer: false,
+//       canteen: false,
+//     },
+//     status: 4,
+//   },
+// ];
 
-const products = [
-  {
-    _id: "LWGNs50hsv3IZ91Ur2rX",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    category: "makanan",
-    countInStock: 4,
-    description: "Makanan Enak",
-    image: "/images/product/product2.jpg",
-    name: "Nasi Goreng",
-    numReviews: 0,
-    price: 8000,
-    rating: 0,
-    slug: "nasi-goreng",
-  },
-  {
-    _id: "aL65uv5TH6GKD2LYscVW",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    category: "minuman",
-    countInStock: 2,
-    description: "Minuman Dingin Enak",
-    image: "/images/product/product2.jpg",
-    name: "Es Teh",
-    numReviews: 0,
-    price: 12000,
-    rating: 0,
-    slug: "es-teh",
-  },
-  {
-    _id: "bZK56uvQTR2LYscVW8hF",
-    canteenId: "nBxAIxKSeNQPM3tJolxo",
-    category: "makanan",
-    countInStock: 6,
-    description: "Makanan Lezat dan Bergizi",
-    image: "/images/product/product3.jpg",
-    name: "Ayam Bakar",
-    numReviews: 0,
-    price: 15000,
-    rating: 0,
-    slug: "ayam-bakar",
-  },
-] as Product[];
+// const products = [
+//   {
+//     _id: "LWGNs50hsv3IZ91Ur2rX",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     category: "makanan",
+//     countInStock: 4,
+//     description: "Makanan Enak",
+//     image: "/images/product/product2.jpg",
+//     name: "Nasi Goreng",
+//     numReviews: 0,
+//     price: 8000,
+//     rating: 0,
+//     slug: "nasi-goreng",
+//   },
+//   {
+//     _id: "aL65uv5TH6GKD2LYscVW",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     category: "minuman",
+//     countInStock: 2,
+//     description: "Minuman Dingin Enak",
+//     image: "/images/product/product2.jpg",
+//     name: "Es Teh",
+//     numReviews: 0,
+//     price: 12000,
+//     rating: 0,
+//     slug: "es-teh",
+//   },
+//   {
+//     _id: "bZK56uvQTR2LYscVW8hF",
+//     canteenId: "nBxAIxKSeNQPM3tJolxo",
+//     category: "makanan",
+//     countInStock: 6,
+//     description: "Makanan Lezat dan Bergizi",
+//     image: "/images/product/product3.jpg",
+//     name: "Ayam Bakar",
+//     numReviews: 0,
+//     price: 15000,
+//     rating: 0,
+//     slug: "ayam-bakar",
+//   },
+// ] as Product[];
 
 const CanteenBeranda = ({ props = "" }: { props: string }) => {
-  // const [order, setOrder] = useState<OrderDetail[]>([]);
+  const [order, setOrder] = useState<OrderDetail[]>([]);
   const { data: session } = useSession();
   let canteenId = "";
   if (props !== "") {
     canteenId = props as string;
   } else {
-    canteenId = session?.user?.canteen as string;
+    canteenId = session?.user?.canteenId as string;
   }
   const [numReadOrder, setNumReadOrder] = useState(0);
 
-  useEffect(() => {
-    function handleReadOrder() {
-      const unreadOrder = order.filter((order) => !order.readBy.canteen);
-      setNumReadOrder(unreadOrder.length);
-    }
-    handleReadOrder();
-  });
-
   // useEffect(() => {
-  //   const q = query(
-  //     collection(db, "order"),
-  //     where("canteenId", "==", canteenId)
-  //   );
-  //   const unsubscribe = onSnapshot(
-  //     q,
-  //     async (snapshot: QuerySnapshot<DocumentData>) => {
-  //       const orderData: OrderDetail[] = snapshot.docs.map(
-  //         (doc: any) =>
-  //           ({
-  //             id: doc.id,
-  //             ...doc.data(),
-  //           } as OrderDetail)
-  //       );
-  //       setOrder(orderData);
-  //     }
-  //   );
+  //   function handleReadOrder() {
+  //     const unreadOrder = order.filter((order) => !order.readBy.canteen);
+  //     setNumReadOrder(unreadOrder.length);
+  //   }
+  //   handleReadOrder();
+  // });
 
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, []);
+  useEffect(() => {
+    const q = query(
+      collection(db, "order"),
+      where("canteenId", "==", canteenId)
+    );
+    const unsubscribe = onSnapshot(
+      q,
+      async (snapshot: QuerySnapshot<DocumentData>) => {
+        const orderData: OrderDetail[] = snapshot.docs.map(
+          (doc: any) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            } as OrderDetail)
+        );
+        setOrder(orderData);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     // {handleStatistic("harian")}
@@ -282,9 +294,9 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
               <>
                 <Tab value="2">Produk</Tab>
                 <Tab value="3">
-                  <div className="badge w-5 border-0 ml-16  absolute text-xs rounded-full badge-ePrimary">
+                  {/* <div className="badge w-5 border-0 ml-16  absolute text-xs rounded-full badge-ePrimary">
                     {numReadOrder}
-                  </div>
+                  </div> */}
                   Pesanan
                 </Tab>
               </>
@@ -330,31 +342,32 @@ const ProductList = ({ props = "" }: { props: string }) => {
   if (props !== "") {
     canteenId = props as string;
   } else {
-    canteenId = session?.user?.canteen as string;
+    canteenId = session?.user?.canteenId as string;
   }
   const router = useRouter();
 
-  // const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [categories, setCategories] = useState<string>("semua");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       if (!products.length) {
-  //         const fetchedProducts = await productsService.getProductByCanteenId(
-  //           canteenId
-  //         );
-  //         setProducts(fetchedProducts);
-  //       }
-  //       setProductsLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!products.length) {
+          const fetchedProducts = await productsService.getProductByCanteenId(
+            canteenId
+          );
+          setProducts(fetchedProducts);
+        }
+        setProductsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  //   fetchData();
-  // }, []);
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
@@ -440,7 +453,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
             )
             .map((product) => (
               <div
-                key={product._id}
+                key={product.id}
                 className="flex justify-between cursor-pointer bg-white space-y-2 py-4 shadow-md hover:bg-gray-50 px-4 w-full  rounded-xl"
               >
                 <div className="flex  justify-between  w-full  ">
@@ -448,7 +461,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
                     className="flex  items-center  w-full  space-x-4"
                     onClick={() => {
                       router.push(
-                        `/canteen/${canteenId}/product/${product._id}`
+                        `/canteen/${canteenId}/product/${product.id}`
                       );
                     }}
                   >
@@ -476,7 +489,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
                     <button
                       onClick={() => {
                         router.push(
-                          `/edit_product/${canteenId}/${product._id}`
+                          `/edit_product/${canteenId}/${product.id}`
                         );
                       }}
                       className="flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-1 rounded-lg"
@@ -522,11 +535,18 @@ const OrderList = ({
   if (props !== "") {
     canteenId = props as string;
   } else {
-    canteenId = session?.user?.canteen as string;
+    canteenId = session?.user?.canteenId as string;
   }
   const router = useRouter();
 
   const [filter, setFilter] = useState(0);
+  // const updateReadBy = async (orderId: string) => {
+  //   const order = orderList.find((order) => order.id === orderId);
+  //   if (order) {
+  //     ordersService.updateReadOrder(order.id as string)
+  //     console.log(order);
+  //   }
+  // }
 
   return orderList.length === 0 ? (
     <div className=" space-y-4">
@@ -588,8 +608,8 @@ const OrderList = ({
               Semua
             </SelectItem>
             <SelectItem value="1">Belum Selesai</SelectItem>
-            <SelectItem value="4">Selesai</SelectItem>
-            <SelectItem value="5">Dibatalkan</SelectItem>
+            <SelectItem value="6">Selesai</SelectItem>
+            <SelectItem value="7">Dibatalkan</SelectItem>
           </Select>
         </div>
       </div>
@@ -598,7 +618,9 @@ const OrderList = ({
           if (filter === 0) {
             return true;
           } else if (filter === 1) {
-            return order.status !== 4 && order.status !== 5;
+            return order.status !== 6 && order.status !== 7 && order.status !== 5;
+          } else if (filter === 6 ) {
+            return order.status === 6 || order.status ===  5;
           } else {
             return order.status === filter;
           }
@@ -606,12 +628,14 @@ const OrderList = ({
         .map((order) => (
           <button
             onClick={() => {
-              router.push(`/placeorder/${order._id}`);
+              // updateReadBy(order.id as string);
+              router.push(`/placeorder/${order.id}`);
+
             }}
-            key={order._id}
-            className={` space-y-2 py-5 shadow-md hover:bg-gray-50 px-5 w-full  rounded-xl ${
-              order.readBy.canteen ? "bg-white" : "bg-[#FFEBD7]"
-            }`}
+            key={order.id}
+            className={` space-y-2 py-5 bg-white shadow-md hover:bg-gray-50 px-5 w-full  rounded-xl 
+            `}
+            // ${order.readBy.canteen ? "bg-white" : "bg-[#FFEBD7]"}
           >
             <div className="flex space-x-2 text-xs">
               <p>{ubahFormatTanggal(order.createdAt)},</p>
@@ -637,7 +661,7 @@ const OrderList = ({
                     ))}
                   </p>
                   <div className="flex space-x-2 items-center mt-1">
-                    {order.status === 4 ? (
+                    {order.status === 6 || order.status === 5 ? (
                       <svg
                         width="14"
                         height="14"
@@ -658,7 +682,7 @@ const OrderList = ({
                           strokeLinecap="round"
                         />
                       </svg>
-                    ) : order.status === 5 ? (
+                    ) : order.status === 7 ? (
                       <svg
                         width="14"
                         height="14"
@@ -719,8 +743,24 @@ const Dashboard = ({
   if (props !== "") {
     canteenId = props as string;
   } else {
-    canteenId = session?.user?.canteen as string;
+    canteenId = session?.user?.canteenId as string;
   }
+  function downloadCsv(filename, data) {
+    const csv = Papa.unparse(data);
+    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const csvURL = window.URL.createObjectURL(csvData);
+    const tempLink = document.createElement('a');
+
+    tempLink.href = csvURL;
+    tempLink.setAttribute('download', filename);
+    tempLink.click();
+}
+
+// Example data
+const datacsv = [
+    { name: "Alice", email: "alice@example.com", phone: "123-456-7890" },
+    { name: "Bob", email: "bob@example.com", phone: "987-654-3210" }
+];
 
   const [totalPendapatan, setTotalPendapatan] = useState(0);
   const [data, setData] = useState<any>([]);
@@ -750,7 +790,7 @@ const Dashboard = ({
   useEffect(() => {
     handleStatistic(
       "harian",
-      orderList.filter((order) => order.status === 4)
+      orderList.filter((order) => order.status === 6)
     );
   }, []);
 
@@ -783,7 +823,7 @@ const Dashboard = ({
             onValueChange={(v) =>
               handleStatistic(
                 v,
-                orderList.filter((order) => order.status === 4)
+                orderList.filter((order) => order.status === 6)
               )
             }
             className=""

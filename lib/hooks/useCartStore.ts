@@ -55,7 +55,7 @@ export default function useCartService() {
     customerId,
 
     increase: (item: OrderItem) => {
-      const existingItem = items.find((x) => x._id === item._id);
+      const existingItem = items.find((x) => x.id === item.id);
 
       // Check if the item being added is from a different canteen
       const isDifferentCanteen = items.some(
@@ -72,7 +72,7 @@ export default function useCartService() {
 
       const updatedCartItems = existingItem
         ? items.map((x) =>
-            x._id === item._id
+            x.id === item.id
               ? { ...existingItem, qty: existingItem.qty + 1 }
               : x
           )
@@ -91,13 +91,13 @@ export default function useCartService() {
     },
 
     decrease: (item: OrderItem) => {
-      const exist = items.find((x) => x._id === item._id);
+      const exist = items.find((x) => x.id === item.id);
       if (!exist) return;
       const updateCartItems =
         exist.qty === 1
-          ? items.filter((x: OrderItem) => x._id !== item._id)
+          ? items.filter((x: OrderItem) => x.id !== item.id)
           : items.map((x) =>
-              x._id === item._id ? { ...exist, qty: exist.qty - 1 } : x
+              x.id === item.id ? { ...exist, qty: exist.qty - 1 } : x
             );
 
       const { itemsPrice, totalPrice } = calcPrice(updateCartItems);

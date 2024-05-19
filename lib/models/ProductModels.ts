@@ -1,5 +1,5 @@
 export type Product = {
-  _id: string;
+  id?: string;
   canteenId: string;
   name: string;
   slug: string;

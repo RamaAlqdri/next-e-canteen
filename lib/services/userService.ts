@@ -21,24 +21,27 @@ export const revalidate = 3600;
 
 async function createUser(user: User) {
   try {
-    const userRef = collection(db, "users");
-    const newUserRef = await addDoc(userRef, {
+    const userRef = doc(db, "users",user.id as string);
+    await setDoc(userRef,  {
+      id : user.id,
       name: user.name,
       email: user.email,
-      password: user.password,
+
       role: "user",
     });
+    console.log("User created successfully");
 
     // Dapatkan ID pengguna yang baru dibuat
-    const userId = newUserRef.id;
+    // const userId = newUserRef.id;
 
-    // Perbarui dokumen pengguna dengan ID baru
-    await setDoc(doc(userRef, userId), {
-      ...user, // Salin properti pengguna yang lain jika diperlukan
-      _id: userId,
-    });
+    // // Perbarui dokumen pengguna dengan ID baru
+    // await setDoc(doc(userRef, userId), {
+    //   ...user, // Salin properti pengguna yang lain jika diperlukan
+    //   _id: userId,
+    // });
   } catch (error) {
     console.error("Error creating user:", error);
+
   }
 }
 async function getUserByEmail(email: string): Promise<User> {

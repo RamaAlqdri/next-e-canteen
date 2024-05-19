@@ -22,7 +22,7 @@ export default function AddToCart({
   const { items, increase, decrease } = useCartService();
   const [existItem, setExistItem] = useState<OrderItem | undefined>();
   useEffect(() => {
-    setExistItem(items.find((x) => x._id == item._id));
+    setExistItem(items.find((x) => x.id == item.id));
   }, [item, items]);
   const addToCartHandler = () => {
     increase(item);

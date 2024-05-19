@@ -106,7 +106,7 @@ const CanteenList = () => {
                     <div
                       className="flex  items-center  w-full  space-x-4"
                       onClick={() => {
-                        router.push(`/canteen_dashboard/${canteen._id}`);
+                        router.push(`/canteen_dashboard/${canteen.id}`);
                         // to component from canteen_home
                       }}
                     >

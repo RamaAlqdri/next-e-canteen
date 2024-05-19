@@ -47,9 +47,9 @@ export default function CartDetails() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          _id: transaction_id,
+          id: transaction_id,
           items,
-          customerId: session?.user?._id,
+          customerId: session?.user?.id,
           canteenId,
           paymentMethod: "QRIS",
           itemsPrice,

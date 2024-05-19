@@ -16,7 +16,7 @@ export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
   const {
-    _id,
+    id,
     items,
     customerId,
     canteenId,
@@ -31,7 +31,7 @@ export const POST = async (request: NextRequest) => {
   
 
   const newOrder = {
-    _id,
+    id,
     items,
     customerId,
     canteenId,

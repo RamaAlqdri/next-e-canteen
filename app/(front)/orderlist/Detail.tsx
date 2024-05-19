@@ -64,6 +64,7 @@ import { OrderDetail } from "@/lib/models/OrderModel";
 
 const Detail = () => {
   const { data: session } = useSession();
+  console.log(session);
   const router = useRouter();
   const [orderList, setOrderList] = useState<OrderDetail[]>([]);
   const [orderLoading, setOrderLoading] = useState(true);
@@ -73,7 +74,7 @@ const Detail = () => {
       try {
         if (!orderList.length) {
           const orders = await ordersService.getAllOrderByUserId(
-            session?.user._id as string
+            session?.user.id as string
           );
           setOrderList(orders);
           setOrderLoading(false);
@@ -108,9 +109,9 @@ const Detail = () => {
                 {orderList.map((order) => (
                   <button
                     onClick={() => {
-                      router.push(`/placeorder/${order._id}`);
+                      router.push(`/placeorder/${order.id}`);
                     }}
-                    key={order._id}
+                    key={order.id}
                     className="bg-white space-y-2 py-5 shadow-md hover:bg-gray-50 px-5 w-full  rounded-xl"
                   >
                     <div className="flex space-x-2 text-xs">

@@ -41,6 +41,7 @@ import {
 import { db } from "@/lib/firebase";
 import productsService from "@/lib/services/productService";
 import ordersService from "@/lib/services/orderService";
+import ImageDownloader from "../image/imageShow";
 // import Papa from "papaparse";
 // import { CSVLink, CSVDownload } from "react-csv";
 
@@ -237,6 +238,7 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
   const [order, setOrder] = useState<OrderDetail[]>([]);
   const { data: session } = useSession();
   let canteenId = "";
+  console.log(session?.user.canteenId);
   if (props !== "") {
     canteenId = props as string;
   } else {
@@ -366,7 +368,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
     };
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -488,9 +490,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
                   <div className="flex items-start">
                     <button
                       onClick={() => {
-                        router.push(
-                          `/edit_product/${canteenId}/${product.id}`
-                        );
+                        router.push(`/edit_product/${canteenId}/${product.id}`);
                       }}
                       className="flex  items-center font-normal hover:bg-[#FFEBD7] text-sm p-1 rounded-lg"
                     >
@@ -599,6 +599,9 @@ const OrderList = ({
     <div className="space-y-3 ">
       <div className="rounded-b-2xl pt-3  bg-white shadow-md px-6 pb-4">
         <div className="w-1/5">
+          <div>
+            {/* <ImageDownloader imagePath={"gs://e-canteen-v1.appspot.com/canteen/avatar/_84081ce3-edb3-417a-a06d-bce6d1a9f13d.jpeg"}/> */}
+          </div>
           <Select
             defaultValue="0"
             className=""
@@ -618,9 +621,11 @@ const OrderList = ({
           if (filter === 0) {
             return true;
           } else if (filter === 1) {
-            return order.status !== 6 && order.status !== 7 && order.status !== 5;
-          } else if (filter === 6 ) {
-            return order.status === 6 || order.status ===  5;
+            return (
+              order.status !== 6 && order.status !== 7 && order.status !== 5
+            );
+          } else if (filter === 6) {
+            return order.status === 6 || order.status === 5;
           } else {
             return order.status === filter;
           }
@@ -630,7 +635,6 @@ const OrderList = ({
             onClick={() => {
               // updateReadBy(order.id as string);
               router.push(`/placeorder/${order.id}`);
-
             }}
             key={order.id}
             className={` space-y-2 py-5 bg-white shadow-md hover:bg-gray-50 px-5 w-full  rounded-xl 
@@ -745,22 +749,11 @@ const Dashboard = ({
   } else {
     canteenId = session?.user?.canteenId as string;
   }
-  function downloadCsv(filename, data) {
-    const csv = Papa.unparse(data);
-    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const csvURL = window.URL.createObjectURL(csvData);
-    const tempLink = document.createElement('a');
-
-    tempLink.href = csvURL;
-    tempLink.setAttribute('download', filename);
-    tempLink.click();
-}
-
-// Example data
-const datacsv = [
-    { name: "Alice", email: "alice@example.com", phone: "123-456-7890" },
-    { name: "Bob", email: "bob@example.com", phone: "987-654-3210" }
-];
+  // const datacsv = [
+  //   ["Name", "Email", "Phone"], // Header row
+  //   ["Alice", "alice@example.com", "123-456-7890"],
+  //   ["Bob", "bob@example.com", "987-654-3210"],
+  // ];
 
   const [totalPendapatan, setTotalPendapatan] = useState(0);
   const [data, setData] = useState<any>([]);
@@ -770,6 +763,76 @@ const datacsv = [
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
+
+  function arrayToCSV(data: any) {
+    return data.map((row: any) => row.join(",")).join("\n");
+  }
+  function downloadCSV(
+    filename = "data.csv",
+    canteenName: string,
+    pendapatan: any,
+    index: any
+  ) {
+    // const csvData = arrayToCSV(data);
+    const csvData = arrayToCSV(makeCsv(canteenName, pendapatan, index));
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+  const makeCsv = (canteenName: string, pendapatan: any, index: any) => {
+    let date = new Date();
+    let contextHeader = "";
+    let header = "";
+
+    if (index === "Jam") {
+      header = "Hari";
+      // Get the day of the week from the date object
+      const days = [
+        "Minggu",
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat",
+        "Sabtu",
+      ];
+      contextHeader = days[date.getDay()]; // date.getDay() returns a number from 0 (Sunday) to 6 (Saturday)
+    } else if (index === "Minggu") {
+      header = "Bulan";
+      // Get the month from the date object
+      const months = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+      ];
+      contextHeader = months[date.getMonth()]; // date.getMonth() returns a number from 0 (January) to 11 (December)
+    } else if (index === "Bulan") {
+      header = "Tahun";
+      // Get the full year
+      contextHeader = date.getFullYear().toString(); // date.getFullYear() returns a four-digit year (e.g., 2024)
+    }
+
+    return [
+      ["Kantin", header, "Pendapatan"],
+      [canteenName, contextHeader, String(`Rp${formatRupiah(pendapatan)}`)],
+    ];
+  };
 
   const handleStatistic = (type: string, order: OrderDetail[]) => {
     setLoading(true);
@@ -838,11 +901,11 @@ const datacsv = [
         <div className="space-x-2">
           <button
             onClick={() => {
-              router.push(`/edit_canteen/${canteenId}`);
+              downloadCSV("data.csv", "", totalPendapatan, index);
             }}
-            className="text-xs text-lime-600 hover:text-white font-medium hover:bg-lime-600 px-2 py-2 border-lime-600 border-2 rounded-xl"
+            className="text-xs text-red-600 hover:text-white font-medium hover:bg-red-600 px-2 py-2 border-red-600 border-2 rounded-xl"
           >
-            Ekspor CSV
+            Ekspor PDF
           </button>
           <button
             onClick={() => {

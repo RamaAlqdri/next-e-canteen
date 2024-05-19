@@ -52,7 +52,7 @@ const Form = () => {
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, location, description, phone } = form;
     try {
-      const res = await fetch("/api/canteen/create", {
+      const res = await fetch("/api/canteen/request", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,8 +63,8 @@ const Form = () => {
           description,
           session,
           phone,
-          uploadImageCanteen,
-          uploadImageQris,
+          // uploadImageCanteen,
+          // uploadImageQris,
         }),
       });
       console.log(res);

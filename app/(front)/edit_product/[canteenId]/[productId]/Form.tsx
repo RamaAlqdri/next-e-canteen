@@ -10,6 +10,10 @@ import { Span } from "next/dist/trace";
 import ImageUpload from "@/components/image/ImageUpload";
 import Image from "next/image";
 import { Product } from "@/lib/models/ProductModels";
+import InputWithLabel from "@/components/input/input";
+import SelectCustom from "@/components/input/select";
+import TextareaWithLabel from "@/components/input/textarea";
+import StockCounter from "@/components/input/count";
 
 type Inputs = {
   slugBefore: string;
@@ -21,7 +25,13 @@ type Inputs = {
   //   image: string;
 };
 
-const Form = ({ product, canteenId }: { product: Product, canteenId:string }) => {
+const Form = ({
+  product,
+  canteenId,
+}: {
+  product: Product;
+  canteenId: string;
+}) => {
   const { data: session } = useSession();
 
   const params = useSearchParams();
@@ -141,10 +151,10 @@ const Form = ({ product, canteenId }: { product: Product, canteenId:string }) =>
 
   return (
     <div className="lg:grid lg:grid-cols-6">
-      <div className="lg:col-span-4 shadow-md rounded-2xl w-full bg-white my-4">
-        <div className="card-body">
+      <div className="lg:col-span-3 my-4">
+        <div className="bg-white px-8 py-6 shadow-md rounded-2xl">
           <h1 className="card-title">Sunting Product</h1>
-          <form onSubmit={handleSubmit(formSubmit)}>
+          <form onSubmit={handleSubmit(formSubmit)} className="py-2">
             {/* <ImageUpload onUpload={handleUpload} /> */}
             {/* {uploadedImageUrl && (
             <div>
@@ -156,101 +166,67 @@ const Form = ({ product, canteenId }: { product: Product, canteenId:string }) =>
               />
             </div>
           )} */}
-            <div className="my-2">
-              <label htmlFor="name" className="label">
-                Nama Produk
-              </label>
-              <input
+            <div className="my-3">
+              <InputWithLabel
+                htmlFor="name"
+                label="Nama Produk"
                 type="text"
-                id="name"
-                {...register("name", {
-                  required: "Nama produk dibutuhkan",
-                })}
-                className="text-medium py-2 px-4 border border-gray-300 rounded-lg bg-gray-100 w-full max-w-sm "
+                error={errors.name?.message}
+                register={register}
+                name="name"
+                validationSchema={{
+                  required: "Nama produk wajib diisi",
+                }}
               />
-              {errors.name?.message && (
-                <div className="text-error">{errors.name.message}</div>
-              )}
             </div>
-            <div className="my-2">
-              <label htmlFor="category" className="label">
-                Kategori
-              </label>
-              <select
-                id="category"
-                {...register("category", {
-                  required: "Kategori produk dibutuhkan",
-                })}
-                className="select select-bordered bg-gray-100 w-full max-w-sm"
-              >
-                {/* <option value="">Pilih Kategori</option> */}
-                <option value="makanan">Makanan</option>
-                <option value="minuman">Minuman</option>
-                <option value="cemilan">Cemilan</option>
-              </select>
-              {errors.category?.message && (
-                <div className="text-error">{errors.category.message}</div>
-              )}
-            </div>
-            <div className="my-2">
-              <label htmlFor="description" className="label">
-                Deskripsi
-              </label>
-              <input
-                type="text"
-                id="description"
-                {...register("description", {
-                  required: "Deskripsi produk dibutuhkan",
-                })}
-                className="input input-bordered w-full max-w-sm bg-gray-100"
+            <div className="my-6">
+              <SelectCustom
+                htmlFor="category"
+                label="Kategori"
+                type="select"
+                register={register}
+                name="category"
+                validationSchema={{ required: "Category is required" }}
+                error={errors.category?.message}
+                options={[
+                  { value: "makanan", label: "Makanan" },
+                  { value: "minuman", label: "Minuman" },
+                  { value: "cemilan", label: "Cemilan" },
+                ]}
               />
-              {errors.description?.message && (
-                <div className="text-error">{errors.description.message}</div>
-              )}
             </div>
-            <div className="my-2">
-              <label htmlFor="price" className="label">
-                Harga
-              </label>
-              <input
+            <div className="my-6">
+              <TextareaWithLabel
+                htmlFor="description"
+                label="Deskripsi"
+                error={errors.description?.message}
+                register={register}
+                name="description"
+                validationSchema={{
+                  required: "Deskripsi wajib diisi",
+                }}
+              />
+            </div>
+            <div className="my-6">
+              <InputWithLabel
+                htmlFor="price"
+                label="Harga"
                 type="number"
-                id="price"
-                {...register("price", {
-                  required: "Harga produk dibutuhkan",
-                })}
-                className="input input-bordered w-full max-w-sm bg-gray-100"
+                error={errors.price?.message}
+                register={register}
+                name="price"
+                validationSchema={{
+                  required: "Harga Produk Wajib Diisi",
+                }}
               />
-              {errors.price?.message && (
-                <div className="text-error">{errors.price.message}</div>
-              )}
             </div>
-            <div className="my-2">
-              <label htmlFor="countInStock" className="label">
-                Stok
-              </label>
-              <div className="flex items-center">
-                <button
-                  type="button"
-                  onClick={handleDecrement}
-                  className="btn btn-ePrimary border-0"
-                >
-                  -
-                </button>
-                <input
-                  type="text"
-                  id="countInStock"
-                  value={countInStockValue}
-                  readOnly
-                  className="input input-bordered w-full max-w-sm text-center bg-gray-100"
-                />
-                <button
-                  type="button"
-                  onClick={handleIncrement}
-                  className="btn btn-ePrimary border-0"
-                >
-                  +
-                </button>
-              </div>
+            <div className="my-6">
+              <StockCounter
+                label={"Stok"}
+                countInStockValue={countInStockValue}
+                handleIncrement={handleIncrement}
+                handleDecrement={handleDecrement}
+              />
             </div>
             <div className="my-2">
               <button

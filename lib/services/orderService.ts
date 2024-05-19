@@ -158,8 +158,23 @@ async function getAllOrderByCanteenIdAndStatus(
     return [];
   }
 }
+async function getAllOrder(): Promise<OrderDetail[]> {
+  try {
+    const q = query(collection(db, "order"));
+    const querySnapshot = await getDocs(q);
+    let orders: OrderDetail[] = [];
+    querySnapshot.forEach((doc) => {
+      orders.push(doc.data() as OrderDetail);
+    });
+    return orders;
+  } catch (error) {
+    console.error("Error fetching order data:", error);
+    return [];
+  }
+}
 
 const ordersService = {
+  getAllOrder,
   updateReadOrder,
   createOrder,
   getOrderById,

@@ -17,9 +17,66 @@ import {
 import { Canteen } from "../models/CanteenModel";
 import { get } from "http";
 import exp from "constants";
+import { CanteenRequest } from "../models/RequestModel";
+import { nanoid } from "nanoid";
+import { User } from "firebase/auth";
 
 export const revalidate = 3600;
 
+async function updateCanteenRequestStatus(requestId: string, status: string) {
+  try {
+    const requestRef = doc(db, "requestCanteen", requestId);
+    await updateDoc(requestRef, {
+      status: status,
+    });
+  } catch (error) {
+    console.error("Error updating request status:", error);
+  }
+}
+async function getRequestCanteenData(requestId: string): Promise<CanteenRequest> {
+  try {
+    const requestRef = doc(db, "requestCanteen", requestId);
+    const requestDoc = await getDoc(requestRef);
+    return requestDoc.data() as CanteenRequest;
+  } catch (error) {
+    console.error("Error fetching request data:", error);
+    return {} as CanteenRequest;
+  }
+}
+
+async function createRequestCanteen(canteen: Canteen, user:User): Promise<void> {
+  try {
+    const requestRef = collection(db, "requestCanteen");
+    const request_id = `RQS-${nanoid(4)}-${nanoid(8)}`;
+    const docRef = doc(requestRef, request_id)
+    await setDoc(docRef, {
+      id: request_id,
+      canteenName: canteen.name,
+      canteenLocation: canteen.location,
+      // canteenImage?:string;
+      canteenDescription: canteen.description,
+      canteenPhone: canteen.phone,
+      status:"Permintaan",
+      user:user
+    });
+  } catch (error) {
+    console.error("Error creating request canteen:", error);
+  }
+}
+async function getAllCanteenRequest(): Promise<CanteenRequest[]> {
+  try {
+    const docRef = collection(db, "requestCanteen");
+    const snapShot = await getDocs(docRef);
+    const canteenList: CanteenRequest[] = [];
+    snapShot.forEach((doc) => {
+      canteenList.push(doc.data() as CanteenRequest);
+    });
+    return canteenList;
+  } catch (error) {
+    console.error("Error fetching canteen data:", error);
+    return [];
+  }
+}
 
 async function getCanteenName(canteenId: string): Promise<string> {
   try {
@@ -44,10 +101,13 @@ async function getCanteenName(canteenId: string): Promise<string> {
   }
 }
 
-async function createCanteen(canteen: Canteen): Promise<void> {
+async function createCanteen(canteen: Canteen , id:string): Promise<void> {
   try {
+    const transaction_id = `CTN-${nanoid(4)}-${nanoid(8)}`;
     const canteenRef = collection(db, "canteen");
-    const newCanteenRef = await addDoc(canteenRef, {
+    const docRef = doc(canteenRef, id)
+    await setDoc(docRef, {
+      id: id,
       name: canteen.name,
       location: canteen.location,
       description: canteen.description,
@@ -58,13 +118,6 @@ async function createCanteen(canteen: Canteen): Promise<void> {
     });
 
     // Dapatkan ID kantin yang baru dibuat
-    const canteenId = newCanteenRef.id;
-
-    // Perbarui dokumen kantin dengan ID baru
-    await setDoc(doc(canteenRef, canteenId), {
-      ...canteen, // Salin properti kantin yang lain jika diperlukan
-      id: canteenId,
-    });
   } catch (error) {
     console.error("Error creating canteen:", error);
   }
@@ -108,7 +161,6 @@ async function updateCanteenData(
 
 async function getCanteenImagePath(canteenId: string): Promise<string> {
   try {
-    
     const canteenRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(canteenRef);
 
@@ -199,6 +251,10 @@ async function getAllCanteenData(): Promise<Canteen[]> {
   }
 }
 const canteenService = {
+  getRequestCanteenData,
+  updateCanteenRequestStatus,
+  getAllCanteenRequest,
+  createRequestCanteen,
   getCanteenData,
   getAllCanteenData,
   getCanteenBySlug,

@@ -6,14 +6,12 @@ import { Canteen } from "@/lib/models/CanteenModel";
 import canteenService from "@/lib/services/canteenService";
 import userService from "@/lib/services/userService";
 import { getSession, useSession } from "next-auth/react";
-import { nanoid } from "nanoid";
 
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { name, location, description, email,phone } = await request.json();
-
-
+  const { name, location, description, session, phone } = await request.json();
+  console.log(session);
 
   console.log(name, location, description, phone);
 
@@ -29,6 +27,11 @@ export const POST = async (request: NextRequest) => {
   //     }
   //   );
   // }
+  const user = {
+    email: session.user.email,
+    name: session.user.name,
+  } as User;
+
   const newCanteen = {
     name,
     location,
@@ -40,24 +43,22 @@ export const POST = async (request: NextRequest) => {
     phone,
   } as Canteen;
   try {
-
-    // canteenService.
-    const id = `CTN-${nanoid(4)}-${nanoid(8)}`;
-    canteenService.createCanteen(newCanteen,id);
+    canteenService.createRequestCanteen(newCanteen, user as any);
+    // canteenService.createCanteen(newCanteen);
     // const canteenId = await canteenService.getCanteenIdBySlug(slug);
-    userService.updateUserRole(email, "canteen");
-    userService.updateUserCanteen(email, id);
+    // userService.updateUserRole(session.user.email, "canteen");
+    // userService.updateUserCanteen(session.user.email, canteenId);
     // userService.createUser(newUser);
 
     return Response.json(
-      { message: "Kantin Berhasil Dibuat" },
+      { message: "Permintaan Kantin telah dibuat" },
       {
         status: 201,
       }
     );
   } catch (err: any) {
     return Response.json(
-      { message: "Gagal membuat kantin" },
+      { message: "Permintaan Kantin gagal dibuat" },
       {
         status: 500,
       }

@@ -5,7 +5,7 @@ import { auth } from "@/lib/firebase";
 import userService from "@/lib/services/userService";
 import { User } from "@/lib/models/UserModel";
 
-export const authOptions = {
+const authOptions = {
   pages: {
     signIn: "/signin",
     newUser: "/register",

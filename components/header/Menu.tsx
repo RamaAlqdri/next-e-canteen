@@ -54,7 +54,7 @@ const Menu = () => {
   const [hasFetched, setHasFetched] = useState(false);
   // setCanteenId(session?.user?.canteenId as string);
 
-  console.log(canteenId);
+  // console.log(canteenId);
   useEffect(() => {
 
     const fetchData = async () => {

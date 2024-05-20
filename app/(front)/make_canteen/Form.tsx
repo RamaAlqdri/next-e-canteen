@@ -23,7 +23,7 @@ type Inputs = {
 
 const Form = () => {
   const { data: session } = useSession();
-  const params = useSearchParams();
+
   const router = useRouter();
 
   const [uploadImageCanteen, setUploadImageCanteen] = useState(null);

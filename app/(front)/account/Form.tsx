@@ -38,8 +38,6 @@ const Form = () => {
       //   confirmPassword: "",
     },
   });
-  const params = useSearchParams();
-  let callbackUrl = params.get("callbackUrl") || "/";
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, email, password } = form;
     try {

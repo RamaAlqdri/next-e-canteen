@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -7,7 +7,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import InputWithLabel from "@/components/input/input";
 import Image from "next/image";
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 
 type Inputs = {
@@ -19,9 +23,15 @@ type Inputs = {
 
 const Form = () => {
   const { data: session } = useSession();
-  const params = useSearchParams();
   const router = useRouter();
-  let callbackUrl = params.get("callbackUrl") || "/";
+  const [callbackUrl, setCallbackUrl] = useState("/");
+
+  useEffect(() => {
+    // Pastikan kode ini hanya dijalankan di sisi klien
+    const searchParams = new URLSearchParams(window.location.search);
+    const url = searchParams.get("callbackUrl") || "/";
+    setCallbackUrl(url);
+  }, []);
   const {
     register,
     handleSubmit,
@@ -45,27 +55,31 @@ const Form = () => {
     if (session && session.user) {
       router.push(callbackUrl);
     }
-  }, [callbackUrl, params, router, session]);
+  }, [callbackUrl, router, session]);
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, email, password } = form;
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       await updateProfile(user, {
         displayName: name,
-
       });
-  
+
       await sendEmailVerification(user);
       toast.success("Email verifikasi telah dikirim ke email anda");
-  
+
       // Optional: Redirect or perform additional actions after successful registration
-      router.push("/signin?callbackUrl=${callbackUrl}&success=Account has been created");
-  
+      router.push(
+        "/signin?callbackUrl=${callbackUrl}&success=Account has been created"
+      );
     } catch (error: any) {
       console.error("Error in form submission:", error);
       let errorMessage = "An error occurred";
-  
+
       if (error.code === "auth/email-already-in-use") {
         errorMessage = "Email sudah ada";
       } else if (error.code === "auth/invalid-email") {
@@ -73,7 +87,7 @@ const Form = () => {
       } else if (error.code === "auth/weak-password") {
         errorMessage = "Password anda lemah";
       }
-  
+
       toast.error(errorMessage);
     }
   };

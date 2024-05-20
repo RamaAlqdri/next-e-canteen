@@ -14,16 +14,6 @@ export type OrderDetail = {
   };
   
 };
-export type Order = {
-  id?: string;
-  readBy: {
-    customer: boolean;
-    canteen: boolean;
-  };
-  customerId: string;
-  canteenId: string;
-  status: number;
-};
 
 export type OrderItem = {
   name: string;
@@ -34,5 +24,15 @@ export type OrderItem = {
   price: number;
   canteenId: string;
   
-
+  
+};
+export type Order = {
+  id?: string;
+  readBy: {
+    customer: boolean;
+    canteen: boolean;
+  };
+  customerId: string;
+  canteenId: string;
+  status: number;
 };

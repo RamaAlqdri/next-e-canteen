@@ -206,7 +206,7 @@ const Detail = ({
                       </div>
                     </div>
                     <div className="flex">
-                      {session?.user.canteen !== product?.canteenId &&
+                      {session?.user.canteenId !== product?.canteenId &&
                         product?.countInStock !== 0 && (
                           <div className="">
                             <AddToCart

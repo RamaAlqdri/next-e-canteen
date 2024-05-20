@@ -127,7 +127,9 @@ const CanteenList = () => {
       // Get statistics for the canteen
       const { totalPendapatanHasil } = getStatisticCanteen(
         index,
-        filteredOrders
+        filteredOrders,
+        new Date()
+
       );
 
       // Return an object that includes canteen details and its statistics

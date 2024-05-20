@@ -21,8 +21,8 @@ const Profil = ({ visible, setVisible }: Props) => {
   };
   const { clear } = useCartService();
   const canteen = () => {
-    if (session?.user?.canteen) {
-      router.push(`/canteen/${session.user.canteen}`);
+    if (session?.user?.canteenId) {
+      router.push(`/canteen/${session.user.canteenId}`);
     } else {
       // Handle case when 'canteen' is null or undefined
       console.error("Canteen not found in session user");

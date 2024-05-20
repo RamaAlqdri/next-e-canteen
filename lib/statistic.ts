@@ -378,11 +378,11 @@ function getTotalPendapatanBulanan(
   return totalPendapatanBulanan;
 }
 
-export function getStatisticCanteen(type: string, order: OrderDetail[]) {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1; // Ingat bahwa bulan dimulai dari 0 (Januari) hingga 11 (Desember)
-  const day = today.getDate();
+export function getStatisticCanteen(type: string, order: OrderDetail[], date:Date) {
+  // const today = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // Ingat bahwa bulan dimulai dari 0 (Januari) hingga 11 (Desember)
+  const day = date.getDate();
   if (type === "tahunan") {
     const dataHasil = getDataTahun(order, year);
     const totalPendapatanHasil = getTotalPendapatanTahunan(order, year);

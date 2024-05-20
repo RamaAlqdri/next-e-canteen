@@ -12,6 +12,8 @@ import {
   Tab,
   TabPanel,
   TabPanels,
+  DatePicker,
+  DatePickerValue,
 } from "@tremor/react";
 import {
   getStatisticCanteen,
@@ -38,10 +40,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import { db } from "@/lib/firebase";
 import productsService from "@/lib/services/productService";
 import ordersService from "@/lib/services/orderService";
 import ImageDownloader from "../image/imageShow";
+import { Canteen } from "@/lib/models/CanteenModel";
+import canteenService from "@/lib/services/canteenService";
 // import Papa from "papaparse";
 // import { CSVLink, CSVDownload } from "react-csv";
 
@@ -276,6 +282,7 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
     return () => {
       unsubscribe();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -749,11 +756,9 @@ const Dashboard = ({
   } else {
     canteenId = session?.user?.canteenId as string;
   }
-  // const datacsv = [
-  //   ["Name", "Email", "Phone"], // Header row
-  //   ["Alice", "alice@example.com", "123-456-7890"],
-  //   ["Bob", "bob@example.com", "987-654-3210"],
-  // ];
+  const [dateValue, setDateValue] = useState<Date>(new Date());
+  const [canteenData, setCanteenData] = useState<Canteen>();
+  const [typeData, setTypeData] = useState<string>("harian");
 
   const [totalPendapatan, setTotalPendapatan] = useState(0);
   const [data, setData] = useState<any>([]);
@@ -763,99 +768,118 @@ const Dashboard = ({
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-
-  function arrayToCSV(data: any) {
-    return data.map((row: any) => row.join(",")).join("\n");
-  }
-  function downloadCSV(
-    filename = "data.csv",
+  const downloadPDF = (
     canteenName: string,
     pendapatan: any,
-    index: any
-  ) {
-    // const csvData = arrayToCSV(data);
-    const csvData = arrayToCSV(makeCsv(canteenName, pendapatan, index));
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }
-  const makeCsv = (canteenName: string, pendapatan: any, index: any) => {
-    let date = new Date();
+    index: string,
+    date: Date
+  ) => {
+    // Generate the data array from your existing function
+    const data = makeData(canteenName, pendapatan);
     let contextHeader = "";
-    let header = "";
+    const days = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+    const months = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
 
     if (index === "Jam") {
-      header = "Hari";
-      // Get the day of the week from the date object
-      const days = [
-        "Minggu",
-        "Senin",
-        "Selasa",
-        "Rabu",
-        "Kamis",
-        "Jumat",
-        "Sabtu",
-      ];
-      contextHeader = days[date.getDay()]; // date.getDay() returns a number from 0 (Sunday) to 6 (Saturday)
+      console.log(date.getDate());
+
+      contextHeader = `${days[date.getDay()]}, ${date.getDate()} ${
+        months[date.getMonth()]
+      } ${date.getFullYear()}`;
+      console.log(contextHeader);
     } else if (index === "Minggu") {
-      header = "Bulan";
-      // Get the month from the date object
-      const months = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-      ];
-      contextHeader = months[date.getMonth()]; // date.getMonth() returns a number from 0 (January) to 11 (December)
+      contextHeader = `Bulan ${months[date.getMonth()]} ${date.getFullYear()}`;
     } else if (index === "Bulan") {
-      header = "Tahun";
-      // Get the full year
-      contextHeader = date.getFullYear().toString(); // date.getFullYear() returns a four-digit year (e.g., 2024)
+      contextHeader = `Tahun ${date.getFullYear().toString()}`;
     }
 
+    const doc = new jsPDF();
+    const headers = data[0]; // The headers are the first element of the array
+    const body = data.slice(1); // The rest is the body
+
+    doc.text(`Laporan Pendapatan ${canteenName}`, 105, 20, { align: "center" }); // Title for the PDF
+    doc.text(`${contextHeader}`, 105, 30, { align: "center" }); // Title for the PDF
+    autoTable(doc, {
+      head: [headers],
+      body: body,
+      startY: 37,
+      styles: { fillColor: [238, 160, 97] },
+      columnStyles: {
+        0: { fillColor: [255, 255, 255] },
+        1: { fillColor: [255, 255, 255] },
+        2: { fillColor: [255, 255, 255] },
+      },
+      theme: "grid",
+    });
+
+    doc.save(`Laporan_Pendapatan_${canteenName}.pdf`);
+  };
+  const makeData = (canteenName: string, pendapatan: any) => {
     return [
-      ["Kantin", header, "Pendapatan"],
-      [canteenName, contextHeader, String(`Rp${formatRupiah(pendapatan)}`)],
+      ["Nama Kantin", "Pendapatan"],
+      [canteenName, String(`Rp${formatRupiah(pendapatan)}`)],
     ];
   };
 
-  const handleStatistic = (type: string, order: OrderDetail[]) => {
+  const handleStatistic = (order: OrderDetail[], date: Date) => {
     setLoading(true);
     const { dataHasil, totalPendapatanHasil, dataMakananHasil } =
-      getStatisticCanteen(type, order);
+      getStatisticCanteen(typeData, order, date);
     setTotalPendapatan(totalPendapatanHasil);
     setData(dataHasil);
     setDataMakanan(dataMakananHasil);
-    if (type === "harian") {
+    if (typeData === "harian") {
       setIndex("Jam");
-    } else if (type === "bulanan") {
+    } else if (typeData === "bulanan") {
       setIndex("Minggu");
-    } else if (type === "tahunan") {
+    } else if (typeData === "tahunan") {
       setIndex("Bulan");
     }
     setLoading(false);
   };
+
   useEffect(() => {
-    handleStatistic(
-      "harian",
-      orderList.filter((order) => order.status === 6)
-    );
+    const fetchData = async () => {
+      try {
+        const canteenData = await canteenService.getCanteenData(canteenId);
+        setCanteenData(canteenData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(typeData); // Ini akan mencetak nilai terkini dari typeData setiap kali typeData berubah
+    handleStatistic(
+      orderList.filter((order) => order.status === 6),
+      dateValue
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeData, dateValue]); // Dependency array menunjukkan bahwa efek ini hanya berjalan ketika typeData berubah
 
   return loading ? (
     <div className=" space-y-4">
@@ -880,28 +904,45 @@ const Dashboard = ({
   ) : (
     <div className="space-y-4 ">
       <div className="rounded-b-2xl pt-3 flex justify-between bg-white shadow-md px-6 pb-4">
-        <div className="w-1/5 ">
+        <div className="w-1/5 flex space-x-2">
           <Select
             defaultValue="harian"
-            onValueChange={(v) =>
-              handleStatistic(
-                v,
-                orderList.filter((order) => order.status === 6)
-              )
-            }
+            onValueChange={(v) => {
+              setTypeData(v), console.log(typeData);
+            }}
             className=""
           >
             <SelectItem value="harian" className="">
               Harian
             </SelectItem>
-            <SelectItem value="bulanan">Mingguan</SelectItem>
-            <SelectItem value="tahunan">Bulanan</SelectItem>
+            <SelectItem value="bulanan">Bulanan</SelectItem>
+            <SelectItem value="tahunan">Tahunan</SelectItem>
           </Select>
         </div>
-        <div className="space-x-2">
+        <div className="flex space-x-2">
+          <div className="">
+            <DatePicker
+              value={dateValue}
+              enableClear={false}
+              enableYearNavigation
+              onValueChange={(v) => {
+                console.log(v);
+                if (v !== undefined) {
+                  setDateValue(v as Date);
+                }
+              }}
+              placeholder="Pilih Tanggal"
+            />
+          </div>
           <button
             onClick={() => {
-              downloadCSV("data.csv", "", totalPendapatan, index);
+              // downloadCSV("data.csv", "", totalPendapatan, index);
+              downloadPDF(
+                canteenData?.name as string,
+                totalPendapatan,
+                index,
+                dateValue
+              );
             }}
             className="text-xs text-red-600 hover:text-white font-medium hover:bg-red-600 px-2 py-2 border-red-600 border-2 rounded-xl"
           >

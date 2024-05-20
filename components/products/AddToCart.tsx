@@ -28,7 +28,7 @@ export default function AddToCart({
     increase(item);
   };
 
-  if (session?.user.canteen === item.canteenId) {
+  if (session?.user.canteenId === item.canteenId) {
     return null;
   }
 

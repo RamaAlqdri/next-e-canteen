@@ -23,6 +23,7 @@ const ImageDownloader = ({ imagePath }: { imagePath: string }) => {
       });
 
       console.log(imageUrl);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const downloadImage = () => {

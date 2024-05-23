@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 
 import { SubmitHandler } from "react-hook-form";
 
-import { Span } from "next/dist/trace";
+
 type Inputs = {
   name: string;
   email: string;

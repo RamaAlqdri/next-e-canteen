@@ -51,9 +51,11 @@ async function createRequestCanteen(canteen: Canteen, user:User): Promise<void> 
     const docRef = doc(requestRef, request_id)
     await setDoc(docRef, {
       id: request_id,
+      canteenId: canteen.id,
       canteenName: canteen.name,
       canteenLocation: canteen.location,
-      // canteenImage?:string;
+      canteenImage:canteen.image,
+      canteenQris:canteen.qris,
       canteenDescription: canteen.description,
       canteenPhone: canteen.phone,
       status:"Permintaan",
@@ -103,7 +105,7 @@ async function getCanteenName(canteenId: string): Promise<string> {
 
 async function createCanteen(canteen: Canteen , id:string): Promise<void> {
   try {
-    const transaction_id = `CTN-${nanoid(4)}-${nanoid(8)}`;
+    // const transaction_id = `CTN-${nanoid(4)}-${nanoid(8)}`;
     const canteenRef = collection(db, "canteen");
     const docRef = doc(canteenRef, id)
     await setDoc(docRef, {
@@ -112,6 +114,7 @@ async function createCanteen(canteen: Canteen , id:string): Promise<void> {
       location: canteen.location,
       description: canteen.description,
       image: canteen.image,
+      qris: canteen.qris,
       numReviews: canteen.numReviews,
       rating: canteen.rating,
       slug: canteen.slug,

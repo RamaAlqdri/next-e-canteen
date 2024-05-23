@@ -48,6 +48,7 @@ import ordersService from "@/lib/services/orderService";
 import ImageDownloader from "../image/imageShow";
 import { Canteen } from "@/lib/models/CanteenModel";
 import canteenService from "@/lib/services/canteenService";
+import ImageDisplay from "../image/imageShow";
 // import Papa from "papaparse";
 // import { CSVLink, CSVDownload } from "react-csv";
 
@@ -475,13 +476,18 @@ const ProductList = ({ props = "" }: { props: string }) => {
                     }}
                   >
                     <div className="w-20 h-20">
-                      <Image
+                      <ImageDisplay
+                        path={product.image}
+                        defaultPath="/images/product/default.jpg"
+                        imgStyle="aspect-square  relative rounded-xl"
+                      />
+                      {/* <Image
                         alt={"canteen image"}
                         src={product.image}
                         width={300}
                         height={300}
                         className="aspect-square relative rounded-xl"
-                      ></Image>
+                      ></Image> */}
                     </div>
                     <div className="flex  flex-col justify-between  ">
                       <p className="font-normal text-start ">{product.name}</p>
@@ -936,7 +942,7 @@ const Dashboard = ({
           <Select
             defaultValue="harian"
             onValueChange={(v) => {
-              setTypeData(v)
+              setTypeData(v);
               //  console.log(typeData);
             }}
             className=""

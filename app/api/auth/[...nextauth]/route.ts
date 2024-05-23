@@ -39,6 +39,7 @@ const authOptions = {
                 name: user.displayName,
                 email: user.email,
                 role: "user",
+                image: "",
               } as User;
               try {
                 // console.log(newUserDB)
@@ -49,7 +50,8 @@ const authOptions = {
                   email: user.email,
                   name: user.displayName,
                   emailVerified: user.emailVerified,
-                  role : newUserDB.role
+                  role : newUserDB.role,
+                  image: newUserDB.image,
                 };
               } catch (error) {
 
@@ -63,6 +65,7 @@ const authOptions = {
               emailVerified: user.emailVerified,
               role : userDB.role,
               canteenId: userDB.canteenId,
+              image: userDB.image,
             };
           } else {
 
@@ -84,6 +87,7 @@ const authOptions = {
         token.emailVerified = user.emailVerified;
         token.role = user.role;
         token.canteenId = user.canteenId;
+        token.image = user.image;
       }
       return token;
     },
@@ -95,6 +99,7 @@ const authOptions = {
         session.user.emailVerified = token.emailVerified;
         session.user.role = token.role;
         session.user.canteenId = token.canteenId;
+        session.user.image = token.image;
       }
       return session;
     },

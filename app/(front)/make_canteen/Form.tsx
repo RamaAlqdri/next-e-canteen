@@ -10,6 +10,8 @@ import { TextInput } from "@tremor/react";
 import ImageUpload from "@/components/image/ImageUpload";
 import InputWithLabel from "@/components/input/input";
 import TextareaWithLabel from "@/components/input/textarea";
+import imageService from "@/lib/services/imageService";
+import { nanoid } from "nanoid";
 
 
 type Inputs = {
@@ -28,11 +30,8 @@ const Form = () => {
 
   const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
   const [uploadImageQris, setUploadImageQris] = useState(null);
+  console.log(uploadImageCanteen);
 
-  // console.log(uploadImageCanteen);
-  // console.log(uploadImageQris);
-
-  //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
     handleSubmit,
@@ -52,6 +51,9 @@ const Form = () => {
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     const { name, location, description, phone } = form;
     try {
+      const id = `CTN-${nanoid(4)}-${nanoid(8)}`;
+      const imageUrl = `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/canteen/avatar/${id}`;
+      const qrisUrl = `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/canteen/qris/${id}`;
       const res = await fetch("/api/canteen/request", {
         method: "POST",
         headers: {
@@ -63,12 +65,19 @@ const Form = () => {
           description,
           session,
           phone,
+          id,
+          imageUrl,
+          qrisUrl,
+
+
           // uploadImageCanteen,
           // uploadImageQris,
         }),
       });
       console.log(res);
       if (res.ok) {
+        imageService.uploadImage(uploadImageCanteen, "canteen", id);
+        imageService.uploadImage(uploadImageQris, "qris", id);
         return router.push("/");
       } else {
         const data = await res.json();

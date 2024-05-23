@@ -12,6 +12,7 @@ import { capitalizeText } from "@/lib/utils";
 import { Suspense } from "react";
 import Await from "@/components/handle/await";
 import { Canteen } from "@/lib/models/CanteenModel";
+import ImageDisplay from "../image/imageShow";
 // import Papa from "papaparse";
 
 const Menu = () => {
@@ -23,6 +24,7 @@ const Menu = () => {
   }, []);
 
   const { data: session } = useSession();
+  // console.log(session);
   const makeCanteen = () => {
     router.push("/make_canteen");
   };
@@ -56,7 +58,6 @@ const Menu = () => {
 
   // console.log(canteenId);
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         if (canteenData === undefined && canteenId && !hasFetched) {
@@ -168,12 +169,10 @@ const Menu = () => {
                             <div className="flex items-center space-x-2">
                               <p>{canteenData.name}</p>
                               <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
-                                <Image
-                                  src={canteenData.image}
-                                  alt="avatar"
-                                  width={300}
-                                  height={300}
-                                  className="object-cover h-full w-full"
+                                <ImageDisplay
+                                  path={canteenData.image}
+                                  defaultPath="/images/canteen/default.png"
+                                  imgStyle="object-cover aspect-square h-full w-full"
                                 />
                               </div>
                             </div>
@@ -184,12 +183,10 @@ const Menu = () => {
                           <>
                             {session.user.name}
                             <div className="relative h-10 w-10 ml-2 rounded-full overflow-hidden">
-                              <Image
-                                src="/images/avatar/my.png"
-                                alt="avatar"
-                                width={300}
-                                height={300}
-                                className="object-cover"
+                              <ImageDisplay
+                                path={session.user.image as string||""}
+                                defaultPath="/images/avatar/default.jpg"
+                                imgStyle="object-cover aspect-square"
                               />
                             </div>
                           </>

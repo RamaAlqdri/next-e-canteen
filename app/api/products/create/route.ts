@@ -13,7 +13,7 @@ import { parse } from "path";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { category, countInStock, name, price, description, canteenId } =
+  const { id,category, countInStock, name, price, description, canteenId,image } =
     await request.json();
   //   console.log(countInStock);
   //   console.log("tes")
@@ -37,10 +37,11 @@ export const POST = async (request: NextRequest) => {
     );
   }
   const newProduct = {
+    id,
     canteenId: canteenId,
     name,
     slug: productSlug,
-    image: "/images/product/product2.jpg",
+    image,
     price: parseInt(price),
     description,
     category,

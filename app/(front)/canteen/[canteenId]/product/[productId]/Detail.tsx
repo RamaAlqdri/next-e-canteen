@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import productsService from "@/lib/services/productService";
 import canteenService from "@/lib/services/canteenService";
 import { Comments } from "@/lib/models/CommentModel";
+import ImageDisplay from "@/components/image/imageShow";
 
 // const product = {
 //   _id: "aL65uv5TH6GKD2LYscVW",
@@ -123,15 +124,12 @@ const Detail = ({
           </div> */}
           <div className="bg-white mb-8 p-4 mt-6 grid md:grid-cols-5 rounded-3xl shadow-md">
             <div className="relative max-h-[26rem] w-full aspect-square md:col-span-2 p-2">
-              <Image
-                src={product?.image || ""}
-                alt={product?.name || ""}
-                width={640}
-                height={640}
-                // sizes="100vw"
-                // style={{ width: "100%", height: "auto" }}
-                className="rounded-2xl object-cover w-full h-full"
+              <ImageDisplay
+                path={product?.image || ""}
+                defaultPath="/images/product/default.jpg"
+                imgStyle="rounded-2xl object-cover w-full h-full"
               />
+
             </div>
             <div className="md:col-span-3 p-2 ml-2 flex flex-col">
               <div>

@@ -12,7 +12,7 @@ async function getImage(imagePath: string): Promise<string> {
   }
 }
 
-async function uploadImage(file: File, uploadFor: string, id: string) {
+async function uploadImage(file: any, uploadFor: string, id: string) {
   let path = "";
   if (uploadFor === "canteen") {
     path = `canteen/avatar/${id}`;

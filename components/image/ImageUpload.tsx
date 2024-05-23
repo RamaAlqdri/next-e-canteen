@@ -2,14 +2,20 @@ import { useState } from "react";
 import Image from "next/image";
 import { storage } from "@/lib/firebase";
 import { ref, uploadBytes } from "firebase/storage";
+import ImageDisplay from "./imageShow";
+import { set } from "firebase/database";
 
 interface ImageUploadProps {
   maxSize: number;
   setImageFile: (file: any) => void;
+  path?: string;
 }
 
-const ImageUpload = ({ maxSize, setImageFile }: ImageUploadProps) => {
+const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
   const [image, setImage] = useState(null);
+  // const [pathImage, setPathImage] = useState(path || "");
+  const [isChanged, setIsChanged] = useState(false);
+  console.log(path);
 
   const handleImageChange = (e: any) => {
     const file = e.target.files[0];
@@ -18,10 +24,12 @@ const ImageUpload = ({ maxSize, setImageFile }: ImageUploadProps) => {
       e.target.value = null;
       return;
     }
+    // setIsChanged(true);
     setImage(file);
     setImageFile(file);
+    console.log(image);
   };
-  const random = Math.random().toString(36).substring(7);
+
   const [color, setColor] = useState("gray");
 
   const randomId = Math.random().toString(36).substring(7);
@@ -40,14 +48,14 @@ const ImageUpload = ({ maxSize, setImageFile }: ImageUploadProps) => {
         <>
           <label
             htmlFor={randomId}
-            className="h-full flex w-full  justify-center"
+            className="h-full flex flex-col items-center w-full   justify-center"
           >
             <button
               onClick={() => {
                 setImage(null);
                 setImageFile(null);
               }}
-              className="absolute w-full   "
+              className="    "
             >
               <svg
                 width="20"
@@ -67,6 +75,13 @@ const ImageUpload = ({ maxSize, setImageFile }: ImageUploadProps) => {
                 />
               </svg>
             </button>
+
+            {/* <ImageDisplay
+                path={path as string}
+                imgStyle="object-cover border aspect-square w-3/6 rounded-2xl"
+                defaultPath=""
+              /> */}
+
             <Image
               src={URL.createObjectURL(image)}
               alt="Preview"
@@ -129,7 +144,10 @@ const ImageUpload = ({ maxSize, setImageFile }: ImageUploadProps) => {
         className="hidden"
         type="file"
         accept="image/*"
-        onChange={handleImageChange}
+        onChange={
+          handleImageChange
+
+        }
       ></input>
 
       {/* <img src={} alt="Preview" style={{ maxWidth: '100%', marginTop: '10px' }} /> */}

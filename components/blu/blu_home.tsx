@@ -46,6 +46,7 @@ import CanteenBeranda from "@/components/canteen/canteen_home";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Canteen } from "@/lib/models/CanteenModel";
+import ImageDisplay from "../image/imageShow";
 
 const BLUBeranda = () => {
   return (
@@ -81,12 +82,10 @@ const CanteenList = () => {
   const router = useRouter();
   const [canteenData, setCanteenData] = useState<Canteen[]>([]);
   const [orderList, setOrderList] = useState<OrderDetail[]>([]);
-  const downloadPDF = (
-    orderList: OrderDetail[],
-  ) => {
+  const downloadPDF = (orderList: OrderDetail[]) => {
     const date = new Date();
     // Generate the data array from your existing function
-    const data = makeData( orderList, date);
+    const data = makeData(orderList, date);
 
     const months = [
       "Januari",
@@ -103,13 +102,17 @@ const CanteenList = () => {
       "Desember",
     ];
 
-
     const doc = new jsPDF();
     const headers = data[0];
     const body = data.slice(1);
 
     doc.text(`Laporan Pendapatan Kantin`, 105, 20, { align: "center" });
-    doc.text(`Bulan ${months[date.getMonth()]} ${date.getFullYear()}`, 105, 30, { align: "center" });
+    doc.text(
+      `Bulan ${months[date.getMonth()]} ${date.getFullYear()}`,
+      105,
+      30,
+      { align: "center" }
+    );
     autoTable(doc, {
       head: [headers],
       body: body,
@@ -124,13 +127,14 @@ const CanteenList = () => {
 
       theme: "grid",
     });
-    
-    doc.save(`Laporan_Pendapatan_Kantin_Bulan_${months[date.getMonth()]}_${date.getFullYear()}.pdf`);
+
+    doc.save(
+      `Laporan_Pendapatan_Kantin_Bulan_${
+        months[date.getMonth()]
+      }_${date.getFullYear()}.pdf`
+    );
   };
-  const makeData = (
-    orderList: OrderDetail[],
-    date: Date
-  ) => {
+  const makeData = (orderList: OrderDetail[], date: Date) => {
     const data = canteenData.map((canteen) => {
       // Filter orders for the current canteen
       const filteredOrders = orderList.filter(
@@ -153,7 +157,7 @@ const CanteenList = () => {
     });
 
     return [
-      ["Kantin","Total Transaksi", "Pendapatan"],
+      ["Kantin", "Total Transaksi", "Pendapatan"],
       ...data.map((item) => [
         item.canteenName,
         item.totalTransaksiHasil,
@@ -271,13 +275,18 @@ const CanteenList = () => {
                   }}
                 >
                   <div className="w-20 h-20">
-                    <Image
+                    <ImageDisplay
+                      path={canteen.image}
+                      defaultPath="/images/canteen/default.jpg"
+                      imgStyle="aspect-square relative rounded-xl"
+                    />
+                    {/* <Image
                       alt={"canteen image"}
                       src={canteen.image}
                       width={300}
                       height={300}
                       className="aspect-square relative rounded-xl"
-                    ></Image>
+                    ></Image> */}
                   </div>
                   <div className="flex  flex-col justify-between  ">
                     <p className="font-normal text-start">{canteen.name}</p>

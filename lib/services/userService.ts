@@ -26,6 +26,7 @@ async function createUser(user: User) {
       id : user.id,
       name: user.name,
       email: user.email,
+      image: "",
 
       role: "user",
     });

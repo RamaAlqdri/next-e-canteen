@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 
 import { nanoid } from "nanoid";
 import { format } from "date-fns-tz";
+import ImageDisplay from "@/components/image/imageShow";
 
 export default function CartDetails() {
   const router = useRouter();
@@ -57,8 +58,8 @@ export default function CartDetails() {
           createdAt: createdAt,
           readBy: {
             customer: false,
-            canteen : false
-          }
+            canteen: false,
+          },
         }),
       });
 
@@ -127,13 +128,12 @@ export default function CartDetails() {
                           href={`/product/${item.slug}`}
                           className="flex items-center sm:ml-3"
                         >
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={300}
-                            height={300}
-                            className="object-cover sm:h-14 rounded-xl  sm:w-14 h-10 w-10"
+                          <ImageDisplay
+                            path={item.image}
+                            defaultPath="/images/product/default.jpg"
+                            imgStyle="object-cover sm:h-14 rounded-xl  sm:w-14 h-10 w-10"
                           />
+
                           <span className="ml-2 px-2">{item.name}</span>
                         </Link>
                       </td>

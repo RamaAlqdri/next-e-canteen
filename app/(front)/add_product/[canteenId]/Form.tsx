@@ -13,6 +13,8 @@ import InputWithLabel from "@/components/input/input";
 import TextareaWithLabel from "@/components/input/textarea";
 import SelectCustom from "@/components/input/select";
 import StockCounter from "@/components/input/count";
+import { nanoid } from "nanoid";
+import imageService from "@/lib/services/imageService";
 
 type Inputs = {
   category: string;
@@ -29,11 +31,6 @@ const Form = ({ canteenId }: { canteenId: string }) => {
   const router = useRouter();
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
-
-  const handleUpload = (imageUrl: any) => {
-    setUploadedImageUrl(imageUrl);
-  };
-  //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
     handleSubmit,
@@ -72,15 +69,19 @@ const Form = ({ canteenId }: { canteenId: string }) => {
 
     // console.log(form);
     try {
+      const id = `PDT-${nanoid(4)}-${nanoid(8)}`;
+      const imageUrl = `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/product/avatar/${id}`;
       const res = await fetch("/api/products/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id,
           category,
           countInStock,
           name,
+          image: imageUrl,
           price,
           description,
           canteenId: canteenId,
@@ -88,6 +89,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
       });
       // console.log(res);
       if (res.ok) {
+        imageService.uploadImage(uploadedImageUrl, "product", id);
         // return router.push(`/canteen/${session?.user.canteen}`);
         return router.back();
         // router.reload();
@@ -183,7 +185,16 @@ const Form = ({ canteenId }: { canteenId: string }) => {
                 handleDecrement={handleDecrement}
               />
             </div>
-            <div className="">
+            <div>
+              <label
+                htmlFor="imageProfile"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                Gambar Produk
+              </label>
+              <ImageUpload maxSize={200} setImageFile={setUploadedImageUrl} />
+            </div>
+            <div className="my-4">
               <button
                 type="submit"
                 disabled={isSubmitting}

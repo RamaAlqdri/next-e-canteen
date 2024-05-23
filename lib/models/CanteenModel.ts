@@ -8,4 +8,5 @@ export type Canteen = {
   description: string;
   rating: number;
   numReviews: number;
+  qris: string;
 };

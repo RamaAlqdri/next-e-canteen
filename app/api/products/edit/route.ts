@@ -39,7 +39,7 @@ export const POST = async (request: NextRequest) => {
     canteenId,
     name,
     slug: productSlug,
-    image: "/images/product/product2.jpg",
+    image: "/images/product/default.jpg",
     price: parseInt(price),
     description,
     category,

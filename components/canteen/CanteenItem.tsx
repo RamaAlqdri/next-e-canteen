@@ -6,6 +6,7 @@ import { formatRupiah } from "@/lib/utils";
 // import AddToCart from "./AddToCart";
 import { convertDocToObj } from "@/lib/utils";
 import { Canteen } from "@/lib/models/CanteenModel";
+import ImageDisplay from "../image/imageShow";
 
 export default function CanteenItem({ canteen }: { canteen: Canteen }) {
   return (
@@ -13,13 +14,18 @@ export default function CanteenItem({ canteen }: { canteen: Canteen }) {
       <div className="   ">
         <div className="w-full aspect-square  h-[65%]  sm:w-full p-3">
           <Link href={`/canteen/${canteen.id}`} className="">
-            <Image
+            <ImageDisplay
+            path={canteen.image}
+            defaultPath="/images/canteen/default.jpg"
+            imgStyle="object-cover aspect-square h-full rounded-2xl  w-full"
+            />
+            {/* <Image
               src={canteen.image}
               alt={canteen.name}
               width={300}
               height={300}
               className="object-cover h-full rounded-2xl  w-full"
-            />
+            /> */}
           </Link>
         </div>
         <div className="pb-4 pl-4    justify-normal ">

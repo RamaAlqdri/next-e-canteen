@@ -14,6 +14,7 @@ import { Product } from "@/lib/models/ProductModels";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ImageDisplay from "@/components/image/imageShow";
 
 const UserBeranda = () => {
   const [canteenData, setCanteenData] = useState<Canteen[]>([]);
@@ -53,6 +54,7 @@ const UserBeranda = () => {
   return (
     <div className="mb-20">
       <div className="w-full mt-4">
+
         <div className="carousel-item rounded-2xl relative w-full">
           <Image
             src="/images/banner/banner1.png"

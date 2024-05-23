@@ -228,7 +228,16 @@ const Form = ({
                 handleDecrement={handleDecrement}
               />
             </div>
-            <div className="my-2">
+            <div>
+              <label
+                htmlFor="imageProfile"
+                className="ml-4 absolute text-sm rounded-full font-light text-gray-700 -mt-2 px-2 bg-white"
+              >
+                Gambar Produk
+              </label>
+              <ImageUpload maxSize={200} setImageFile={setUploadedImageUrl} path={product.image} />
+            </div>
+            <div className="my-4">
               <button
                 type="submit"
                 disabled={isSubmitting}

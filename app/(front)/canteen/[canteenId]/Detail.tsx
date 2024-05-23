@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { text } from "stream/consumers";
 import productsService from "@/lib/services/productService";
 import canteenService from "@/lib/services/canteenService";
+import ImageDisplay from "@/components/image/imageShow";
 
 const Detail = ({ canteenId }: { canteenId: string }) => {
 
@@ -78,12 +79,10 @@ const Detail = ({ canteenId }: { canteenId: string }) => {
         <div className="w-full mt-6 md:h-36 shadow-lg h-24 flex bg-white justify-between items-center  rounded-t-2xl rounded-b-md px-4  ">
           <div className="md:h-full  justify-center flex items-center ">
             <div className="sm:h-16 sm:w-16 relative  md:w-24 md:h-24  h-16 w-16">
-              <Image
-                src={canteenData?.image||""}
-                alt={canteenData?.name||""}
-                width={300}
-                height={300}
-                className="object-cover h-full w-full rounded-xl  "
+              <ImageDisplay
+                path={canteenData?.image||""}
+                defaultPath="/images/canteen/default.jpg"
+                imgStyle="object-cover aspect-square h-full w-full rounded-xl"
               />
             </div>
           </div>

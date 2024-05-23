@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { name, location, description, email,phone } = await request.json();
+  const { name, location, description, email,phone,id,image,qris } = await request.json();
 
 
 
@@ -30,10 +30,12 @@ export const POST = async (request: NextRequest) => {
   //   );
   // }
   const newCanteen = {
+    id,
     name,
     location,
     description,
-    image: "/images/canteen/canteen1.jpg",
+    image,
+    qris,
     numReviews: 0,
     rating: 0,
     slug,
@@ -42,7 +44,7 @@ export const POST = async (request: NextRequest) => {
   try {
 
     // canteenService.
-    const id = `CTN-${nanoid(4)}-${nanoid(8)}`;
+    // const id = `CTN-${nanoid(4)}-${nanoid(8)}`;
     canteenService.createCanteen(newCanteen,id);
     // const canteenId = await canteenService.getCanteenIdBySlug(slug);
     userService.updateUserRole(email, "canteen");

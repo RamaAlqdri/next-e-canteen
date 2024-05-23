@@ -11,6 +11,7 @@ import { Canteen } from "@/lib/models/CanteenModel";
 import { useSession } from "next-auth/react";
 import { capitalizeText } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import ImageDisplay from "../image/imageShow";
 
 export default function ProductItem({
   product,
@@ -39,12 +40,10 @@ export default function ProductItem({
             href={`${canteen}${product.canteenId}/product/${product.id}`}
             className=""
           >
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={300}
-              height={300}
-              className="object-cover h-full rounded-2xl  w-full"
+            <ImageDisplay
+              path={product.image}
+              defaultPath="/images/product/default.jpg"
+              imgStyle="object-cover h-full rounded-2xl  w-full"
             />
           </Link>
         </div>

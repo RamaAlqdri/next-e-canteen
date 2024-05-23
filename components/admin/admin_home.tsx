@@ -43,6 +43,7 @@ import { CanteenRequest } from "@/lib/models/RequestModel";
 import router from "next/router";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
+import ImageDisplay from "../image/imageShow";
 
 const AdminBeranda = () => {
   return (
@@ -294,13 +295,18 @@ const CanteenList = () => {
                   }}
                 >
                   <div className="w-20 h-20">
-                    <Image
+                    <ImageDisplay
+                    path={canteen.image}
+                    defaultPath="/images/canteen/default.jpg"
+                    imgStyle="aspect-square relative rounded-xl"
+                    />
+                    {/* <Image
                       alt={"canteen image"}
                       src={canteen.image}
                       width={300}
                       height={300}
                       className="aspect-square relative rounded-xl"
-                    ></Image>
+                    ></Image> */}
                   </div>
                   <div className="flex  flex-col justify-between  ">
                     <p className="font-normal text-start">{canteen.name}</p>

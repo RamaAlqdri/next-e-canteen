@@ -21,11 +21,14 @@ const Form = ({ requestId }: { requestId: string }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: requestCanteen?.canteenId,
           name: requestCanteen?.canteenName,
           location: requestCanteen?.canteenLocation,
           description: requestCanteen?.canteenDescription,
           email: requestCanteen?.user.email,
           phone: requestCanteen?.canteenPhone,
+          image: requestCanteen?.canteenImage,
+          qris: requestCanteen?.canteenQris,
         }),
       });
       if (res.ok) {

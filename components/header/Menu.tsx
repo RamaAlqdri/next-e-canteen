@@ -60,14 +60,14 @@ const Menu = () => {
     const fetchData = async () => {
       try {
         if (canteenData === undefined && canteenId && !hasFetched) {
-          console.log(canteenId);
+          // console.log(canteenId);
           const fetchedCanteenData = await canteenService.getCanteenData(
             canteenId
           );
-          console.log(fetchedCanteenData);
+          // console.log(fetchedCanteenData);
           setCanteenData(fetchedCanteenData);
 
-          console.log("Data fetched");
+          // console.log("Data fetched");
           setHasFetched(true);
         } else {
         }
@@ -80,7 +80,7 @@ const Menu = () => {
       fetchData();
     }
     // }
-    console.log(canteenData);
+    // console.log(canteenData);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canteenId]);

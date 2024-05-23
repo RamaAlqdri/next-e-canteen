@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 
 import {User} from "@/lib/models/UserModel";
 import userService from "@/lib/services/userService";
+import toast from "react-hot-toast";
 
 export const POST = async (request: NextRequest) => {
   const { name, email, password } = await request.json();
@@ -11,7 +12,7 @@ export const POST = async (request: NextRequest) => {
 
   const existingUser = await userService.getUserByEmail(email);
   if (existingUser.email) {
-    console.error("User already exists");
+    toast.error("User already exists");
     return Response.json(
       { message: "User already exists" },
       {

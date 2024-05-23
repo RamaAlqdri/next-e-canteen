@@ -157,12 +157,12 @@ async function deleteProduct(canteenId: string, productSlug: string) {
     //   canteenData.docs[0].id,
     //   "product"
     // );
-    console.log(canteenData);
+    // console.log(canteenData);
     const productId = await getProductIdByProductSlugandCanteenId(
       productSlug,
       canteenId
     );
-    console.log(productId);
+    // console.log(productId);
     const productRef = doc(
       db,
       "canteen",
@@ -424,7 +424,7 @@ async function writeComment(
   comment: Comments
 ) {
   try {
-    console.log("hehe")
+    // console.log("hehe")
     const productRef = collection(
       db,
       "canteen",
@@ -438,14 +438,14 @@ async function writeComment(
       rating: comment.rating,
       content: comment.content,
     });
-    console.log("hehe")
+    // console.log("hehe")
 
     const commentId = newComment.id;
     await setDoc(doc(productRef, commentId), {
       ...comment,
       id: commentId,
     });
-    console.log("hehe")
+    // console.log("hehe")
   } catch (error) {
     console.error("Error writing comment data:", error);
   }

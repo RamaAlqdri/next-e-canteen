@@ -32,14 +32,14 @@ const SelectCustom: React.FC<FormFieldProps> = ({
           <input
             id={htmlFor}
             {...register(name, validationSchema)}
-            className="w-full text-gray-600 font-light text-sm focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
+            className="w-full text-gray-900 text-sm focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
           />
         )}
         {type === "select" && (
           <select
             id={htmlFor}
             {...register(name, validationSchema)}
-            className="w-full text-gray-600 font-light text-sm focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
+            className="w-full text-gray-900 text-sm focus:border-[#EEA147] focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
           >
             {options?.map(option => (
               <option key={option.value} value={option.value}>

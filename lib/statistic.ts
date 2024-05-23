@@ -1,6 +1,5 @@
 import { OrderDetail } from "./models/OrderModel";
 
-
 function getDataTahun(
   orders: OrderDetail[],
   year: number
@@ -56,7 +55,7 @@ function getDataHarian(
 
     return orderYear === year && orderMonth === month && orderDay === day;
   });
-//   console.log(ordersHarian);
+  //   console.log(ordersHarian);
 
   // Iterasi setiap 2 jam dari 00:00 hingga 22:00
   for (let hour = 0; hour < 24; hour += 1) {
@@ -87,11 +86,11 @@ function getDataBulanan(
   // Inisialisasi array untuk menyimpan data per minggu
   const dataBulanan: { Minggu: string; Pendapatan: number }[] = [];
 
-//   orders.map((order) => {
-//     console.log(new Date(order.createdAt).getMonth());
-//   });
-//   console.log(year);
-//   console.log(month);
+  //   orders.map((order) => {
+  //     console.log(new Date(order.createdAt).getMonth());
+  //   });
+  //   console.log(year);
+  //   console.log(month);
 
   // Filter pesanan berdasarkan tahun dan bulan
   const ordersBulanan = orders.filter(
@@ -99,7 +98,7 @@ function getDataBulanan(
       new Date(order.createdAt).getFullYear() === year &&
       new Date(order.createdAt).getUTCMonth() === month
   );
-//   console.log(ordersBulanan);
+  //   console.log(ordersBulanan);
 
   // Iterasi setiap minggu dalam bulan
   let currentDate = new Date(year, month, 1);
@@ -137,7 +136,23 @@ function getDataBulanan(
 export function valueFormatter(quantity: number): string {
   return `${quantity} produk`;
 }
-
+function getFullMonthName(month: number): string {
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+  return months[month];
+}
 function getMonthName(month: number): string {
   const months = [
     "Jan",
@@ -315,7 +330,10 @@ export const dataFormatterSingkat = (number: number) => {
   return formattedNumber.replace(",00", "");
 };
 
-function getTotalPendapatanTahunan(orders: OrderDetail[], year: number): number {
+function getTotalPendapatanTahunan(
+  orders: OrderDetail[],
+  year: number
+): number {
   // Filter pesanan berdasarkan tahun
   const ordersTahun = orders.filter(
     (order) => new Date(order.createdAt).getFullYear() === year
@@ -346,7 +364,7 @@ function getTotalPendapatanHarian(
       orderDate.getUTCDate() === day
     );
   });
-//   console.log(ordersHarian.length);
+  //   console.log(ordersHarian.length);
 
   // Hitung total pendapatan dari pesanan-pesanan pada hari tersebut
   const totalPendapatanHarian = ordersHarian.reduce(
@@ -378,7 +396,116 @@ function getTotalPendapatanBulanan(
   return totalPendapatanBulanan;
 }
 
-export function getStatisticCanteen(type: string, order: OrderDetail[], date:Date) {
+function getTotalTransaksiHarian(
+  orders: OrderDetail[],
+  year: number,
+  month: number,
+  day: number
+): number {
+  // Filter pesanan berdasarkan tahun, bulan, dan hari
+  month = month - 1;
+  const ordersHarian = orders.filter((order) => {
+    const orderDate = new Date(order.createdAt);
+    return (
+      orderDate.getFullYear() === year &&
+      orderDate.getUTCMonth() === month &&
+      orderDate.getUTCDate() === day
+    );
+  });
+
+  return ordersHarian.length;
+}
+function getTotalTransaksiBulanan(
+  orders: OrderDetail[],
+  year: number,
+  month: number
+): number {
+  month = month - 1;
+  // Filter pesanan berdasarkan tahun dan bulan
+  const ordersBulanan = orders.filter(
+    (order) =>
+      new Date(order.createdAt).getFullYear() === year &&
+      new Date(order.createdAt).getUTCMonth() === month
+  );
+
+  return ordersBulanan.length;
+}
+function getTotalTransaksiTahunan(orders: OrderDetail[], year: number): number {
+  // Filter pesanan berdasarkan tahun
+  const ordersTahun = orders.filter(
+    (order) => new Date(order.createdAt).getFullYear() === year
+  );
+
+  return ordersTahun.length;
+}
+
+function getArrayDataHarianSebulan(
+  orders: OrderDetail[],
+  year: number,
+  month: number
+): { Date: string; TotalTransaksi: number; Pendapatan: number }[] {
+  const dataHarian: {
+    Date: string;
+    TotalTransaksi: number;
+    Pendapatan: number;
+  }[] = [];
+  // Iterasi untuk setiap hari dalam bulan
+  const daysInMonth = new Date(year, month, 0).getDate();
+  for (let day = 1; day <= daysInMonth; day++) {
+    const ordersHarian = orders.filter((order) => {
+      const orderDate = new Date(order.createdAt);
+      return (
+        orderDate.getFullYear() === year &&
+        orderDate.getMonth() + 1 === month &&
+        orderDate.getDate() === day
+      );
+    });
+
+    const totalPendapatanHarian = ordersHarian.reduce(
+      (total, order) => total + order.itemsPrice,
+      0
+    );
+
+    dataHarian.push({
+      Date: `${day}`,
+      TotalTransaksi: ordersHarian.length,
+      Pendapatan: totalPendapatanHarian,
+    });
+  }
+
+  return dataHarian;
+}
+function getDataBulananPerTahun(
+  orders: OrderDetail[],
+  year: number
+): { Date: string; TotalTransaksi: number; Pendapatan: number }[] {
+  const dataBulanan: { Date: string; TotalTransaksi: number; Pendapatan: number }[] = [];
+
+  for (let month = 1; month <= 12; month++) {
+    const ordersBulanan = orders.filter(order => {
+      const orderDate = new Date(order.createdAt);
+      return (
+        orderDate.getFullYear() === year &&
+        orderDate.getMonth() + 1 === month
+      );
+    });
+
+    const totalPendapatanBulanan = ordersBulanan.reduce(
+      (total, order) => total + order.itemsPrice,
+      0
+    );
+
+    dataBulanan.push({ Date: getFullMonthName(month - 1), TotalTransaksi: ordersBulanan.length, Pendapatan: totalPendapatanBulanan });
+  }
+
+  return dataBulanan;
+}
+
+export function getStatisticCanteen(
+  type: string,
+  order: OrderDetail[],
+  date: Date
+) {
   // const today = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1; // Ingat bahwa bulan dimulai dari 0 (Januari) hingga 11 (Desember)
@@ -387,18 +514,51 @@ export function getStatisticCanteen(type: string, order: OrderDetail[], date:Dat
     const dataHasil = getDataTahun(order, year);
     const totalPendapatanHasil = getTotalPendapatanTahunan(order, year);
     const dataMakananHasil = getDataMakananTahunan(order, year);
-    return { dataHasil, totalPendapatanHasil, dataMakananHasil };
+    const totalTransaksiHasil = getTotalTransaksiTahunan(order, year);
+    const data = getDataBulananPerTahun(order, year);
+    return {
+      dataHasil,
+      totalPendapatanHasil,
+      dataMakananHasil,
+      totalTransaksiHasil,
+      data,
+    };
   } else if (type === "harian") {
     const dataHasil = getDataHarian(order, year, month, day);
-    const totalPendapatanHasil = getTotalPendapatanHarian(order, year, month, day);
+    const totalPendapatanHasil = getTotalPendapatanHarian(
+      order,
+      year,
+      month,
+      day
+    );
     const dataMakananHasil = getDataMakananHarian(order, year, month, day);
-    return { dataHasil, totalPendapatanHasil, dataMakananHasil };
+    const totalTransaksiHasil = getTotalTransaksiHarian(
+      order,
+      year,
+      month,
+      day
+    );
+    return {
+      dataHasil,
+      totalPendapatanHasil,
+      dataMakananHasil,
+      totalTransaksiHasil,
+      data:[],
+    };
   } else if (type === "bulanan") {
     const dataHasil = getDataBulanan(order, year, month);
     const totalPendapatanHasil = getTotalPendapatanBulanan(order, year, month);
     const dataMakananHasil = getDataMakananBulanan(order, year, month);
-    return { dataHasil, totalPendapatanHasil, dataMakananHasil };
+    const totalTransaksiHasil = getTotalTransaksiBulanan(order, year, month);
+    const data = getArrayDataHarianSebulan(order, year, month);
+    return {
+      dataHasil,
+      totalPendapatanHasil,
+      dataMakananHasil,
+      totalTransaksiHasil,
+      data,
+    };
   } else {
-    return { dataHasil: [], totalPendapatanHasil: 0, dataMakananHasil: [] };
+    return { dataHasil: [], totalPendapatanHasil: 0, dataMakananHasil: [],totalTransaksiHasil:0, data:[] };
   }
 }

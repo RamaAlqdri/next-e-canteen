@@ -6,13 +6,10 @@ import CanteenItem from "@/components/canteen/CanteenItem";
 import { useEffect, useState } from "react";
 import { Canteen } from "@/lib/models/CanteenModel";
 
-// export const metadata: Metadata = {
-//   title: process.env.NEXT_PUBLIC_APP_NAME || "Daftar Kantin",
-//   description: process.env.NEXT_PUBLIC_APP_DESC || "e-Canteen",
-// };
+
 
 export default function Home() {
-  // const canteen = await canteenService.getAllCanteenData();
+
 
   const [canteenData, setCanteenData] = useState<Canteen[]>([]);
   const [canteenLoading, setCanteenLoading] = useState(true);

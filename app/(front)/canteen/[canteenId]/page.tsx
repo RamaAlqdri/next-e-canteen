@@ -1,18 +1,5 @@
 
-import data from "@/lib/data";
-import Link from "next/link";
-import Image from "next/image";
-import AddToCart from "@/components/products/AddToCart";
-import productsService from "@/lib/services/productService";
-import { convertDocToObj } from "@/lib/utils";
-import { formatRupiah } from "@/lib/utils";
 import canteenService from "@/lib/services/canteenService";
-import ProductItem from "@/components/products/ProductItem";
-import { getSession, useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { Session } from "next-auth";
-
-import { Metadata } from "next";
 import Detail from "./Detail";
 
 export async function generateMetadata({

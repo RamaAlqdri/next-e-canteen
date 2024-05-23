@@ -13,7 +13,7 @@ export default async function EditProduct({
   params: { productId: string; canteenId: string };
 }) {
 
-    console.log(params);
+    // console.log(params);
 
     const product = await productsService.getProductById(params.canteenId, params.productId);
     return <Form product={product} canteenId={params.canteenId}/>

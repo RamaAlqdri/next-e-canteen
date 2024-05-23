@@ -14,6 +14,11 @@ export type OrderDetail = {
   };
   
 };
+export type dataStatistic={
+  Date: string;
+  TotalTransaksi: number;
+  Pendapatan: number;
+}
 
 export type OrderItem = {
   name: string;

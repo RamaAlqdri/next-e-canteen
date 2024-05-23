@@ -23,7 +23,7 @@ const UserBeranda = () => {
   const router = useRouter();
 
   const { data: session } = useSession();
-  console.log(session);
+  // console.log(session);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +31,7 @@ const UserBeranda = () => {
         if (!canteenData.length) {
           const fetchedCanteenData = await canteenService.getAllCanteenData();
           setCanteenData(fetchedCanteenData);
-          console.log("Data fetched");
+          // console.log("Data fetched");
         } else {
         }
         setCanteenLoading(false);
@@ -78,14 +78,14 @@ const UserBeranda = () => {
       {canteenLoading ? (
         <div className="grid grid-cols-2 gap-2 sm:gap-4 2xl:grid-cols-5 sm:grid-cols-3 mt-3">
           {[1, 2, 3, 4, 5].map((index) => (
-            <>
+            <div key={index}>
               <div key={index} className="bg-white relative animate-pulse p-4 rounded-2xl">
                 <div className="aspect-square h-[300] w-full overflow-hidden rounded-lg bg-gray-200"></div>
                 <p className="mt-2 h-4 w-1/2 rounded-lg bg-gray-400"></p>
                 <p className="mt-2 block h-4 rounded-lg bg-gray-400 text-sm font-medium"></p>
 
               </div>
-            </>
+            </div>
           ))}
         </div>
       ) : (
@@ -104,13 +104,13 @@ const UserBeranda = () => {
       {productLoading ? (
         <div className="grid grid-cols-2 gap-2 sm:gap-4 2xl:grid-cols-5 sm:grid-cols-3 mt-3">
         {[1, 2, 3, 4, 5].map((index) => (
-          <>
+          <div key={index}>
             <div key={index} className="bg-white relative animate-pulse p-4 rounded-2xl">
               <div className="aspect-square h-[300] w-full overflow-hidden rounded-lg bg-gray-200"></div>
               <p className="mt-2 h-4 w-1/2 rounded-lg bg-gray-400"></p>
               <p className="mt-2 block h-4 rounded-lg bg-gray-400 text-sm font-medium"></p>
             </div>
-          </>
+          </div>
         ))}
       </div>
       ) : (

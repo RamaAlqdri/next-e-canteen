@@ -1,15 +1,10 @@
 "use client";
-
-import ProductItem from "@/components/products/ProductItem";
-
-import productsService from "@/lib/services/productService";
-
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import canteenService from "@/lib/services/canteenService";
 import CanteenItem from "@/components/canteen/CanteenItem";
 import Image from "next/image";
-import Skeleton from "@/components/handle/skeleton";
-import Await from "@/components/handle/await";
+
+
 import {
   AreaChart,
   Card,
@@ -46,6 +41,8 @@ import CanteenBeranda from "@/components/canteen/canteen_home";
 import { Canteen } from "@/lib/models/CanteenModel";
 import { CanteenRequest } from "@/lib/models/RequestModel";
 import router from "next/router";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
 
 const AdminBeranda = () => {
   return (
@@ -86,38 +83,77 @@ const CanteenList = () => {
   const router = useRouter();
   const [canteenData, setCanteenData] = useState<Canteen[]>([]);
   const [orderList, setOrderList] = useState<OrderDetail[]>([]);
-  function arrayToCSV(data: any) {
-    return data.map((row: any) => row.join(",")).join("\n");
-  }
-
-  function downloadCSV(
-    filename = "data.csv",
-    canteenName: string,
+  const downloadPDF = (
     orderList: OrderDetail[],
-    index: any
-  ) {
-    // const csvData = arrayToCSV(data);
-    const csvData = arrayToCSV(makeCsv(canteenName, orderList, index));
-    console.log(csvData);
-    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }
-  const makeCsv = (
-    canteenName: string,
-    orderList: OrderDetail[],
-    index: any
   ) => {
-    let date = new Date();
-    let contextHeader = "";
-    let header = "";
+    const date = new Date();
+    // Generate the data array from your existing function
+    const data = makeData( orderList, date);
+
+    const months = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+
+
+    const doc = new jsPDF();
+    const headers = data[0];
+    const body = data.slice(1);
+
+    doc.text(`Laporan Pendapatan Kantin`, 105, 20, { align: "center" });
+    doc.text(`Bulan ${months[date.getMonth()]} ${date.getFullYear()}`, 105, 30, { align: "center" });
+    autoTable(doc, {
+      head: [headers],
+      body: body,
+      startY: 37,
+      styles: { fillColor: [238, 160, 97] },
+      columnStyles: {
+        0: { fillColor: [255, 255, 255] },
+        1: { fillColor: [255, 255, 255] },
+        2: { fillColor: [255, 255, 255] },
+        3: { fillColor: [255, 255, 255] },
+      },
+
+      theme: "grid",
+    });
+    
+    doc.save(`Laporan_Pendapatan_Kantin_Bulan_${months[date.getMonth()]}_${date.getFullYear()}.pdf`);
+  };
+
+  // function downloadCSV(
+  //   filename = "data.csv",
+  //   canteenName: string,
+  //   orderList: OrderDetail[],
+  //   index: any
+  // ) {
+  //   // const csvData = arrayToCSV(data);
+  //   const csvData = arrayToCSV(makeCsv(canteenName, orderList, index));
+  //   console.log(csvData);
+  //   const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+  //   const url = window.URL.createObjectURL(blob);
+
+  //   const a = document.createElement("a");
+  //   a.href = url;
+  //   a.download = filename;
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  //   window.URL.revokeObjectURL(url);
+  // }
+  const makeData = (
+    orderList: OrderDetail[],
+    date: Date
+  ) => {
     const data = canteenData.map((canteen) => {
       // Filter orders for the current canteen
       const filteredOrders = orderList.filter(
@@ -125,63 +161,27 @@ const CanteenList = () => {
       );
 
       // Get statistics for the canteen
-      const { totalPendapatanHasil } = getStatisticCanteen(
-        index,
+      const { totalPendapatanHasil, totalTransaksiHasil } = getStatisticCanteen(
+        "bulanan",
         filteredOrders,
-        new Date()
-
+        date
       );
 
       // Return an object that includes canteen details and its statistics
       return {
         canteenName: canteen.name,
+        totalTransaksiHasil: totalTransaksiHasil,
         totalPendapatanHasil: totalPendapatanHasil,
       };
     });
-    if (index === "Jam") {
-      header = "Hari";
-      // Get the day of the week from the date object
-      const days = [
-        "Minggu",
-        "Senin",
-        "Selasa",
-        "Rabu",
-        "Kamis",
-        "Jumat",
-        "Sabtu",
-      ];
-      contextHeader = days[date.getDay()]; // date.getDay() returns a number from 0 (Sunday) to 6 (Saturday)
-    } else if (index === "Minggu") {
-      header = "Bulan";
-      // Get the month from the date object
-      const months = [
-        "Januari",
-        "Februari",
-        "Maret",
-        "April",
-        "Mei",
-        "Juni",
-        "Juli",
-        "Agustus",
-        "September",
-        "Oktober",
-        "November",
-        "Desember",
-      ];
-      contextHeader = months[date.getMonth()]; // date.getMonth() returns a number from 0 (January) to 11 (December)
-    } else if (index === "Bulan") {
-      header = "Tahun";
-      // Get the full year
-      contextHeader = date.getFullYear().toString(); // date.getFullYear() returns a four-digit year (e.g., 2024)
-    }
 
     return [
-      ["Kantin", header, "Pendapatan"],
+      ["Kantin","Total Transaksi", "Pendapatan"],
       ...data.map((item) => [
         item.canteenName,
-        contextHeader,
+        item.totalTransaksiHasil,
         String(`Rp${formatRupiah(item.totalPendapatanHasil)}`),
-      ]),
+      ])
     ];
   };
 
@@ -193,7 +193,7 @@ const CanteenList = () => {
           const fetchedOrderList = await ordersService.getAllOrder();
           setCanteenData(fetchedCanteenData);
           setOrderList(fetchedOrderList);
-          console.log("Data fetched");
+          // console.log("Data fetched");
         } else {
         }
       } catch (error) {
@@ -259,24 +259,24 @@ const CanteenList = () => {
         <div className="space-y-3">
           <div className="rounded-b-2xl pt-3 flex justify-between bg-white shadow-md px-6 pb-4">
             <div className="w-1/5">
-              <Select
+              {/* <Select
                 defaultValue="none"
-                // onValueChange={(v) => handleStatistic(v, orders)}
+
                 className=""
               >
                 <SelectItem value="1" className=""></SelectItem>
                 <SelectItem value="2"></SelectItem>
                 <SelectItem value="3"></SelectItem>
-              </Select>
+              </Select> */}
             </div>
             <div>
               <button
                 onClick={() => {
-                  downloadCSV("data.csv", "", orderList, "Minggu");
+                  downloadPDF(orderList);
                 }}
-                className="text-xs text-lime-600 hover:text-white font-medium hover:bg-lime-600 px-2 py-2 border-lime-600 border-2 rounded-xl"
+                className="text-xs text-red-600 hover:text-white font-medium hover:bg-red-600 px-2 py-2 border-red-600 border-2 rounded-xl"
               >
-                Ekspor CSV
+                Ekspor PDF
               </button>
             </div>
           </div>
@@ -334,7 +334,7 @@ const RequestList = () => {
             await canteenService.getAllCanteenRequest();
           // const fetchedOrderList = await ordersService.getAllOrder();
           setRequestList(fetchedRequestData);
-          console.log(fetchedRequestData);
+          // console.log(fetchedRequestData);
           console.log("Data fetched");
         } else {
         }

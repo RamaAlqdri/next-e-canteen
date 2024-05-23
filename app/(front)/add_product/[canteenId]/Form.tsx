@@ -86,7 +86,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
           canteenId: canteenId,
         }),
       });
-      console.log(res);
+      // console.log(res);
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
         return router.back();

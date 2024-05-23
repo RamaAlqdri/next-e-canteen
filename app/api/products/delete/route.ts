@@ -12,8 +12,8 @@ export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
   const { slugBefore,canteenslug } = await request.json();
-  console.log(canteenslug);
-  console.log(slugBefore);
+  // console.log(canteenslug);
+  // console.log(slugBefore);
 
   //   const hashedPassword = bcrypt.hashSync(password, 5);
 //   const slug = name.toLowerCase().replace(/ /g, "-");

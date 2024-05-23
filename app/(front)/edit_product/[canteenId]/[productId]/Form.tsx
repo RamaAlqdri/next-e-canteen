@@ -36,7 +36,7 @@ const Form = ({
 
   const params = useSearchParams();
   const router = useRouter();
-  console.log(product);
+  // console.log(product);
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 

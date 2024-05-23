@@ -80,12 +80,12 @@ async function getAllCanteenRequest(): Promise<CanteenRequest[]> {
 
 async function getCanteenName(canteenId: string): Promise<string> {
   try {
-    console.log(canteenId);
+    // console.log(canteenId);
     const canteenRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(canteenRef);
     if (canteenData) {
       const nameData = canteenData.data();
-      console.log(canteenData.data() as Canteen);
+      // console.log(canteenData.data() as Canteen);
       if (nameData) {
         return nameData.name;
       } else {
@@ -125,11 +125,11 @@ async function createCanteen(canteen: Canteen , id:string): Promise<void> {
 
 async function getCanteenData(canteenId: any): Promise<Canteen> {
   try {
-    console.log(canteenId);
+    // console.log(canteenId);
 
     const kantinRef = doc(db, "canteen", canteenId);
     const canteenData = await getDoc(kantinRef);
-    console.log(canteenData.data());
+    // console.log(canteenData.data());
     return canteenData.data() as Canteen;
   } catch (error) {
     console.error("Error fetching canteen data:", error);

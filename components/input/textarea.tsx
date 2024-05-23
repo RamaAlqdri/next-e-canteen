@@ -13,7 +13,7 @@ const TextareaWithLabel = ({ htmlFor, label, error, register,name,validationSche
         id={htmlFor}
         {...register(name, validationSchema)}
         // type = {type}
-        className="w-full focus:border-[#EEA147] text-gray-600 text-sm font-light focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
+        className="w-full focus:border-[#EEA147] text-gray-900 text-sm focus:ring-[#EEA147] rounded-xl py-3 border-1 px-6 border-gray-400"
       />
       {error && <div className="text-error">{error}</div>}
     </div>

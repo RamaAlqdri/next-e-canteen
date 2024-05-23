@@ -21,7 +21,7 @@ import {
   dataFormatterSingkat,
   dataFormatter,
 } from "@/lib/statistic";
-import { OrderDetail, OrderItem } from "@/lib/models/OrderModel";
+import { OrderDetail, OrderItem, dataStatistic } from "@/lib/models/OrderModel";
 import { useSession } from "next-auth/react";
 import {
   dapatkanWaktu,
@@ -244,7 +244,7 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
   const [order, setOrder] = useState<OrderDetail[]>([]);
   const { data: session } = useSession();
   let canteenId = "";
-  console.log(session?.user.canteenId);
+  // console.log(session?.user.canteenId);
   if (props !== "") {
     canteenId = props as string;
   } else {
@@ -282,7 +282,7 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
     return () => {
       unsubscribe();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -761,9 +761,12 @@ const Dashboard = ({
   const [typeData, setTypeData] = useState<string>("harian");
 
   const [totalPendapatan, setTotalPendapatan] = useState(0);
+  const [totalTransaksi, setTotalTransaksi] = useState(0);
   const [data, setData] = useState<any>([]);
   const [dataMakanan, setDataMakanan] = useState<any>([]);
   const [index, setIndex] = useState("");
+
+  const [dataArray, setDataArray] = useState<dataStatistic[]>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -802,12 +805,11 @@ const Dashboard = ({
     ];
 
     if (index === "Jam") {
-      console.log(date.getDate());
-
+      // console.log(date.getDate());
       contextHeader = `${days[date.getDay()]}, ${date.getDate()} ${
         months[date.getMonth()]
       } ${date.getFullYear()}`;
-      console.log(contextHeader);
+      // console.log(contextHeader);
     } else if (index === "Minggu") {
       contextHeader = `Bulan ${months[date.getMonth()]} ${date.getFullYear()}`;
     } else if (index === "Bulan") {
@@ -815,11 +817,11 @@ const Dashboard = ({
     }
 
     const doc = new jsPDF();
-    const headers = data[0]; // The headers are the first element of the array
-    const body = data.slice(1); // The rest is the body
+    const headers = data[0];
+    const body = data.slice(1);
 
-    doc.text(`Laporan Pendapatan ${canteenName}`, 105, 20, { align: "center" }); // Title for the PDF
-    doc.text(`${contextHeader}`, 105, 30, { align: "center" }); // Title for the PDF
+    doc.text(`Laporan Pendapatan ${canteenName}`, 105, 20, { align: "center" });
+    doc.text(`${contextHeader}`, 105, 30, { align: "center" });
     autoTable(doc, {
       head: [headers],
       body: body,
@@ -829,26 +831,52 @@ const Dashboard = ({
         0: { fillColor: [255, 255, 255] },
         1: { fillColor: [255, 255, 255] },
         2: { fillColor: [255, 255, 255] },
+        3: { fillColor: [255, 255, 255] },
       },
+
       theme: "grid",
     });
 
     doc.save(`Laporan_Pendapatan_${canteenName}.pdf`);
   };
   const makeData = (canteenName: string, pendapatan: any) => {
+    let header = "";
+    if (typeData === "bulanan") {
+      header = "Tanggal";
+    } else if (typeData === "tahunan") {
+      header = "Bulan";
+    } else {
+      return [
+        ["Nama Kantin", "Total Transaksi", "Pendapatan"],
+        [canteenName, totalTransaksi, String(`Rp${formatRupiah(pendapatan)}`)],
+      ];
+    }
     return [
-      ["Nama Kantin", "Pendapatan"],
-      [canteenName, String(`Rp${formatRupiah(pendapatan)}`)],
+      ["Nama Kantin", header, "Total Transaksi", "Pendapatan"],
+      ...dataArray.map((item) => [
+        canteenName,
+        item.Date,
+        item.TotalTransaksi,
+        String(`Rp${formatRupiah(item.Pendapatan)}`),
+      ]),
+      ["Total Pendapatan", "", "", String(`Rp${formatRupiah(pendapatan)}`)],
     ];
   };
 
   const handleStatistic = (order: OrderDetail[], date: Date) => {
     setLoading(true);
-    const { dataHasil, totalPendapatanHasil, dataMakananHasil } =
-      getStatisticCanteen(typeData, order, date);
+    const {
+      dataHasil,
+      totalPendapatanHasil,
+      dataMakananHasil,
+      totalTransaksiHasil,
+      data,
+    } = getStatisticCanteen(typeData, order, date);
+    setTotalTransaksi(totalTransaksiHasil as number);
     setTotalPendapatan(totalPendapatanHasil);
     setData(dataHasil);
     setDataMakanan(dataMakananHasil);
+    setDataArray(data);
     if (typeData === "harian") {
       setIndex("Jam");
     } else if (typeData === "bulanan") {
@@ -869,17 +897,17 @@ const Dashboard = ({
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    console.log(typeData); // Ini akan mencetak nilai terkini dari typeData setiap kali typeData berubah
+    // console.log(typeData); // Ini akan mencetak nilai terkini dari typeData setiap kali typeData berubah
     handleStatistic(
       orderList.filter((order) => order.status === 6),
       dateValue
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [typeData, dateValue]); // Dependency array menunjukkan bahwa efek ini hanya berjalan ketika typeData berubah
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeData, dateValue]);
 
   return loading ? (
     <div className=" space-y-4">
@@ -908,7 +936,8 @@ const Dashboard = ({
           <Select
             defaultValue="harian"
             onValueChange={(v) => {
-              setTypeData(v), console.log(typeData);
+              setTypeData(v)
+              //  console.log(typeData);
             }}
             className=""
           >
@@ -926,7 +955,7 @@ const Dashboard = ({
               enableClear={false}
               enableYearNavigation
               onValueChange={(v) => {
-                console.log(v);
+                // console.log(v);
                 if (v !== undefined) {
                   setDateValue(v as Date);
                 }
@@ -948,14 +977,16 @@ const Dashboard = ({
           >
             Ekspor PDF
           </button>
-          <button
-            onClick={() => {
-              router.push(`/edit_canteen/${canteenId}`);
-            }}
-            className="text-xs text-[#EEA147] hover:text-white font-medium hover:bg-[#EEA147] px-2 py-2 border-[#EEA147] border-2 rounded-xl"
-          >
-            Edit Kantin
-          </button>
+          {session?.user.role !== "blu" && (
+            <button
+              onClick={() => {
+                router.push(`/edit_canteen/${canteenId}`);
+              }}
+              className="text-xs text-[#EEA147] hover:text-white font-medium hover:bg-[#EEA147] px-2 py-2 border-[#EEA147] border-2 rounded-xl"
+            >
+              Edit Kantin
+            </button>
+          )}
         </div>
       </div>
       <div className="grid grid-cols-2 space-x-4 ">

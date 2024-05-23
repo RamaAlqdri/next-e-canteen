@@ -62,18 +62,18 @@ const Form = ({ orderId }: { orderId: string }) => {
   const [productId, setProductId] = useState<string[]>([]);
 
   const commentSubmit: SubmitHandler<Inputs> = async (form) => {
-    console.log("i'm here");
+    // console.log("i'm here");
     const { content, rating } = form;
-    console.log(content, rating);
+    // console.log(content, rating);
     const newComment = {
       content,
       rating: ratingValue,
     };
-    console.log(productId);
-    console.log(commentItems);
-    console.log(newComment);
+    // console.log(productId);
+    // console.log(commentItems);
+    // console.log(newComment);
     const productIdForm = productId[commentItems];
-    console.log(productIdForm);
+    // console.log(productIdForm);
     try {
       if (order) {
         await productsService.writeComment(
@@ -116,10 +116,10 @@ const Form = ({ orderId }: { orderId: string }) => {
           const newProductIds = orderData.items.map(
             (item) => item.id as string
           );
-          console.log(newProductIds);
+          // console.log(newProductIds);
           setProductId(newProductIds);
         }
-        console.log(productId)
+        // console.log(productId)
         if (orderData) {
           try {
             const [canteenData, userData] = await Promise.all([

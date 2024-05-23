@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
     // rating: 0,
     slug,
   } as Canteen;
-  console.log(newCanteen);
+  // console.log(newCanteen);
   try {
     // canteenService.createCanteen(newCanteen);
     canteenService.updateCanteenData(slugBefore, newCanteen);

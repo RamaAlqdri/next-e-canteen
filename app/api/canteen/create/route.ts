@@ -15,7 +15,7 @@ export const POST = async (request: NextRequest) => {
 
 
 
-  console.log(name, location, description, phone);
+  // console.log(name, location, description, phone);
 
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const slug = name.toLowerCase().replace(/ /g, "-");

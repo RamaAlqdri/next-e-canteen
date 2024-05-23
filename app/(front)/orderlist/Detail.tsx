@@ -64,7 +64,7 @@ import { OrderDetail } from "@/lib/models/OrderModel";
 
 const Detail = () => {
   const { data: session } = useSession();
-  console.log(session);
+  // console.log(session);
   const router = useRouter();
   const [orderList, setOrderList] = useState<OrderDetail[]>([]);
   const [orderLoading, setOrderLoading] = useState(true);

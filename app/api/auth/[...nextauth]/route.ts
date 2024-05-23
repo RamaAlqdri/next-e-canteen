@@ -41,7 +41,7 @@ const authOptions = {
                 role: "user",
               } as User;
               try {
-                console.log(newUserDB)
+                // console.log(newUserDB)
                 await userService.createUser(newUserDB);
 
                 return {

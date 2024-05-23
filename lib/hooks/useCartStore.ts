@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { round2 } from "../utils";
 import { OrderItem, OrderDetail } from "../models/OrderModel";
 import { persist } from "zustand/middleware";
+import toast from "react-hot-toast";
 
 type Cart = {
   items: OrderItem[];
@@ -64,9 +65,7 @@ export default function useCartService() {
 
       if (isDifferentCanteen) {
         // Show alert if the user tries to add an item from a different canteen
-        window.alert(
-          "Maaf, tidak boleh menambahkan barang dari kantin yang berbeda."
-        );
+        toast.error("Maaf, tidak boleh menambahkan barang dari kantin yang berbeda");
         return; // or you can throw an error or prevent further execution
       }
 

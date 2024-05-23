@@ -53,7 +53,7 @@ async function getUserByEmail(email: string): Promise<User> {
     );
 
     const userData = await getDocs(userRef);
-    console.log(userData.docs[0].data());
+    // console.log(userData.docs[0].data());
     return userData.docs[0].data() as User;
   } catch (error) {
     console.error("Error fetching user data:", error);

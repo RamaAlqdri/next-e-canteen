@@ -46,7 +46,7 @@ async function getRealTimeOrderById(orderId: string): Promise<OrderDetail> {
         order = doc.data() as OrderDetail;
       });
       // Do something with the real-time order data
-      console.log("Real-time order data:", order);
+      // console.log("Real-time order data:", order);
     });
     return {} as OrderDetail;
   } catch (error) {

@@ -10,7 +10,7 @@ import { TextInput } from "@tremor/react";
 import ImageUpload from "@/components/image/ImageUpload";
 import InputWithLabel from "@/components/input/input";
 import TextareaWithLabel from "@/components/input/textarea";
-import { error } from "console";
+
 
 type Inputs = {
   name: string;
@@ -29,8 +29,8 @@ const Form = () => {
   const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
   const [uploadImageQris, setUploadImageQris] = useState(null);
 
-  console.log(uploadImageCanteen);
-  console.log(uploadImageQris);
+  // console.log(uploadImageCanteen);
+  // console.log(uploadImageQris);
 
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {

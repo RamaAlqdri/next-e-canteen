@@ -12,6 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import CSS
 import InputWithLabel from "@/components/input/input";
 import TextareaWithLabel from "@/components/input/textarea";
 import ImageUpload from "@/components/image/ImageUpload";
+import imageService from "@/lib/services/imageService";
 
 type Inputs = {
   slugBefore: string;
@@ -67,6 +68,12 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
       });
       console.log(res);
       if (res.ok) {
+        if (uploadImageCanteen) {
+          imageService.uploadImage(uploadImageCanteen,"canteen", canteen.id as string);
+        }
+        if (uploadImageQris) {
+          imageService.uploadImage(uploadImageQris,"qris", canteen.id as string);
+        }
         return router.push("/");
       } else {
         const data = await res.json();
@@ -101,6 +108,8 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
                 }),
               });
               if (res.ok) {
+                imageService.deleteImage("canteen",canteen.id as string);
+                imageService.deleteImage("qris",canteen.id as string);
                 return router.push("/");
               } else {
                 const data = await res.json();
@@ -173,7 +182,7 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
               >
                 Profil Kantin
               </label>
-              <ImageUpload maxSize={200} setImageFile={setUploadImageCanteen} />
+              <ImageUpload maxSize={200} setImageFile={setUploadImageCanteen} path={canteen.image as string} />
             </div>
             <div>
               <label
@@ -182,7 +191,7 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
               >
                 QRIS
               </label>
-              <ImageUpload maxSize={500} setImageFile={setUploadImageQris} />
+              <ImageUpload maxSize={500} setImageFile={setUploadImageQris} path={canteen.qris as string} />
             </div>
 
             <div className="my-2 space-y-2">

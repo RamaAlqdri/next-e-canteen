@@ -11,7 +11,7 @@ import productsService from "@/lib/services/productService";
 export const POST = async (request: NextRequest) => {
   //   const session = useSession();
 
-  const { slugBefore,canteenslug } = await request.json();
+  const { productId,canteenId } = await request.json();
   // console.log(canteenslug);
   // console.log(slugBefore);
 
@@ -22,7 +22,7 @@ export const POST = async (request: NextRequest) => {
 
   try {
     // canteenService.createCanteen(newCanteen);
-    productsService.deleteProduct(canteenslug,slugBefore);
+    productsService.deleteProduct(canteenId,productId);
     // userService.createUser(newUser);
 
     return Response.json(

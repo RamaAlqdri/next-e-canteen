@@ -479,7 +479,7 @@ const ProductList = ({ props = "" }: { props: string }) => {
                       <ImageDisplay
                         path={product.image}
                         defaultPath="/images/product/default.jpg"
-                        imgStyle="aspect-square  relative rounded-xl"
+                        imgStyle="aspect-square  object-cover relative rounded-xl"
                       />
                       {/* <Image
                         alt={"canteen image"}

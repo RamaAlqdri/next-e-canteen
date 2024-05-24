@@ -1,29 +1,42 @@
-import { NextRequest } from "next/server";
-import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from 'next/server';
+import { getAuth, onAuthStateChanged, updateProfile, updatePassword } from 'firebase/auth';
+import userService from '@/lib/services/userService';
+import { auth } from '@/lib/firebase';
+ // Sesuaikan impor dengan konfigurasi Anda
 
-import {User} from "@/lib/models/UserModel";
-import userService from "@/lib/services/userService";
+ export const POST = async (request: NextRequest) => {
+  const { name, email, password,user } = await request.json();
+  // const user = auth.currentUser;
+  // console.log(user);
 
-export const POST = async (request: NextRequest) => {
-  const { name, email,password } = await request.json();
-
-  const hashedPassword = bcrypt.hashSync(password, 5);
-  const newName = name;
-  try {
-    userService.updateUserName(email, newName);
-    userService.updateUserPassword(email, hashedPassword);
-    return Response.json(
-      { message: "Pengguna di perbarui" },
-      {
-        status: 201,
-      }
+  if (!user) {
+    return NextResponse.json(
+      { message: "Pengguna tidak ditemukan" },
+      { status: 404 }
     );
-  } catch (err: any) {
-    return Response.json(
+  }
+
+  try {
+    if (name !== "") {
+      console.log(name);
+      await updateProfile(user, { displayName: name as string });
+      await userService.updateUserName(email, name);
+    }
+
+    if (password !== "") {
+      await updatePassword(user, password);
+      // await userService.updateUserPassword(email, hashedPassword); // Jika Anda menggunakan hashed password
+    }
+
+    return NextResponse.json(
+      { message: "Pengguna diperbarui" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
       { message: "Gagal Memperbarui Pengguna" },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 };

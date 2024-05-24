@@ -10,18 +10,25 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 
 import { SubmitHandler } from "react-hook-form";
-
+import { auth } from "@/lib/firebase";
+import imageService from "@/lib/services/imageService";
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, updateProfile } from "firebase/auth";
+import userService from "@/lib/services/userService";
 
 type Inputs = {
   name: string;
   email: string;
+  currentPassword: string;
   password: string;
   confirmPassword: string;
 };
 
 const Form = () => {
   const { data: session } = useSession();
+  console.log(session?.user.image);
   const [imageProfile, setImageProfile] = useState(null);
+  const user = auth.currentUser;
+  console.log(user);
 
   const {
     register,
@@ -30,8 +37,9 @@ const Form = () => {
     formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     defaultValues: {
-      name: session?.user.name as string,
-      email: session?.user.email as string,
+      name: user?.displayName as string,
+      email: user?.email as string,
+      currentPassword: "",
       password: "",
       confirmPassword: "",
 
@@ -39,33 +47,28 @@ const Form = () => {
     },
   });
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
-    const { name, email, password } = form;
-    try {
-      const res = await fetch("/api/auth/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
-      });
-      if (res.ok) {
-        return router.push(
-          "/signin?callbackUrl=${callbackUrl}&success=Account has been created"
-        );
-      } else {
-        const data = await res.json();
-        throw new Error(data.message);
+    const { name, email, password,currentPassword } = form;
+    if (user) {
+      try {
+        if (name !== "" && name !== user.displayName) {
+          console.log(name);
+          await updateProfile(user, { displayName: name as string });
+          await userService.updateUserName(email, name);
+        }
+        if (password !== "") {
+          const credential = EmailAuthProvider.credential(user.email!, currentPassword);
+          await reauthenticateWithCredential(user, credential);
+          await updatePassword(user, password);
+          // await userService.updateUserPassword(email, hashedPassword); // Jika Anda menggunakan hashed password
+        }
+    
+        if (imageProfile !== null) {
+          imageService.uploadImage(imageProfile, "user", user?.uid as string);
+        }
+        router.push("/");
+      } catch (err: any) {
+        toast.error(err.message || "error");
       }
-    } catch (err: any) {
-      const error =
-        err.message && err.message.indexOf("E11000") === 0
-          ? "Email is duplicate"
-          : err.message;
-      toast.error(err.message || "error");
     }
   };
   const router = useRouter();
@@ -88,13 +91,25 @@ const Form = () => {
                 type="text"
                 label="Nama Anda"
                 register={register}
-                validationSchema={{
-                  required: "Nama wajib diisi",
-                }}
+                // validationSchema={{
+                //   required: "Nama wajib diisi",
+                // }}
                 name="name"
                 error={errors.name?.message}
               />
-              
+            </div>
+            <div className="my-2">
+              <InputWithLabel
+                htmlFor="password"
+                type={"password"}
+                label="Kata Sandi Lama"
+                register={register}
+                // validationSchema={{
+                //   required: "Kata sandi wajib diis",
+                // }}
+                name="currentPassword"
+                error={errors.password?.message}
+              />
             </div>
             <div className="my-2">
               <InputWithLabel
@@ -102,11 +117,10 @@ const Form = () => {
                 type={"password"}
                 label="Kata Sandi Baru"
                 register={register}
-                validationSchema={{
-                  required: "Kata sandi wajib diis",
-                }}
+                // validationSchema={{
+                //   required: "Kata sandi wajib diis",
+                // }}
                 name="password"
-                
                 error={errors.password?.message}
               />
             </div>
@@ -115,12 +129,11 @@ const Form = () => {
                 type="password"
                 htmlFor="password"
                 label="Konfirmasi Kata Sandi "
-                
                 register={register}
                 name="confirmPassword"
                 validationSchema={{
-                  required: "Konfirmasi kata sandi wajib diisi",
-                  validate: (value:any) => {
+                  // required: "Konfirmasi kata sandi wajib diisi",
+                  validate: (value: any) => {
                     const { password } = getValues();
                     return password === value || "Kata sandi tidak cocok";
                   },
@@ -135,7 +148,11 @@ const Form = () => {
               >
                 Profil Anda
               </label>
-              <ImageUpload maxSize={200} setImageFile={setImageProfile} />
+              <ImageUpload
+                maxSize={200}
+                setImageFile={setImageProfile}
+                path={session?.user.image as string}
+              />
             </div>
             <div className="my-2">
               <button

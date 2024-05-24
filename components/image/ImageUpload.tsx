@@ -15,19 +15,22 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
   const [image, setImage] = useState(null);
   // const [pathImage, setPathImage] = useState(path || "");
   const [isChanged, setIsChanged] = useState(false);
-  console.log(path);
+  const [isError, setIsError] = useState(false);
+  // console.log(path);
 
   const handleImageChange = (e: any) => {
-    const file = e.target.files[0];
-    if (file.size > maxSize * 1024) {
-      alert("Ukuran file terlalu besar!");
-      e.target.value = null;
-      return;
+    if (e) {
+      const file = e.target.files[0];
+      if (file.size > maxSize * 1024) {
+        alert("Ukuran file terlalu besar!");
+        e.target.value = null;
+        return;
+      }
+      // setIsChanged(true);
+      setImage(file);
+      setImageFile(file);
+      console.log(image);
     }
-    // setIsChanged(true);
-    setImage(file);
-    setImageFile(file);
-    console.log(image);
   };
 
   const [color, setColor] = useState("gray");
@@ -50,7 +53,7 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
             htmlFor={randomId}
             className="h-full flex flex-col items-center w-full   justify-center"
           >
-            <button
+            {/* <button
               onClick={() => {
                 setImage(null);
                 setImageFile(null);
@@ -74,7 +77,7 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
                   fill="gray"
                 />
               </svg>
-            </button>
+            </button> */}
 
             {/* <ImageDisplay
                 path={path as string}
@@ -88,6 +91,20 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
               width={300}
               height={300}
               className="object-cover border aspect-square w-3/6 rounded-2xl "
+            />
+          </label>
+        </>
+      ) : !isError ? (
+        <>
+          <label
+            htmlFor={randomId}
+            className="h-full flex  items-center w-full   justify-center"
+          >
+            <ImageDisplay
+              path={path as string}
+              setError={setIsError}
+              imgStyle="object-cover border bg-black aspect-square w-3/6 rounded-2xl"
+              defaultPath=""
             />
           </label>
         </>
@@ -144,10 +161,7 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
         className="hidden"
         type="file"
         accept="image/*"
-        onChange={
-          handleImageChange
-
-        }
+        onChange={handleImageChange}
       ></input>
 
       {/* <img src={} alt="Preview" style={{ maxWidth: '100%', marginTop: '10px' }} /> */}

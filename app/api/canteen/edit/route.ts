@@ -15,14 +15,16 @@ export const POST = async (request: NextRequest) => {
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const slug = name.toLowerCase().replace(/ /g, "-");
   const existingCanteen = await canteenService.getCanteenBySlug(slug);
-  if (existingCanteen.name) {
-    // console.error("Canteen already exists.");
-    return Response.json(
-      { message: "Canteen already exists." },
-      {
-        status: 400,
-      }
-    );
+  if (slugBefore !== slug) {
+    if (existingCanteen.name) {
+      // console.error("Canteen already exists.");
+      return Response.json(
+        { message: "Canteen already exists." },
+        {
+          status: 400,
+        }
+      );
+    }
   }
   const newCanteen = {
     name,

@@ -21,30 +21,29 @@ export const POST = async (request: NextRequest) => {
   
   //   const hashedPassword = bcrypt.hashSync(password, 5);
   const productSlug = name.toLowerCase().replace(/ /g, "-");
-  const existingProduct = await productsService.getProductBySlugByCanteenId(
-    canteenId,
-    productSlug
-  );
+  // const existingProduct = await productsService.getProductBySlugByCanteenId(
+  //   canteenId,
+  //   productSlug
+  // );
   //   const existingCanteen = await canteenService.getCanteenBySlug(slug);
-  if (existingProduct.name) {
-    console.error("Produk sudah ada");
-    return Response.json(
-      { message: "Produk sudah ada" },
-      {
-        status: 400,
-      }
-    );
-  }
+  // if (existingProduct.name) {
+  //   console.error("Produk sudah ada");
+  //   return Response.json(
+  //     { message: "Produk sudah ada" },
+  //     {
+  //       status: 400,
+  //     }
+  //   );
+  // }
   const newProduct = {
     canteenId,
     name,
     slug: productSlug,
-    image: "/images/product/default.jpg",
     price: parseInt(price),
     description,
     category,
-    rating: 0,
-    numReviews: 0,
+    // rating: 0,
+    // numReviews: 0,
     countInStock,
   } as Product;
   try {

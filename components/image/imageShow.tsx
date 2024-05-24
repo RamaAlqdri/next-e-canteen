@@ -5,15 +5,19 @@ import { storage } from "@/lib/firebase";
 import { getDownloadURL, ref } from "firebase/storage";
 import { set } from "firebase/database";
 
-const ImageDisplay = ({
-  path,
-  defaultPath,
-  imgStyle,
-}: {
+interface ImageDisplayProps {
   path: string;
+  setError?: (error: boolean) => void;
   defaultPath: string;
   imgStyle: string;
-}) => {
+}
+
+const ImageDisplay = ({
+  path,
+  setError,
+  defaultPath,
+  imgStyle,
+}: ImageDisplayProps) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,6 +28,8 @@ const ImageDisplay = ({
         setImageUrl(url);
         // if (path === "") setImageUrl(defaultPath);
       } catch (error) {
+        if (setError) setError(true);
+
         setImageUrl(defaultPath);
         console.log("Error fetching image:", error);
       }
@@ -34,7 +40,7 @@ const ImageDisplay = ({
   }, []);
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <>
       {imageUrl && (
         <Image
           loader={() => imageUrl}
@@ -45,7 +51,7 @@ const ImageDisplay = ({
           className={imgStyle}
         />
       )}
-    </div>
+    </>
   );
 };
 

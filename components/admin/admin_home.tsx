@@ -298,7 +298,7 @@ const CanteenList = () => {
                     <ImageDisplay
                     path={canteen.image}
                     defaultPath="/images/canteen/default.jpg"
-                    imgStyle="aspect-square relative rounded-xl"
+                    imgStyle="aspect-square object-cover relative rounded-xl"
                     />
                     {/* <Image
                       alt={"canteen image"}

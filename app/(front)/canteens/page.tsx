@@ -35,6 +35,7 @@ export default function Home() {
 
   return (
     <div className="mb-20">
+      <title>Daftar Kantin</title>
       {canteenLoading ? (
         <div className="grid grid-cols-2 gap-2 sm:gap-4 2xl:grid-cols-5 sm:grid-cols-3  mt-10">
           {[1, 2, 3, 4, 5,6,7,8,9].map((index) => (

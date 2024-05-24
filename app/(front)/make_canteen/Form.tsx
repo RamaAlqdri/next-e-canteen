@@ -69,9 +69,6 @@ const Form = () => {
           imageUrl,
           qrisUrl,
 
-
-          // uploadImageCanteen,
-          // uploadImageQris,
         }),
       });
       console.log(res);

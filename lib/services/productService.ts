@@ -134,43 +134,48 @@ async function updateProduct(slugBefore: string, product: Product) {
       price: product.price,
       countInStock: product.countInStock,
       slug: product.slug,
-      image: product.image,
-      rating: product.rating,
-      numReviews: product.numReviews,
+      // image: product.image,
+      // rating: product.rating,
+      // numReviews: product.numReviews,
     });
   } catch (error) {
     console.error("Error updating product:", error);
   }
 }
 
-async function deleteProduct(canteenId: string, productSlug: string) {
+async function deleteProduct(canteenId:string, productId:string) {
   try {
+    // Mendapatkan referensi dokumen canteen berdasarkan canteenId
     const canteenRef = query(
       collection(db, "canteen"),
       where("id", "==", canteenId),
       limit(1)
     );
+
+    // Mengambil data dokumen canteen
     const canteenData = await getDocs(canteenRef);
-    // const productRef = collection(
-    //   db,
-    //   "canteen",
-    //   canteenData.docs[0].id,
-    //   "product"
-    // );
-    // console.log(canteenData);
-    const productId = await getProductIdByProductSlugandCanteenId(
-      productSlug,
-      canteenId
-    );
-    // console.log(productId);
+
+    // Memastikan bahwa dokumen canteen ditemukan
+    if (canteenData.empty) {
+      throw new Error("Canteen not found");
+    }
+
+    // Mendapatkan ID dokumen canteen
+    const canteenDocId = canteenData.docs[0].id;
+
+    // Mendapatkan referensi dokumen produk yang akan dihapus dari subkoleksi
     const productRef = doc(
       db,
       "canteen",
-      canteenData.docs[0].id,
+      canteenDocId,
       "product",
       productId
     );
+
+    // Menghapus dokumen produk
     await deleteDoc(productRef);
+
+    console.log("Product deleted successfully");
   } catch (error) {
     console.error("Error deleting product:", error);
   }
@@ -348,7 +353,9 @@ async function createProduct(product: Product) {
       canteenData.docs[0].id,
       "product"
     );
-    await setDoc(doc(productRef), {
+    const docRef = doc(productRef, product.id);
+    await setDoc(docRef, {
+      id: product.id,
       canteenId: product.canteenId,
       name: product.name,
       category: product.category,
@@ -359,14 +366,6 @@ async function createProduct(product: Product) {
       image: product.image,
       rating: product.rating,
       numReviews: product.numReviews,
-    });
-
-    const productId = await getProductIdByProductSlugandCanteenId(
-      product.slug,
-      product.canteenId
-    );
-    await updateDoc(doc(productRef, productId), {
-      id: productId,
     });
   } catch (error) {
     console.error("Error creating product:", error);

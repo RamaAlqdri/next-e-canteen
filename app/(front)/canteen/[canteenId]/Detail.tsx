@@ -62,7 +62,8 @@ const Detail = ({ canteenId }: { canteenId: string }) => {
   const [category, setCategory] = useState("semua");
 
   return (
-    <>
+    <div>
+      <title>{canteenData?.name}</title>
       {canteenLoading ? (
         <div className="w-full mt-6 md:h-36  h-24 flex bg-white animate-pulse justify-between items-center  rounded-t-2xl rounded-b-md px-4  ">
           <div className="md:h-full  justify-center flex items-center ">
@@ -161,7 +162,7 @@ const Detail = ({ canteenId }: { canteenId: string }) => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

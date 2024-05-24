@@ -94,7 +94,8 @@ const Detail = ({
   }, []);
 
   return (
-    <>
+    <div>
+      <title>{product?.name}</title>
       {!product ? (
         <>
           {/* <div className="my-2">
@@ -266,7 +267,7 @@ const Detail = ({
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 export default Detail;

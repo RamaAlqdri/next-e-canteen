@@ -14,6 +14,7 @@ import InputWithLabel from "@/components/input/input";
 import SelectCustom from "@/components/input/select";
 import TextareaWithLabel from "@/components/input/textarea";
 import StockCounter from "@/components/input/count";
+import imageService from "@/lib/services/imageService";
 
 type Inputs = {
   slugBefore: string;
@@ -99,9 +100,11 @@ const Form = ({
           canteenId,
         }),
       });
+      console.log(res);
 
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
+        imageService.uploadImage(uploadedImageUrl, "product", product.id as string);
         return router.back();
         // router.reload();
         // router.refresh
@@ -126,12 +129,13 @@ const Form = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          slugBefore: product.slug,
+          productId: product.id,
           canteenId: product.canteenId,
         }),
       });
       console.log(res);
       if (res.ok) {
+        imageService.deleteImage("product", product.id as string);
         // return router.push(`/canteen/${session?.user.canteen}`);
         return router.back();
         // router.reload();

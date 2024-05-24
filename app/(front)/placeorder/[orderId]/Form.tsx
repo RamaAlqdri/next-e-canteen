@@ -26,6 +26,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import productsService from "@/lib/services/productService";
 import TextareaWithLabel from "@/components/input/textarea";
 import { set } from "firebase/database";
+import ImageDisplay from "@/components/image/imageShow";
 
 type Inputs = {
   content: string;
@@ -41,6 +42,7 @@ const Form = ({ orderId }: { orderId: string }) => {
   }
 
   const [canteen, setCanteen] = useState<Canteen>();
+  console.log(canteen);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [currentProductId, setCurrentProductId] = useState("");
@@ -86,7 +88,7 @@ const Form = ({ orderId }: { orderId: string }) => {
         setCommentItems(commentItems + 1);
         // console.log(commentItems);
         // console.log(order.items.length);
-        if(commentItems+1 === order.items.length){
+        if (commentItems + 1 === order.items.length) {
           // console.log("masuk");
           updateOrderStatus(6);
         }
@@ -146,6 +148,7 @@ const Form = ({ orderId }: { orderId: string }) => {
 
   return (
     <div className="">
+      <title>Detail Pesanan</title>
       <h1 className="card-title mt-8 mb-4">Detail Pesanan</h1>
       <div className="grid lg:grid-cols-5 gap-4 ">
         <div className="lg:col-span-3">
@@ -254,13 +257,18 @@ const Form = ({ orderId }: { orderId: string }) => {
                 </li>
                 {order.status === 1 && session?.user.role == "user" && (
                   <div className="flex justify-center w-full ">
-                    <Image
+                    <ImageDisplay
+                      path={canteen?.qris as string}
+                      defaultPath="/images/qris/qris1.jpeg"
+                      imgStyle="relative w-[70%] rounded-xl border-2"
+                    />
+                    {/* <Image
                       src={"/images/qris/qris1.jpeg"}
                       width={500}
                       height={500}
                       alt="QRIS Canteen"
                       className="relative w-[70%] rounded-xl border-2"
-                    ></Image>
+                    ></Image> */}
                   </div>
                 )}
 
@@ -313,7 +321,6 @@ const Form = ({ orderId }: { orderId: string }) => {
                                   commentItems === index ? "content" : "hidden"
                                 } `}
                               >
-                                
                                 <p className="font-light text-">{item.name}</p>
                                 <div>
                                   <div className="rating rating-sm space-x-1">

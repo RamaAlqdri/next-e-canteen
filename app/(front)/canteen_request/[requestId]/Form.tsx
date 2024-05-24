@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import canteenService from "@/lib/services/canteenService";
 import { CanteenRequest } from "@/lib/models/RequestModel";
+import Image from "next/image";
+import ImageDisplay from "@/components/image/imageShow";
 
 const Form = ({ requestId }: { requestId: string }) => {
   const router = useRouter();
@@ -85,6 +87,24 @@ const Form = ({ requestId }: { requestId: string }) => {
                   <p>: {requestCanteen.canteenPhone}</p>
                   <p>: {requestCanteen.canteenLocation}</p>
                   <p>: {requestCanteen.canteenDescription}</p>
+                </div>
+              </div>
+              <div className="flex flex-col items-center mt-2">
+                <p className="text-md  font-medium mt-1 mb-2">{`Profil Kantin`}</p>
+                <div className="flex justify-center w-full ">
+                  <ImageDisplay
+                    path={requestCanteen.canteenImage as string}
+                    defaultPath="/images/canteen/default.jpg"
+                    imgStyle="  object-cover aspect-square rounded-xl border-2"
+                  ></ImageDisplay>
+                </div>
+                <p className="text-md  font-medium mt-1 mb-2">{`QRIS Kantin`}</p>
+                <div className="flex justify-center w-full">
+                  <ImageDisplay
+                    path={requestCanteen.canteenQris as string}
+                    defaultPath="/images/canteen/default.jpg"
+                    imgStyle=" object-cover  rounded-xl border-2"
+                  ></ImageDisplay>
                 </div>
               </div>
             </div>

@@ -30,16 +30,17 @@ const authOptions = {
 
           // Periksa apakah email sudah diverifikasi
           if (user.emailVerified) {
-            const userDB = await userService.getUserByEmail(user.email as string);
+            const userDB = await userService.getUserByEmail(
+              user.email as string
+            );
 
             if (Object.keys(userDB).length === 0) {
-
               const newUserDB = {
                 id: user.uid,
                 name: user.displayName,
                 email: user.email,
                 role: "user",
-                image: "",
+                image: `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/user/avatar/${user.uid}`,
               } as User;
               try {
                 // console.log(newUserDB)
@@ -50,12 +51,10 @@ const authOptions = {
                   email: user.email,
                   name: user.displayName,
                   emailVerified: user.emailVerified,
-                  role : newUserDB.role,
+                  role: newUserDB.role,
                   image: newUserDB.image,
                 };
-              } catch (error) {
-
-              }
+              } catch (error) {}
             }
 
             return {
@@ -63,12 +62,11 @@ const authOptions = {
               email: user.email,
               name: user.displayName,
               emailVerified: user.emailVerified,
-              role : userDB.role,
+              role: userDB.role,
               canteenId: userDB.canteenId,
               image: userDB.image,
             };
           } else {
-
             throw new Error("Email belum diverifikasi");
           }
         } catch (error) {

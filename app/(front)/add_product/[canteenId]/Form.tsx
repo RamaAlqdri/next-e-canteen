@@ -31,6 +31,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
   const router = useRouter();
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  console.log(uploadedImageUrl);
   const {
     register,
     handleSubmit,
@@ -87,7 +88,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
           canteenId: canteenId,
         }),
       });
-      // console.log(res);
+      console.log(res);
       if (res.ok) {
         imageService.uploadImage(uploadedImageUrl, "product", id);
         // return router.push(`/canteen/${session?.user.canteen}`);

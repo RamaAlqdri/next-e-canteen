@@ -37,13 +37,12 @@ const Form = () => {
     formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     defaultValues: {
-      name: user?.displayName as string,
-      email: user?.email as string,
+      name: session?.user?.name as string,
+      email: session?.user?.email as string,
       currentPassword: "",
       password: "",
       confirmPassword: "",
 
-      //   confirmPassword: "",
     },
   });
   const formSubmit: SubmitHandler<Inputs> = async (form) => {

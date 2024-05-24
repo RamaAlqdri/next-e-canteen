@@ -62,6 +62,7 @@ async function getUserByEmail(email: string): Promise<User> {
   }
 }
 async function updateUserName(email: string, name: string): Promise<void> {
+  console.log(email);
   try {
     const userRef = query(
       collection(db, "users"),

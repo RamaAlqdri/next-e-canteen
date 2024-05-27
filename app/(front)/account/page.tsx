@@ -3,7 +3,7 @@ import Form from './Form'
 import ordersService from '@/lib/services/orderService';
 
 export const metadata: Metadata = {
-    title: 'Pengaturan',
+    title: 'Akun',
 }
 export default async function Setting() {
 

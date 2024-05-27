@@ -29,7 +29,7 @@ const ImageUpload = ({ maxSize, setImageFile, path }: ImageUploadProps) => {
       // setIsChanged(true);
       setImage(file);
       setImageFile(file);
-      console.log(image);
+      // console.log(image);
     }
   };
 

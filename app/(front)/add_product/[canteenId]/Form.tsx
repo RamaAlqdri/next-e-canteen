@@ -30,8 +30,19 @@ const Form = ({ canteenId }: { canteenId: string }) => {
   const params = useSearchParams();
   const router = useRouter();
 
+  // console.log(canteenId);
+  // console.log(session?.user.canteenId);
+
+  useEffect(() => {
+    if (session?.user.role !== "admin") {
+      if (session?.user.canteenId !== canteenId) {
+        router.push("/");
+      }
+    }
+  }, [session]);
+
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
-  console.log(uploadedImageUrl);
+  // console.log(uploadedImageUrl);
   const {
     register,
     handleSubmit,
@@ -88,7 +99,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
           canteenId: canteenId,
         }),
       });
-      console.log(res);
+      // console.log(res);
       if (res.ok) {
         imageService.uploadImage(uploadedImageUrl, "product", id);
         // return router.push(`/canteen/${session?.user.canteen}`);

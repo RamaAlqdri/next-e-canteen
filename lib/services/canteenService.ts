@@ -145,8 +145,8 @@ async function updateCanteenData(
 ): Promise<void> {
   try {
     const canteenId = await getCanteenIdBySlug(canteenSlug);
-    console.log(canteenId);
-    console.log(canteen);
+    // console.log(canteenId);
+    // console.log(canteen);
     const canteenRef = doc(db, "canteen", canteenId);
     await updateDoc(canteenRef, {
       name: canteen.name,
@@ -204,7 +204,7 @@ async function deleteCanteenData(canteenSlug: string): Promise<void> {
     // Setelah produk dihapus, hapus kantin itu sendiri
     await deleteDoc(canteenRef);
 
-    console.log("Canteen and associated products deleted successfully.");
+    // console.log("Canteen and associated products deleted successfully.");
   } catch (error) {
     console.error("Error deleting canteen data:", error);
   }

@@ -8,11 +8,13 @@ import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputWithLabel from "@/components/input/input";
 import Image from "next/image";
+import { sendPasswordResetEmail } from "firebase/auth";
+import {auth} from "@/lib/firebase";
 import toast from "react-hot-toast";
 
 type Inputs = {
   email: string;
-  password: string;
+
 };
 
 const Form = () => {
@@ -29,7 +31,6 @@ const Form = () => {
   } = useForm<Inputs>({
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
@@ -41,28 +42,25 @@ const Form = () => {
 
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
     // console.log("Form values:", form);
-    const { email, password } = form;
+    const { email } = form;
     // console.log(email, password);
-
+    // sendPasswordResetEmail(auth,email).then(() => {
+    //   // Password reset email sent!
+    // })
     try{
-      await signIn("credentials", {
-        email,
-        password,
-      });
-    }catch(err){
-      toast.error("Email atau password salah");
-      console.log(err);
+      await sendPasswordResetEmail(auth,email);
+      toast.success("Email reset password telah dikirim");
+    }catch(error){
+      toast.error("Email tidak ditemukan");
     }
-
-    
   };
 
   return (
     <div className="flex justify-center ">
       <div className="w-[50rem] mt-12 ">
         <div className="bg-white h-[30rem]  shadow-md rounded-3xl flex overflow-hidden">
-          <div className="w-7/12 px-10  flex justify-center flex-col">
-            <h1 className="text-center font-medium text-xl">Masuk</h1>
+          <div className="w-7/12 px-10  -mt-6 flex justify-center flex-col">
+            <h1 className="text-center font-medium text-xl">Lupa Kata Sandi</h1>
             <form
               className="space-y-6 mt-6"
               onSubmit={handleSubmit(formSubmit)}
@@ -80,28 +78,7 @@ const Form = () => {
                   error={errors.email?.message}
                 />
               </div>
-              <div className="">
-                <InputWithLabel
-                  htmlFor="password"
-                  type="password"
-                  label="Kata Sandi"
-                  name="password"
-                  error={errors.password?.message}
-                  register={register}
-                  validationSchema={{
-                    required: "Password wajib diisi",
-                  }}
-                />
-                <div className="flex w-full justify-end">
-                  <Link
-                    className="link text-xs mt-1 text-[#EEA061] font-light"
-                    href={`/forgot_password?callbackUrl=${callbackUrl}`}
-                  >
-                    Lupa Kata Sandi?
-                  </Link>
-                </div>
-              </div>
-
+              
               <div className="">
                 <button
                   type="submit"
@@ -111,7 +88,7 @@ const Form = () => {
                   {isSubmitting && (
                     <span className="loading loading-spinner"></span>
                   )}
-                  Masuk
+                  Kirim
                 </button>
                 {/* <button
                   onClick={() => {
@@ -124,15 +101,7 @@ const Form = () => {
                 </button> */}
               </div>
             </form>
-            <div className="text-sm text-center text-gray-500 mt-12">
-              Belum punya akun?{" "}
-              <Link
-                className="link text-[#EEA061] font-semibold"
-                href={`/register?callbackUrl=${callbackUrl}`}
-              >
-                Daftar
-              </Link>
-            </div>
+            
           </div>
           <div className=" overflow-hidden w-5/12 opacity-40 ">
             <Image

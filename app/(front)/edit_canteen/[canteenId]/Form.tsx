@@ -30,6 +30,13 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
   const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
   const [uploadImageQris, setUploadImageQris] = useState(null);
 
+  useEffect(() => {
+    if (session?.user.role !== "admin") {
+      if (session?.user.canteenId !== canteen.id) {
+        router.push("/");
+      }
+    }
+  }, [session]);
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {
     register,
@@ -66,7 +73,7 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
           session,
         }),
       });
-      console.log(res);
+      // console.log(res);
       if (res.ok) {
         if (uploadImageCanteen) {
           imageService.uploadImage(uploadImageCanteen,"canteen", canteen.id as string);

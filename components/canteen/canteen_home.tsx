@@ -244,6 +244,16 @@ import ImageDisplay from "../image/imageShow";
 const CanteenBeranda = ({ props = "" }: { props: string }) => {
   const [order, setOrder] = useState<OrderDetail[]>([]);
   const { data: session } = useSession();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    if (session?.user.role === "canteen") {
+      if (session?.user.canteenId !== canteenId) {
+        router.push("/");
+      }
+    }
+  }, [session]);
   let canteenId = "";
   // console.log(session?.user.canteenId);
   if (props !== "") {

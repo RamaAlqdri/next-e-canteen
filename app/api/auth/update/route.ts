@@ -18,7 +18,7 @@ import { auth } from '@/lib/firebase';
 
   try {
     if (name !== "") {
-      console.log(name);
+      // console.log(name);
       await updateProfile(user, { displayName: name as string });
       await userService.updateUserName(email, name);
     }

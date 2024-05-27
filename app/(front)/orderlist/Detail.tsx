@@ -25,10 +25,10 @@ const Detail = () => {
           );
           setOrderList(orders);
           setOrderLoading(false);
-          console.log("fetching data");
+          // console.log("fetching data");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchData();

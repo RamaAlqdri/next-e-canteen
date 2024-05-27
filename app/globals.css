@@ -14,6 +14,18 @@
   animation: none;
   /* @apply shadow-none; */
 }
+input[type="radio"]:checked {
+  background-color: transparent; /* Menghapus warna latar belakang default */
+  border-color: transparent; /* Menghapus warna border default */
+}
+
+input[type="radio"].bg-orange-500:checked {
+  background-color: #f97316; /* Warna oranye tua */
+}
+
+input[type="radio"].bg-orange-200:checked {
+  background-color: #fed7aa; /* Warna oranye muda */
+}
 
 
 /* @media (prefers-color-scheme: dark) {

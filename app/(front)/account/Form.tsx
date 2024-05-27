@@ -25,10 +25,10 @@ type Inputs = {
 
 const Form = () => {
   const { data: session } = useSession();
-  console.log(session?.user.image);
+  // console.log(session?.user.image);
   const [imageProfile, setImageProfile] = useState(null);
   const user = auth.currentUser;
-  console.log(user);
+  // console.log(user);
 
   const {
     register,
@@ -50,7 +50,7 @@ const Form = () => {
     if (user) {
       try {
         if (name !== "" && name !== user.displayName) {
-          console.log(name);
+          // console.log(name);
           await updateProfile(user, { displayName: name as string });
           await userService.updateUserName(email, name);
         }

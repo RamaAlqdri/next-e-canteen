@@ -341,7 +341,7 @@ const RequestList = () => {
           // const fetchedOrderList = await ordersService.getAllOrder();
           setRequestList(fetchedRequestData);
           // console.log(fetchedRequestData);
-          console.log("Data fetched");
+          // console.log("Data fetched");
         } else {
         }
       } catch (error) {

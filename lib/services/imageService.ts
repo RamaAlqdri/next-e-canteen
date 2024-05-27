@@ -28,7 +28,7 @@ async function deleteImage(uploadFor: string, id: string) {
   try {
     const storageRef = ref(storage, path);
     await deleteObject(storageRef);
-    console.log("Image deleted successfully");
+    // console.log("Image deleted successfully");
   } catch (error) {
     console.error("Error deleting image:", error);
   }

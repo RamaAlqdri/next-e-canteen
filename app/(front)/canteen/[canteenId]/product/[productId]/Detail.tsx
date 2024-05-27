@@ -78,7 +78,7 @@ const Detail = ({
         setProduct(fetchedProduct);
         const canteenName = await canteenService.getCanteenName(canteenId);
         setCanteenName(canteenName);
-        const fetchedComment = await productsService.getCommentFromProduct(
+        const fetchedComment = await productsService.getCommentFromProductLimit(
           canteenId,
           productId
         );
@@ -243,7 +243,7 @@ const Detail = ({
                             <input
                               disabled
                               name="rating-2"
-                              className="mask mask-star-2 bg-gray-500"
+                              className="mask mask-star-2 bg-orange-500"
                             />
                           </div>
                         ) : (
@@ -251,7 +251,7 @@ const Detail = ({
                             <input
                               disabled
                               name="rating-2"
-                              className="mask mask-star-2 bg-gray-200"
+                              className="mask mask-star-2 bg-orange-200"
                             />
                           </div>
                         )

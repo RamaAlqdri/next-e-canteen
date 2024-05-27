@@ -35,14 +35,15 @@ type Inputs = {
 
 const Form = ({ orderId }: { orderId: string }) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [order, setOrder] = useState<OrderDetail | null>();
+  const [canteen, setCanteen] = useState<Canteen>();
 
   function updateOrderStatus(status: number) {
     orderService.updateOrderStatus(orderId, status);
   }
 
-  const [canteen, setCanteen] = useState<Canteen>();
-  console.log(canteen);
+  // console.log(canteen);
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [currentProductId, setCurrentProductId] = useState("");
@@ -60,6 +61,13 @@ const Form = ({ orderId }: { orderId: string }) => {
     },
   });
   const [ratingValue, setRatingValue] = useState(0);
+  const getStarClass = (index: number) => {
+    if (index <= ratingValue) {
+      return "mask mask-star-2 bg-orange-500"; // Warna untuk rating yang dipilih dan di bawahnya
+    } else {
+      return "mask mask-star-2 bg-orange-200"; // Warna untuk rating di atas yang dipilih
+    }
+  };
   const [commentItems, setCommentItems] = useState(0);
   const [productId, setProductId] = useState<string[]>([]);
 
@@ -143,6 +151,19 @@ const Form = ({ orderId }: { orderId: string }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // console.log(order?.canteenId),
+  // console.log(canteen);
+  useEffect(() => {
+    if (canteen) {
+      if (session?.user.role !== "admin") {
+        if (session?.user.canteenId !== canteen?.id) {
+          // console.log(session?.user.canteenId);
+          // console.log(canteen?.id);
+          router.push("/");
+        }
+      }
+    }
+  }, [session]);
 
   if (!order) return <></>;
 
@@ -257,11 +278,13 @@ const Form = ({ orderId }: { orderId: string }) => {
                 </li>
                 {order.status === 1 && session?.user.role == "user" && (
                   <div className="flex justify-center w-full ">
-                    <ImageDisplay
-                      path={canteen?.qris as string}
-                      defaultPath="/images/qris/qris1.jpeg"
-                      imgStyle="relative w-[70%] rounded-xl border-2"
-                    />
+                    {canteen?.qris && (
+                      <ImageDisplay
+                        path={canteen?.qris as string}
+                        defaultPath=""
+                        imgStyle="relative w-[70%] rounded-xl border-2"
+                      />
+                    )}
                     {/* <Image
                       src={"/images/qris/qris1.jpeg"}
                       width={500}
@@ -327,47 +350,37 @@ const Form = ({ orderId }: { orderId: string }) => {
                                     <input
                                       type="radio"
                                       name="rating-2"
-                                      onClick={() => {
-                                        setRatingValue(1);
-                                      }}
+                                      onClick={() => setRatingValue(1)}
                                       checked={ratingValue === 1}
-                                      className="mask mask-star-2 bg-orange-400"
+                                      className={getStarClass(1)}
                                     />
                                     <input
                                       type="radio"
                                       name="rating-2"
-                                      onClick={() => {
-                                        setRatingValue(2);
-                                      }}
-                                      className="mask mask-star-2 bg-orange-400"
+                                      onClick={() => setRatingValue(2)}
                                       checked={ratingValue === 2}
+                                      className={getStarClass(2)}
                                     />
                                     <input
                                       type="radio"
                                       name="rating-2"
-                                      onClick={() => {
-                                        setRatingValue(3);
-                                      }}
+                                      onClick={() => setRatingValue(3)}
                                       checked={ratingValue === 3}
-                                      className="mask mask-star-2 bg-orange-400"
+                                      className={getStarClass(3)}
                                     />
                                     <input
                                       type="radio"
                                       name="rating-2"
-                                      onClick={() => {
-                                        setRatingValue(4);
-                                      }}
+                                      onClick={() => setRatingValue(4)}
                                       checked={ratingValue === 4}
-                                      className="mask mask-star-2 bg-orange-400"
+                                      className={getStarClass(4)}
                                     />
                                     <input
                                       type="radio"
                                       name="rating-2"
-                                      onClick={() => {
-                                        setRatingValue(5);
-                                      }}
+                                      onClick={() => setRatingValue(5)}
                                       checked={ratingValue === 5}
-                                      className="mask mask-star-2 bg-orange-400"
+                                      className={getStarClass(5)}
                                     />
                                   </div>
                                   <div className="pt-2">

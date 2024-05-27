@@ -30,7 +30,7 @@ const Form = () => {
 
   const [uploadImageCanteen, setUploadImageCanteen] = useState(null);
   const [uploadImageQris, setUploadImageQris] = useState(null);
-  console.log(uploadImageCanteen);
+  // console.log(uploadImageCanteen);
 
   const {
     register,
@@ -71,7 +71,7 @@ const Form = () => {
 
         }),
       });
-      console.log(res);
+      // console.log(res);
       if (res.ok) {
         imageService.uploadImage(uploadImageCanteen, "canteen", id);
         imageService.uploadImage(uploadImageQris, "qris", id);

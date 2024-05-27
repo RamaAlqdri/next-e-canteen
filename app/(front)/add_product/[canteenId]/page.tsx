@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Form from './Form'
 
 export const metadata: Metadata = {
-    title: 'Make Canteen',
+    title: 'Buat Kantin',
 }
 
 export default async function AddProduct({

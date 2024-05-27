@@ -175,7 +175,7 @@ async function deleteProduct(canteenId:string, productId:string) {
     // Menghapus dokumen produk
     await deleteDoc(productRef);
 
-    console.log("Product deleted successfully");
+    // console.log("Product deleted successfully");
   } catch (error) {
     console.error("Error deleting product:", error);
   }
@@ -398,6 +398,27 @@ async function getProductByCategoryByCanteenSlug(
     return [] as Product[];
   }
 }
+async function getCommentFromProductLimit(
+  canteenId: string,
+  productId: string
+): Promise<Comments[]> {
+  try {
+    // Menambahkan limit ke query
+    const productRef = query(
+      collection(db, "canteen", canteenId, "product", productId, "comment"),
+      limit(10) // Membatasi jumlah dokumen yang diambil menjadi 10
+    );
+    const productData = await getDocs(productRef);
+    let commentList: Comments[] = [];
+    productData.forEach((doc) => {
+      commentList.push(doc.data() as Comments);
+    });
+    return commentList;
+  } catch (error) {
+    console.error("Error fetching comment data:", error);
+    return [] as Comments[];
+  }
+}
 async function getCommentFromProduct(
   canteenId: string,
   productId: string
@@ -453,6 +474,7 @@ async function writeComment(
 const productsService = {
   writeComment,
   getCommentFromProduct,
+  getCommentFromProductLimit,
   getAllProducts,
   getProduct,
   getProductByCanteenId,

@@ -30,7 +30,7 @@ async function createUser(user: User) {
 
       role: "user",
     });
-    console.log("User created successfully");
+    // console.log("User created successfully");
 
     // Dapatkan ID pengguna yang baru dibuat
     // const userId = newUserRef.id;
@@ -62,7 +62,7 @@ async function getUserByEmail(email: string): Promise<User> {
   }
 }
 async function updateUserName(email: string, name: string): Promise<void> {
-  console.log(email);
+  // console.log(email);
   try {
     const userRef = query(
       collection(db, "users"),

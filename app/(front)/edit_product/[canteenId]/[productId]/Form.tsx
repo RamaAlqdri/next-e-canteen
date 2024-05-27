@@ -38,6 +38,7 @@ const Form = ({
   const params = useSearchParams();
   const router = useRouter();
   // console.log(product);
+  
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
@@ -100,7 +101,7 @@ const Form = ({
           canteenId,
         }),
       });
-      console.log(res);
+      // console.log(res);
 
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
@@ -133,7 +134,7 @@ const Form = ({
           canteenId: product.canteenId,
         }),
       });
-      console.log(res);
+      // console.log(res);
       if (res.ok) {
         imageService.deleteImage("product", product.id as string);
         // return router.push(`/canteen/${session?.user.canteen}`);
@@ -152,6 +153,13 @@ const Form = ({
       toast.error(err.message || "error");
     }
   };
+  useEffect(() => {
+    if (session?.user.role !== "admin") {
+      if (session?.user.canteenId !== canteenId) {
+        router.push("/");
+      }
+    }
+  }, [session]);
 
   return (
     <div className="lg:grid lg:grid-cols-6">

@@ -39,6 +39,7 @@ const Form = ({ canteenId }: { canteenId: string }) => {
         router.push("/");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);

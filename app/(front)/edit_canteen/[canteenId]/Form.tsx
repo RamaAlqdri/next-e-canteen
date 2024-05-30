@@ -36,6 +36,7 @@ const Form = ({ canteen }: { canteen: Canteen }) => {
         router.push("/");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
   //   let callbackUrl = params.get("callbackUrl") || "/";
   const {

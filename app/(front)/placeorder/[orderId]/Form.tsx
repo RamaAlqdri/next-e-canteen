@@ -163,6 +163,7 @@ const Form = ({ orderId }: { orderId: string }) => {
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   if (!order) return <></>;

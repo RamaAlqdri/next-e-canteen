@@ -253,6 +253,7 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
         router.push("/");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
   let canteenId = "";
   // console.log(session?.user.canteenId);

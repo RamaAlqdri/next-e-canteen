@@ -92,9 +92,6 @@ dependencies:
   svg2pdf:
     specifier: ^1.1.1
     version: 1.1.1
-  svg2pdf.js:
-    specifier: ^2.2.3
-    version: 2.2.3(jspdf@2.5.1)
   swr:
     specifier: ^2.2.5
     version: 2.2.5(react@18.3.1)
@@ -3355,10 +3352,6 @@ packages:
         optional: true
     dev: false
 
-  /font-family-papandreou@0.2.0-patch2:
-    resolution: {integrity: sha512-l/YiRdBSH/eWv6OF3sLGkwErL+n0MqCICi9mppTZBOCL5vixWGDqCYvRcuxB2h7RGCTzaTKOHT2caHvCXQPRlw==}
-    dev: false
-
   /for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
@@ -5291,11 +5284,6 @@ packages:
     resolution: {integrity: sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==}
     engines: {node: '>=0.10.0'}
 
-  /specificity@0.4.1:
-    resolution: {integrity: sha512-1klA3Gi5PD1Wv9Q0wUoOQN1IWAuPu0D1U03ThXTr0cJ20+/iq2tHSDnK7Kk/0LXJ1ztUB2/1Os0wKmfyNgUQfg==}
-    hasBin: true
-    dev: false
-
   /stackblur-canvas@2.7.0:
     resolution: {integrity: sha512-yf7OENo23AGJhBriGx0QivY5JP6Y1HbrrDI6WLt6C5auYZXlQrheoY8hD4ibekFKz1HOfE48Ww8kMWMnJD/zcQ==}
     engines: {node: '>=0.1.14'}
@@ -5473,18 +5461,6 @@ packages:
     dev: false
     optional: true
 
-  /svg2pdf.js@2.2.3(jspdf@2.5.1):
-    resolution: {integrity: sha512-PqOkKIy+zzU3DQQnPpzvwpjqtonCiPz8bAUVzXlz0f25p7pFvGTnj8IGwoFBV9bBlhLk50FABDzTW8JZNOyQaQ==}
-    peerDependencies:
-      jspdf: ^2.0.0
-    dependencies:
-      cssesc: 3.0.0
-      font-family-papandreou: 0.2.0-patch2
-      jspdf: 2.5.1
-      specificity: 0.4.1
-      svgpath: 2.6.0
-    dev: false
-
   /svg2pdf@1.1.1:
     resolution: {integrity: sha512-JdHobNc+hgpP0Go4ITPKLFMuTlpexhp6a9x9ivacP+KloB4tsKebABcImkDN7dVUYHbZBBH5uz1vV5oLa9KBtA==}
     hasBin: true
@@ -5492,10 +5468,6 @@ packages:
       commander: 2.20.3
       progress: 2.0.3
       threads: 0.8.1
-    dev: false
-
-  /svgpath@2.6.0:
-    resolution: {integrity: sha512-OIWR6bKzXvdXYyO4DK/UWa1VA1JeKq8E+0ug2DG98Y/vOmMpfZNj+TIG988HjfYSqtcy/hFOtZq/n/j5GSESNg==}
     dev: false
 
   /swr@2.2.5(react@18.3.1):

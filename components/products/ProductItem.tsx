@@ -40,6 +40,7 @@ export default function ProductItem({
     };
 
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const path = usePathname();

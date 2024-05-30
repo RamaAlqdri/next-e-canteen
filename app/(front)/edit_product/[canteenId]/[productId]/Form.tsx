@@ -164,6 +164,7 @@ const Form = ({
         router.push("/");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   return (

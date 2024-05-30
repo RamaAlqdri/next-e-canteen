@@ -2,7 +2,7 @@
 import { Product } from "@/lib/models/ProductModels";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import { formatRupiah } from "@/lib/utils";
 import AddToCart from "./AddToCart";
 import { convertDocToObj } from "@/lib/utils";
@@ -24,8 +24,24 @@ export default function ProductItem({
 
   // const { data : session } = useSession();
   // console.log(session);
-
+  const [canteenData, setCanteenData] = useState<Canteen | null>(null);
   // console.log();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedCanteenData = await canteenService.getCanteenData(
+          product.canteenId
+        );
+        setCanteenData(fetchedCanteenData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const path = usePathname();
   let canteen = "";
   if (path === "/") {
@@ -72,7 +88,7 @@ export default function ProductItem({
                 fill="#EEA147"
               />
             </svg>
-            {/* <p className=" sm:text-sm text-xs">{capitalizeText(canteenName)}</p> */}
+            <p className=" sm:text-sm text-xs">{canteenData?.name}</p>
           </div>
           <div className="flex justify-between ">
             <div className=" flex items-center justify-between ">

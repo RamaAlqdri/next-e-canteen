@@ -37,6 +37,7 @@ import {
   capitalizeText,
   dapatkanWaktu,
   formatRupiah,
+  getBase64ImageTes,
   getOrderDescription,
   ubahFormatTanggal,
 } from "@/lib/utils";
@@ -106,32 +107,48 @@ const CanteenList = () => {
     const headers = data[0];
     const body = data.slice(1);
 
-    doc.text(`Laporan Pendapatan Kantin`, 105, 20, { align: "center" });
-    doc.text(
-      `Bulan ${months[date.getMonth()]} ${date.getFullYear()}`,
-      105,
-      30,
-      { align: "center" }
-    );
-    autoTable(doc, {
-      head: [headers],
-      body: body,
-      startY: 37,
-      styles: { fillColor: [238, 160, 97] },
-      columnStyles: {
-        0: { fillColor: [255, 255, 255] },
-        1: { fillColor: [255, 255, 255] },
-        2: { fillColor: [255, 255, 255] },
-        3: { fillColor: [255, 255, 255] },
-      },
+    getBase64ImageTes(
+      "/images/icon/unram-canteen.png",
+      function (base64Data: any, imgWidth: any, imgHeight: any) {
+        const maxWidth = 50; // Lebar maksimum gambar di PDF
+        const ratio = maxWidth / imgWidth; // Rasio untuk menjaga aspek gambar
+        const width = maxWidth;
+        const height = imgHeight * ratio;
+        doc.addImage(base64Data, "PNG", 15, 20, width, height);
+        doc.setFont("helvetica", "bold");
 
-      theme: "grid",
-    });
+        doc.setFontSize(16);
+        doc.text(`Laporan Pendapatan Kantin`, 67, 25, {
+          align: "left",
+        });
+        doc.setFont("helvetica", "plain");
+        doc.setFontSize(12);
+        doc.text(
+          `Bulan ${months[date.getMonth()]} ${date.getFullYear()}`,
+          67,
+          31,
+          { align: "left" }
+        );
+        autoTable(doc, {
+          head: [headers],
+          body: body,
+          startY: 37,
+          styles: { fillColor: [238, 160, 97] },
+          columnStyles: {
+            0: { fillColor: [255, 255, 255] },
+            1: { fillColor: [255, 255, 255] },
+            2: { fillColor: [255, 255, 255] },
+            3: { fillColor: [255, 255, 255] },
+          },
 
-    doc.save(
-      `Laporan_Pendapatan_Kantin_Bulan_${
-        months[date.getMonth()]
-      }_${date.getFullYear()}.pdf`
+          theme: "grid",
+        });
+        doc.save(
+          `Laporan_Pendapatan_Kantin_Bulan_${
+            months[date.getMonth()]
+          }_${date.getFullYear()}.pdf`
+        );
+      }
     );
   };
   const makeData = (orderList: OrderDetail[], date: Date) => {

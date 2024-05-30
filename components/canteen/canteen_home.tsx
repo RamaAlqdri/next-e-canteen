@@ -15,6 +15,7 @@ import {
   DatePicker,
   DatePickerValue,
 } from "@tremor/react";
+
 import {
   getStatisticCanteen,
   valueFormatter,
@@ -28,6 +29,7 @@ import {
   formatRupiah,
   getOrderDescription,
   ubahFormatTanggal,
+  getBase64ImageTes,
 } from "@/lib/utils";
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -49,7 +51,6 @@ import ImageDownloader from "../image/imageShow";
 import { Canteen } from "@/lib/models/CanteenModel";
 import canteenService from "@/lib/services/canteenService";
 import ImageDisplay from "../image/imageShow";
-// import Papa from "papaparse";
 // import { CSVLink, CSVDownload } from "react-csv";
 
 // const order = [
@@ -245,7 +246,6 @@ const CanteenBeranda = ({ props = "" }: { props: string }) => {
   const [order, setOrder] = useState<OrderDetail[]>([]);
   const { data: session } = useSession();
   const router = useRouter();
-
 
   useEffect(() => {
     if (session?.user.role === "canteen") {
@@ -836,24 +836,48 @@ const Dashboard = ({
     const headers = data[0];
     const body = data.slice(1);
 
-    doc.text(`Laporan Pendapatan ${canteenName}`, 105, 20, { align: "center" });
-    doc.text(`${contextHeader}`, 105, 30, { align: "center" });
-    autoTable(doc, {
-      head: [headers],
-      body: body,
-      startY: 37,
-      styles: { fillColor: [238, 160, 97] },
-      columnStyles: {
-        0: { fillColor: [255, 255, 255] },
-        1: { fillColor: [255, 255, 255] },
-        2: { fillColor: [255, 255, 255] },
-        3: { fillColor: [255, 255, 255] },
-      },
+    getBase64ImageTes(
+      "/images/icon/unram-canteen.png",
+      function (base64Data: any, imgWidth: any, imgHeight: any) {
+        const maxWidth = 50; // Lebar maksimum gambar di PDF
+        const ratio = maxWidth / imgWidth; // Rasio untuk menjaga aspek gambar
+        const width = maxWidth;
+        const height = imgHeight * ratio;
 
-      theme: "grid",
-    });
+        doc.addImage(base64Data, "PNG", 15, 20, width, height);
 
-    doc.save(`Laporan_Pendapatan_${canteenName}.pdf`);
+        doc.setFont("helvetica", "bold");
+
+        doc.setFontSize(16);
+        doc.text(`Laporan Pendapatan ${canteenName}`, 67, 25, {
+          align: "left",
+        });
+        doc.setFont("helvetica", "plain");
+        doc.setFontSize(12);
+        doc.text(`${contextHeader}`, 67, 31, { align: "left" });
+        autoTable(doc, {
+          head: [headers],
+          body: body,
+          startY: 38,
+          styles: { fillColor: [238, 160, 97] },
+          columnStyles: {
+            0: { fillColor: [255, 255, 255] },
+            1: { fillColor: [255, 255, 255] },
+            2: { fillColor: [255, 255, 255] },
+            3: { fillColor: [255, 255, 255] },
+          },
+
+          theme: "grid",
+          didParseCell: function (data) {
+            if (data.row.index === body.length - 1) {
+              data.cell.styles.fontStyle = 'bold';
+            }
+          }
+        });
+        // console.log(base64Data);
+        doc.save(`Laporan_Pendapatan_${canteenName}.pdf`);
+      }
+    );
   };
   const makeData = (canteenName: string, pendapatan: any) => {
     let header = "";

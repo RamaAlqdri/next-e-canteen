@@ -304,7 +304,7 @@ const Form = ({ orderId }: { orderId: string }) => {
                       order.status !== 7 && (
                         <button
                           // onClick={() => router.push("/order")}
-                          onClick={() => updateOrderStatus(4)}
+                          onClick={() => updateOrderStatus(7)}
                           className="btn border-0 btn-Delete "
                         >
                           Batalkan Pesanan
@@ -426,7 +426,7 @@ const Form = ({ orderId }: { orderId: string }) => {
                       order.status !== 7 && (
                         <button
                           // onClick={() => router.push("/order")}
-                          onClick={() => updateOrderStatus(4)}
+                          onClick={() => updateOrderStatus(7)}
                           className="btn border-0 btn-Delete "
                         >
                           Batalkan Pesanan

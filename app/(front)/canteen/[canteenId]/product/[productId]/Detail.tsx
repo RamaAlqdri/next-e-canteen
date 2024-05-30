@@ -49,6 +49,20 @@ import ImageDisplay from "@/components/image/imageShow";
 //   },
 // ];
 
+function countReview(commentList: Comments[]) {
+  return commentList.length;
+}
+function averageRating(commentList: Comments[]) {
+  if (commentList.length === 0) {
+    return 0;
+  }
+  let total = 0;
+  commentList.forEach((comment) => {
+    total += comment.rating;
+  });
+  return total / commentList.length;
+}
+
 const canteenName = "Kantin A";
 const Detail = ({
   canteenId,
@@ -165,7 +179,7 @@ const Detail = ({
                   <li className="flex space-x-2 items-center ">
                     <div className="rating  rating-sm">
                       {[1, 2, 3, 4, 5].map((angka, index) =>
-                        angka <= product?.rating ? (
+                        angka <= averageRating(commentList) ? (
                           <div key={index}>
                             <input
                               disabled
@@ -185,7 +199,7 @@ const Detail = ({
                       )}
                     </div>
                     <p className="text-xs font-light">
-                      dari {product?.numReviews} ulasan
+                      dari {countReview(commentList)} ulasan
                     </p>
                   </li>
 

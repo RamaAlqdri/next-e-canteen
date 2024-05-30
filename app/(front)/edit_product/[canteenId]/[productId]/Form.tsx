@@ -38,7 +38,6 @@ const Form = ({
   const params = useSearchParams();
   const router = useRouter();
   // console.log(product);
-  
 
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
 
@@ -105,7 +104,13 @@ const Form = ({
 
       if (res.ok) {
         // return router.push(`/canteen/${session?.user.canteen}`);
-        imageService.uploadImage(uploadedImageUrl, "product", product.id as string);
+        if (uploadedImageUrl) {
+          imageService.uploadImage(
+            uploadedImageUrl,
+            "product",
+            product.id as string
+          );
+        }
         return router.back();
         // router.reload();
         // router.refresh
@@ -247,7 +252,11 @@ const Form = ({
               >
                 Gambar Produk
               </label>
-              <ImageUpload maxSize={200} setImageFile={setUploadedImageUrl} path={product.image} />
+              <ImageUpload
+                maxSize={200}
+                setImageFile={setUploadedImageUrl}
+                path={product.image}
+              />
             </div>
             <div className="my-4">
               <button

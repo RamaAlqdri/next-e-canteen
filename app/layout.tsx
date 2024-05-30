@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/header";
 import SessionProviders from "@/components/SessionProvider"
 import { Poppins } from "next/font/google";
@@ -34,6 +35,7 @@ export default function RootLayout({
             <Header />
             
             {children}
+            <Footer />
             {/* <footer className="footer footer-center p-4  text-base-content">
               <p>Copyright ☠︎ 2023 - All right reserved by Next</p>
             </footer> */}

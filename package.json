@@ -37,6 +37,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.12.0",
     "redis": "^4.6.14",
+    "svg2pdf": "^1.1.1",
     "swr": "^2.2.5",
     "vercel": "^34.2.0",
     "zustand": "^4.5.2"

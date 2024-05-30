@@ -12,7 +12,12 @@ import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form";
 import { auth } from "@/lib/firebase";
 import imageService from "@/lib/services/imageService";
-import { EmailAuthProvider, reauthenticateWithCredential, updatePassword, updateProfile } from "firebase/auth";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  updateProfile,
+} from "firebase/auth";
 import userService from "@/lib/services/userService";
 
 type Inputs = {
@@ -24,11 +29,11 @@ type Inputs = {
 };
 
 const Form = () => {
-  const { data: session } = useSession();
+  const { data: session, status, update } = useSession();
   // console.log(session?.user.image);
   const [imageProfile, setImageProfile] = useState(null);
   const user = auth.currentUser;
-  // console.log(user);
+  console.log(session);
 
   const {
     register,
@@ -42,25 +47,28 @@ const Form = () => {
       currentPassword: "",
       password: "",
       confirmPassword: "",
-
     },
   });
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
-    const { name, email, password,currentPassword } = form;
+    const { name, email, password, currentPassword } = form;
     if (user) {
       try {
         if (name !== "" && name !== user.displayName) {
           // console.log(name);
           await updateProfile(user, { displayName: name as string });
           await userService.updateUserName(email, name);
+          update({name});
         }
         if (password !== "") {
-          const credential = EmailAuthProvider.credential(user.email!, currentPassword);
+          const credential = EmailAuthProvider.credential(
+            user.email!,
+            currentPassword
+          );
           await reauthenticateWithCredential(user, credential);
           await updatePassword(user, password);
           // await userService.updateUserPassword(email, hashedPassword); // Jika Anda menggunakan hashed password
         }
-    
+
         if (imageProfile !== null) {
           imageService.uploadImage(imageProfile, "user", user?.uid as string);
         }

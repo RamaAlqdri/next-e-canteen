@@ -27,6 +27,7 @@ const authOptions = {
           );
 
           const user = userCredential.user;
+          // console.log(user);
 
           // Periksa apakah email sudah diverifikasi
           if (user.emailVerified) {
@@ -60,7 +61,7 @@ const authOptions = {
             return {
               id: user.uid,
               email: user.email,
-              name: user.displayName,
+              name: userDB.name,
               emailVerified: user.emailVerified,
               role: userDB.role,
               canteenId: userDB.canteenId,
@@ -77,7 +78,17 @@ const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: any; user: any }) {
+    async jwt({
+      token,
+      user,
+      trigger,
+      session,
+    }: {
+      token: any;
+      user: any;
+      trigger?: string;
+      session?: any;
+    }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -86,6 +97,10 @@ const authOptions = {
         token.role = user.role;
         token.canteenId = user.canteenId;
         token.image = user.image;
+      }
+      if (trigger === "update" && session) {
+        if (session.name) token.name = session.name;
+        if (session.image) token.image = session.image;
       }
       return token;
     },
